@@ -30,6 +30,13 @@ async function send(messages) {
     if (ev.type === "text-delta") text += ev.delta;
     if (ev.type === "tool-input-available")
       tools.push({ toolCallId: ev.toolCallId, toolName: ev.toolName, input: ev.input });
+    if (ev.type === "tool-input-error")
+      tools.push({
+        toolCallId: ev.toolCallId,
+        toolName: ev.toolName,
+        input: ev.input,
+        invalid: ev.errorText ?? "input failed schema validation",
+      });
     if (ev.type === "tool-output-available") {
       const t = tools.find((x) => x.toolCallId === ev.toolCallId);
       if (t) t.output = ev.output;
@@ -38,7 +45,7 @@ async function send(messages) {
   }
   const parts = [];
   if (text) parts.push({ type: "text", text });
-  for (const t of tools)
+  for (const t of tools.filter((x) => !x.invalid))
     parts.push({
       type: `tool-${t.toolName}`,
       toolCallId: t.toolCallId,
@@ -62,6 +69,12 @@ for (const s of scenarios) {
     if (text) console.log(`[text] ${text}`);
     for (const t of tools) {
       const d = t.input;
+      if (t.invalid) {
+        console.log(`[${t.toolName}] REJECTED — the manager sees no draft.`);
+        console.log(`  reason: ${String(t.invalid).split("\n").slice(0, 12).join("\n          ")}`);
+        console.log(`  praised had ${d?.praised?.length} items, problems had ${d?.problems?.length} items`);
+        continue;
+      }
       console.log(`[${t.toolName}] risk=${d.risk} | ${d.platform} | stars=${d.stars} | ${d.language} | ${d.sentiment}`);
       console.log(`  riskReason: ${d.riskReason}`);
       console.log(`  praised: ${JSON.stringify(d.praised)} problems: ${JSON.stringify(d.problems)}`);

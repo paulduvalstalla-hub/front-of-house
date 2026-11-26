@@ -38,10 +38,10 @@ export function ProfilePanel() {
         </p>
 
         <div className="mt-5 space-y-3">
-          {sections.map((s, i) => (
+          {sections.map((s) => (
             <details
               key={s.title}
-              open={i === 2 || i === 3}
+              open={s.title === "Reply policy" || s.title.startsWith("Escalate")}
               className="group rounded-2xl bg-white/75 px-4 py-3 open:bg-white"
             >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-serif text-[17.5px] tracking-[-0.01em] [&::-webkit-details-marker]:hidden">

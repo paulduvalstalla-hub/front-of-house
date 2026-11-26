@@ -26,7 +26,8 @@ const RISK = {
   },
 } as const;
 
-function Stars({ value }: { value: number }) {
+function Stars({ value: raw }: { value: number }) {
+  const value = Math.min(5, Math.max(0, Math.round(raw)));
   return (
     <span aria-label={`${value} out of 5 stars`} className="tracking-[0.08em] text-ink">
       {"★".repeat(value)}
@@ -48,8 +49,8 @@ export function ReplyCard({
 }) {
   const [copied, setCopied] = useState(false);
   const risk = draft.risk ? RISK[draft.risk] : null;
-  const praised = (draft.praised ?? []).filter(Boolean) as string[];
-  const problems = (draft.problems ?? []).filter(Boolean) as string[];
+  const praised = ((draft.praised ?? []).filter(Boolean) as string[]).slice(0, 4);
+  const problems = ((draft.problems ?? []).filter(Boolean) as string[]).slice(0, 4);
   const words = draft.reply ? draft.reply.trim().split(/\s+/).length : 0;
 
   async function copy() {

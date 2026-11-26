@@ -1,0 +1,99 @@
+
+=================== happy ===================
+
+>>> USER:
+Google, 5 stars, from Sarah M.: Came for my mom's 60th birthday. The duck confit was perfect and our server Léa remembered it was a celebration and brought a candle in the crème brûlée. Cosy room, great wine list. We'll definitely be back!
+
+<<< AGENT (2.5s):
+[fileReply] REJECTED — the manager sees no draft.
+  reason: AI_InvalidToolInputError: Invalid input for tool fileReply: AI_TypeValidationError: Type validation failed: Value: {"platform":"Google","stars":5,"language":"English","sentiment":"positive","praised":["duck confit was perfect","server remembered the celebration","candle in crème brûlée","cosy room","great wine list"],"problems":[],"risk":"ready","riskReason":"Positive review with no escalation triggers; it describes a Tuesday-to-Sunday dinner-style visit consistent with our hours.","reply":"Hi Sarah, thank you so much. What a lovely way to celebrate your mom's 60th. We're glad the duck confit hit the mark, and it made our day that Léa noticed the occasion and added a candle to the crème brûlée. Thank you for the kind words about the room and the wine list. We look forward to welcoming you both back.\n\n— Camille, General Manager","managerNote":"No action needed. Consider passing Léa's candle moment along to her directly, since it's a specific guest compliment."}.
+          Error message: [
+            {
+              "origin": "array",
+              "code": "too_big",
+              "maximum": 4,
+              "inclusive": true,
+              "path": [
+                "praised"
+              ],
+              "message": "Too big: expected array to have <=4 items"
+            }
+  praised had 5 items, problems had 0 items
+
+=================== happy ===================
+
+>>> USER:
+Google, 5 stars, from Sarah M.: Came for my mom's 60th birthday. The duck confit was perfect and our server Léa remembered it was a celebration and brought a candle in the crème brûlée. Cosy room, great wine list. We'll definitely be back!
+
+<<< AGENT (2.3s):
+[fileReply] REJECTED — the manager sees no draft.
+  reason: AI_InvalidToolInputError: Invalid input for tool fileReply: AI_TypeValidationError: Type validation failed: Value: {"platform":"Google","stars":5,"language":"English","sentiment":"positive","praised":["duck confit was perfect","server remembered the celebration","candle in crème brûlée","cosy room","great wine list"],"problems":[],"risk":"ready","riskReason":"Positive review with no escalation triggers; it describes a Saturday-style dinner visit with no fake-review signals.","reply":"Thank you, Sarah. Celebrating your mom's 60th with us means a lot, and we are so glad the duck confit hit the mark. Léa loves a special occasion, so the candle on the crème brûlée was a fitting touch. Thank you for the kind words about the room and the wine list. We look forward to welcoming you both back.\n\n— Camille, General Manager","managerNote":"Consider passing Sarah's praise for Léa along to her privately. No action needed before posting."}.
+          Error message: [
+            {
+              "origin": "array",
+              "code": "too_big",
+              "maximum": 4,
+              "inclusive": true,
+              "path": [
+                "praised"
+              ],
+              "message": "Too big: expected array to have <=4 items"
+            }
+  praised had 5 items, problems had 0 items
+
+=================== happy ===================
+
+>>> USER:
+Google, 5 stars, from Sarah M.: Came for my mom's 60th birthday. The duck confit was perfect and our server Léa remembered it was a celebration and brought a candle in the crème brûlée. Cosy room, great wine list. We'll definitely be back!
+
+<<< AGENT (2.2s):
+[fileReply] REJECTED — the manager sees no draft.
+  reason: AI_InvalidToolInputError: Invalid input for tool fileReply: AI_TypeValidationError: Type validation failed: Value: {"platform":"Google","stars":5,"language":"English","sentiment":"positive","praised":["duck confit was perfect","server remembered the celebration","candle in crème brûlée","cosy room","great wine list"],"problems":[],"risk":"ready","riskReason":"Positive review with no illness, complaint, or fake-review markers.","reply":"Hi Sarah, thank you for sharing your mom's 60th birthday with us. It means a lot that you chose Petit Comptoir for it. We are glad the duck confit hit the mark, and that the candle in the crème brûlée made the evening feel special. I'll pass your kind words along to Léa. We hope to see you both again soon.\n\n— Camille, General Manager","managerNote":"Passing Léa's praise along is a nice touch; you may want to tell her directly. No action needed before posting."}.
+          Error message: [
+            {
+              "origin": "array",
+              "code": "too_big",
+              "maximum": 4,
+              "inclusive": true,
+              "path": [
+                "praised"
+              ],
+              "message": "Too big: expected array to have <=4 items"
+            }
+  praised had 5 items, problems had 0 items
+
+=================== happy ===================
+
+>>> USER:
+Google, 5 stars, from Sarah M.: Came for my mom's 60th birthday. The duck confit was perfect and our server Léa remembered it was a celebration and brought a candle in the crème brûlée. Cosy room, great wine list. We'll definitely be back!
+
+<<< AGENT (2.2s):
+[fileReply] risk=ready | Google | stars=5 | English | positive
+  riskReason: Positive review with no escalation triggers; safe to post.
+  praised: ["Duck confit was perfect","Server remembered the birthday celebration","Candle in the crème brûlée","Cosy room and wine list"] problems: []
+  reply (61 words):
+    Hi Sarah, what a lovely way to celebrate your mom's 60th. It makes us happy to hear the duck confit landed well, and that Léa noticed the occasion and added a candle to the crème brûlée. Thank you for the kind words about the room and the wine list. We look forward to welcoming you both back.
+    
+    — Camille, General Manager
+  managerNote: Consider passing Léa's candle moment along to her directly; no action needed on the reply.
+
+=================== happy ===================
+
+>>> USER:
+Google, 5 stars, from Sarah M.: Came for my mom's 60th birthday. The duck confit was perfect and our server Léa remembered it was a celebration and brought a candle in the crème brûlée. Cosy room, great wine list. We'll definitely be back!
+
+<<< AGENT (2.2s):
+[fileReply] REJECTED — the manager sees no draft.
+  reason: AI_InvalidToolInputError: Invalid input for tool fileReply: AI_TypeValidationError: Type validation failed: Value: {"platform":"Google","stars":5,"language":"English","sentiment":"positive","praised":["duck confit perfect","server remembered celebration","candle in crème brûlée","cosy room","great wine list"],"problems":[],"risk":"ready","riskReason":"Positive review with no escalation triggers; it describes a plausible Thursday-to-Sunday visit with menu items we serve.","reply":"Hi Sarah, thank you so much. Happy 60th to your mom! It means a lot that the duck confit hit the mark, and that Léa noticed the occasion and brought that candle to the crème brûlée. We hope to see you both again soon. — Camille, General Manager","managerNote":"Consider passing Léa's kind mention to her directly. No action needed before posting."}.
+          Error message: [
+            {
+              "origin": "array",
+              "code": "too_big",
+              "maximum": 4,
+              "inclusive": true,
+              "path": [
+                "praised"
+              ],
+              "message": "Too big: expected array to have <=4 items"
+            }
+  praised had 5 items, problems had 0 items
