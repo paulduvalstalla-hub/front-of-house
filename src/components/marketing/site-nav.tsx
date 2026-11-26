@@ -3,7 +3,7 @@ import { Logo } from "@/components/brand";
 import { HomeLink } from "./home-link";
 
 const LINKS = [
-  { href: "#product", label: "Product" },
+  { href: "#how-it-works", label: "How it works" },
   { href: "#integrations", label: "Integrations" },
   { href: "#pricing", label: "Pricing" },
 ];

@@ -1,14 +1,12 @@
 import Link from "next/link";
 import { Logo } from "@/components/brand";
-import { DuskSky } from "./dusk-sky";
 import { HomeLink } from "./home-link";
 
 export function ClosingCta() {
   return (
-    <section className="px-3 pb-3 sm:px-6 sm:pb-6">
-      <div className="relative mx-auto max-w-[1240px] overflow-hidden rounded-[28px] border border-line">
-        <DuskSky />
-        <div className="relative z-[3] px-6 py-24 text-center sm:py-32">
+    <section className="border-t border-line">
+      <div className="mx-auto max-w-[1200px] px-5 py-20 sm:px-8 sm:py-32">
+        <div className="text-center">
           <h2 className="mx-auto max-w-[760px] font-serif text-display-2 [text-wrap:balance]">
             Answer tonight&rsquo;s reviews before the chairs go up.
           </h2>
@@ -34,8 +32,8 @@ export function SiteFooter() {
           <Logo size={18} />
         </HomeLink>
         <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2 text-small text-smoke">
-          <a href="#product" className="hover:text-linen">
-            Product
+          <a href="#how-it-works" className="hover:text-linen">
+            How it works
           </a>
           <a href="#integrations" className="hover:text-linen">
             Integrations

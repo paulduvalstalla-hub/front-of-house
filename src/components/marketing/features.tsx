@@ -1,9 +1,9 @@
-import type { ReactNode } from "react";
 import { PlatformLogo } from "@/components/platform-logo";
+import { StatusLabel } from "@/components/status";
 import { DEMO_REVIEWS, type DemoReview } from "@/lib/demo-reviews";
 import { LIVE_REVIEWS } from "@/lib/live-reviews";
 import { RESTAURANT_PROFILE } from "@/lib/restaurant-profile";
-import { RiskBadge, type Risk } from "./risk-badge";
+import { RISK_LABEL, type Risk } from "./risk-badge";
 
 const byId = (id: string) => [...DEMO_REVIEWS, ...LIVE_REVIEWS].find((r) => r.id === id) as DemoReview;
 
@@ -18,64 +18,58 @@ function sectionBullets(title: string, count: number) {
   return out;
 }
 
-function Row({
-  title,
-  body,
-  visual,
-  flip = false,
-}: {
-  title: string;
-  body: string;
-  visual: ReactNode;
-  flip?: boolean;
-}) {
-  return (
-    <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
-      <div className={`min-w-0 ${flip ? "lg:order-2" : ""}`}>
-        <h3 className="font-serif text-display-3 [text-wrap:balance]">{title}</h3>
-        <p className="mt-4 max-w-[440px] text-lead [text-wrap:pretty] text-smoke">{body}</p>
-      </div>
-      <div className={`min-w-0 ${flip ? "lg:order-1" : ""}`}>{visual}</div>
-    </div>
-  );
-}
-
 /* (a) Triage board. Each review sits where Petit Comptoir's knowledge file puts it, the
    same as in the hero's inbox preview: a 1- or 2-star review with no escalation trigger
    is "tell"; illness, discrimination and fake-looking reviews are "hold". */
 const COLUMNS: { risk: Risk; ids: string[]; note: string }[] = [
-  { risk: "ready", ids: ["g-sarah", "g-priya", "o-chen"], note: "Safe to post now" },
-  { risk: "tell", ids: ["y-mark", "live-greg"], note: "Post it, then tell the owner the same day" },
-  { risk: "hold", ids: ["t-helene", "g-dana", "y-kevin"], note: "A neutral holding reply; the owner decides" },
+  {
+    risk: "ready",
+    ids: ["g-sarah", "g-priya", "o-chen"],
+    note: "Posts when you approve it. With Autopilot on, a Ready reply to a 4- or 5-star review posts on its own after a 12-second countdown you can stop.",
+  },
+  {
+    risk: "tell",
+    ids: ["y-mark", "live-greg"],
+    note: "Posts when you approve it, and the owner hears about it the same day.",
+  },
+  {
+    risk: "hold",
+    ids: ["t-helene", "g-dana", "y-kevin"],
+    note: "Gets a short, neutral holding reply that waits until the owner has seen the review.",
+  },
 ];
 
-function TriageVisual() {
+function TriageBoard() {
   return (
-    <div className="rounded-[20px] border border-line bg-night-2 p-3 sm:p-4">
-      <div className="grid gap-3 sm:grid-cols-3">
-        {COLUMNS.map((c) => (
-          <div key={c.risk} className="rounded-xl bg-night/70 p-2.5">
-            <RiskBadge risk={c.risk} className="px-0.5 text-small font-medium !text-linen" />
-            <p className="mt-1.5 px-0.5 text-micro text-smoke-2">{c.note}</p>
-            <ul className="mt-2.5 space-y-2">
-              {c.ids.map((id) => {
-                const r = byId(id);
-                return (
-                  <li key={id} className="rounded-lg border border-line bg-night-3/60 px-2.5 py-2">
-                    <div className="flex items-center gap-1.5">
-                      <PlatformLogo platform={r.platform} size={13} />
-                      <span className="truncate text-small font-medium">{r.author}</span>
-                      <span className="ml-auto text-micro text-lamp">{r.stars}★</span>
-                    </div>
-                    <p className="mt-1 line-clamp-2 text-micro leading-snug text-smoke">{r.text}</p>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
-      </div>
-    </div>
+    <ul className="mt-14 grid gap-12 md:grid-cols-3 md:grid-rows-[auto_auto_auto] md:gap-x-6 md:gap-y-0 lg:gap-x-10">
+      {COLUMNS.map((c) => (
+        <li key={c.risk} className="border-t border-line-strong pt-5 md:row-span-3 md:grid md:grid-rows-subgrid">
+          <StatusLabel level={c.risk} size={18} className="text-title font-semibold text-linen">
+            {RISK_LABEL(c.risk)}
+          </StatusLabel>
+          <p className="mt-2 text-small text-smoke">{c.note}</p>
+          <ul className="mt-5 space-y-2.5">
+            {c.ids.map((id, i) => {
+              const r = byId(id);
+              return (
+                // On a phone each column shows two reviews; the third appears from the small breakpoint up.
+                <li
+                  key={id}
+                  className={`rounded-xl border border-line bg-night-2 px-4 py-3 ${i >= 2 ? "hidden sm:block" : ""}`}
+                >
+                  <div className="flex items-center gap-2">
+                    <PlatformLogo platform={r.platform} size={14} />
+                    <span className="truncate text-small font-medium">{r.author}</span>
+                    <span className="ml-auto text-micro text-lamp">{r.stars}★</span>
+                  </div>
+                  <p className="mt-1.5 line-clamp-2 text-small leading-snug text-smoke">{r.text}</p>
+                </li>
+              );
+            })}
+          </ul>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -150,32 +144,59 @@ function RefusalVisual() {
   );
 }
 
+/** Shared frame for the sections that put the heading in a left rail and the proof on the right. */
+const RAIL = "mx-auto grid max-w-[1200px] items-start gap-10 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16";
+
 export function Features() {
   return (
-    <section id="product" className="scroll-mt-20">
-      <div className="mx-auto max-w-[1200px] space-y-28 px-5 py-28 sm:px-8 lg:space-y-36">
-        <div className="max-w-[720px]">
-          <h2 className="font-serif text-display-2 [text-wrap:balance]">
-            The reply desk that reads like your best manager.
-          </h2>
+    <>
+      {/* 1. The whole night, sorted. Absorbs the old three-step "How it works". */}
+      <section id="how-it-works" className="scroll-mt-20 border-t border-line">
+        <div className="mx-auto max-w-[1200px] px-5 py-20 sm:px-8 sm:py-28">
+          <div className="grid gap-5 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-end lg:gap-16">
+            <h2 className="font-serif text-display-2">Every review sorted before you open it</h2>
+            <p className="max-w-[56ch] text-lead text-smoke">
+              Each new review is read the moment it lands, for rating, language and what went wrong, and gets a reply
+              drafted in your voice. Illness, allergies, discrimination and likely fakes never go out unchecked.
+            </p>
+          </div>
+          <TriageBoard />
         </div>
-        <Row
-          title="Sorted before you open it"
-          body="Each review is read for rating, language and what went wrong, then marked Ready to post, Tell the owner, or Hold for the owner. Illness, allergies, discrimination and likely fakes never go out unchecked."
-          visual={<TriageVisual />}
-        />
-        <Row
-          flip
-          title="Written the way you talk"
-          body="Your brand voice, reply policy and the facts about your restaurant live in one knowledge file. Every draft follows it: the guest's name, the dish they mentioned, your sign-off, and none of the corporate filler."
-          visual={<VoiceVisual />}
-        />
-        <Row
-          title="Knows when not to reply"
-          body="It won't write fake reviews, rewrite a guest's words, or promise a refund in public, even when a stressed manager asks it to at the end of a long night."
-          visual={<RefusalVisual />}
-        />
-      </div>
-    </section>
+      </section>
+
+      {/* 2. The refusals, the product's sharpest difference: one band, so it reads as the page's peak. */}
+      <section className="border-y border-line bg-night-2/40">
+        <div className={RAIL}>
+          <div className="min-w-0">
+            <h2 className="font-serif text-display-2">Knows when not to reply</h2>
+            <p className="mt-4 max-w-[440px] text-lead text-smoke">
+              It won&rsquo;t write fake reviews, rewrite a guest&rsquo;s words, or promise a refund in public, even when
+              a stressed manager asks it to at the end of a long night.
+            </p>
+          </div>
+          <div className="min-w-0">
+            <RefusalVisual />
+          </div>
+        </div>
+      </section>
+
+      {/* 3. The knowledge file */}
+      <section>
+        <div className={RAIL}>
+          <div className="min-w-0">
+            <h2 className="font-serif text-display-2">Written the way you talk</h2>
+            <p className="mt-4 max-w-[440px] text-lead text-smoke">
+              Your brand voice, reply policy and the facts about your restaurant live in one knowledge file. Every
+              draft follows it: the guest&rsquo;s name, the dish they mentioned, your sign-off, and none of the
+              corporate filler.
+            </p>
+          </div>
+          {/* room for the quote card that hangs off the bottom of the file */}
+          <div className="min-w-0 pb-5">
+            <VoiceVisual />
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

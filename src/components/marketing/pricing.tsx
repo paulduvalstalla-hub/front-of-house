@@ -37,7 +37,7 @@ export function Pricing() {
 
   return (
     <section id="pricing" className="scroll-mt-20 border-t border-line">
-      <div className="mx-auto max-w-[1200px] px-5 py-24 sm:px-8">
+      <div className="mx-auto max-w-[1200px] px-5 py-20 sm:px-8 sm:py-24">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
             <h2 className="font-serif text-display-2 [text-wrap:balance]">

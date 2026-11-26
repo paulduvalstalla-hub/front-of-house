@@ -24,7 +24,7 @@ const QUESTIONS = [
 export function Faq() {
   return (
     <section className="border-t border-line">
-      <div className="mx-auto grid max-w-[1200px] gap-10 px-5 py-24 sm:px-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-16">
+      <div className="mx-auto grid max-w-[1200px] gap-10 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-16">
         <h2 className="font-serif text-display-2 [text-wrap:balance]">
           Questions managers ask first
         </h2>
