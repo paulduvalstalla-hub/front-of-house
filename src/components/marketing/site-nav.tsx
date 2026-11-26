@@ -37,7 +37,7 @@ export function SiteNav() {
             href="/sign-in"
             className="hidden whitespace-nowrap rounded-lg bg-linen px-4 py-2 text-small font-semibold text-night transition hover:bg-white min-[400px]:inline-block"
           >
-            Start free trial
+            Try the live demo
           </Link>
           <details className="relative md:hidden">
             <summary
@@ -61,7 +61,7 @@ export function SiteNav() {
                 href="/sign-in"
                 className="mt-1 rounded-lg bg-linen px-3 py-2 text-small font-semibold text-night min-[400px]:hidden"
               >
-                Start free trial
+                Try the live demo
               </Link>
             </div>
           </details>

@@ -17,12 +17,6 @@ export function ClosingCta() {
               href="/sign-in"
               className="rounded-lg bg-linen px-6 py-3 text-body font-semibold text-night transition hover:bg-white"
             >
-              Start free trial
-            </Link>
-            <Link
-              href="/sign-in"
-              className="rounded-lg border border-linen/25 bg-night/40 px-6 py-3 text-body font-medium text-linen backdrop-blur transition hover:border-linen/50"
-            >
               Try the live demo
             </Link>
           </div>

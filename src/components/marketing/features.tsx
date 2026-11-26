@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
 import { PlatformLogo } from "@/components/platform-logo";
 import { DEMO_REVIEWS, type DemoReview } from "@/lib/demo-reviews";
+import { LIVE_REVIEWS } from "@/lib/live-reviews";
 import { RESTAURANT_PROFILE } from "@/lib/restaurant-profile";
 import { RiskBadge, type Risk } from "./risk-badge";
 
-const byId = (id: string) => DEMO_REVIEWS.find((r) => r.id === id) as DemoReview;
+const byId = (id: string) => [...DEMO_REVIEWS, ...LIVE_REVIEWS].find((r) => r.id === id) as DemoReview;
 
 function sectionBullets(title: string, count: number) {
   const lines = RESTAURANT_PROFILE.split("\n");
@@ -30,19 +31,21 @@ function Row({
 }) {
   return (
     <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
-      <div className={flip ? "lg:order-2" : ""}>
+      <div className={`min-w-0 ${flip ? "lg:order-2" : ""}`}>
         <h3 className="font-serif text-display-3 [text-wrap:balance]">{title}</h3>
         <p className="mt-4 max-w-[440px] text-lead [text-wrap:pretty] text-smoke">{body}</p>
       </div>
-      <div className={flip ? "lg:order-1" : ""}>{visual}</div>
+      <div className={`min-w-0 ${flip ? "lg:order-1" : ""}`}>{visual}</div>
     </div>
   );
 }
 
-/* (a) Triage board */
+/* (a) Triage board. Each review sits where Petit Comptoir's knowledge file puts it, the
+   same as in the hero's inbox preview: a 1- or 2-star review with no escalation trigger
+   is "tell"; illness, discrimination and fake-looking reviews are "hold". */
 const COLUMNS: { risk: Risk; ids: string[]; note: string }[] = [
-  { risk: "ready", ids: ["g-sarah", "o-chen", "t-james"], note: "Safe to post now" },
-  { risk: "tell", ids: ["y-mark", "g-priya"], note: "Post it, then tell the owner the same day" },
+  { risk: "ready", ids: ["g-sarah", "g-priya", "o-chen"], note: "Safe to post now" },
+  { risk: "tell", ids: ["y-mark", "live-greg"], note: "Post it, then tell the owner the same day" },
   { risk: "hold", ids: ["t-helene", "g-dana", "y-kevin"], note: "A neutral holding reply; the owner decides" },
 ];
 
@@ -82,7 +85,7 @@ function VoiceVisual() {
   const policy = sectionBullets("Reply policy", 3);
   return (
     <div className="relative rounded-[20px] border border-line bg-[linear-gradient(170deg,#1b2031,#141826)] p-6 pb-28 sm:p-8 sm:pb-28">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
         <p className="text-small text-smoke-2">Knowledge file, Petit Comptoir</p>
         <span className="text-micro text-smoke-2">Sent with every draft</span>
       </div>

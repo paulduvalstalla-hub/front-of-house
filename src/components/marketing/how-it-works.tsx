@@ -15,7 +15,7 @@ const STEPS = [
 
 export function HowItWorks() {
   return (
-    <section className="border-t border-line">
+    <section id="how-it-works" className="scroll-mt-20 border-t border-line">
       <div className="mx-auto max-w-[1200px] px-5 py-24 sm:px-8">
         <h2 className="max-w-[560px] font-serif text-display-2 [text-wrap:balance]">
           From new review to posted reply in three steps

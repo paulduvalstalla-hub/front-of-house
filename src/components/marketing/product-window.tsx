@@ -3,19 +3,24 @@ import { PlatformLogo } from "@/components/platform-logo";
 import { DEMO_REVIEWS, timeAgo, type DemoReview } from "@/lib/demo-reviews";
 import { RiskBadge, type Risk } from "./risk-badge";
 
-// A static rendition of the dashboard inbox, built from the same demo data the app uses.
-const ROWS: { id: string; risk: Risk }[] = [
-  { id: "g-sarah", risk: "ready" },
-  { id: "t-helene", risk: "hold" },
-  { id: "y-mark", risk: "tell" },
-  { id: "o-chen", risk: "ready" },
-  { id: "g-dana", risk: "hold" },
-  { id: "g-priya", risk: "ready" },
-  { id: "t-james", risk: "ready" },
-  { id: "y-kevin", risk: "hold" },
-];
-
 const byId = (id: string) => DEMO_REVIEWS.find((r) => r.id === id) as DemoReview;
+
+// A static rendition of the dashboard inbox, built from the same demo data the app uses.
+// Statuses follow Petit Comptoir's knowledge file and match the triage board further
+// down; rows are sorted newest first, like the real inbox.
+const STATUS: Record<string, Risk> = {
+  "g-sarah": "ready",
+  "t-helene": "hold",
+  "y-mark": "tell",
+  "g-priya": "ready",
+  "o-chen": "ready",
+  "g-dana": "hold",
+  "y-kevin": "hold",
+  "t-james": "ready",
+};
+const ROWS = Object.entries(STATUS)
+  .map(([id, risk]) => ({ id, risk }))
+  .sort((a, b) => byId(a.id).hoursAgo - byId(b.id).hoursAgo);
 
 const NAV = [
   { label: "Inbox", count: "9", active: true, icon: "inbox" },

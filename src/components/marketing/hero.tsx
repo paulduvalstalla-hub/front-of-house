@@ -34,16 +34,18 @@ export function Hero() {
             href="/sign-in"
             className="rounded-lg bg-linen px-6 py-3 text-body font-semibold text-night transition hover:bg-white"
           >
-            Start free trial
-          </Link>
-          <Link
-            href="/sign-in"
-            className="rounded-lg border border-line-strong bg-night-2/60 px-6 py-3 text-body font-medium text-linen transition hover:border-linen/40"
-          >
             Try the live demo
           </Link>
+          <a
+            href="#how-it-works"
+            className="rounded-lg border border-line-strong bg-night-2/60 px-6 py-3 text-body font-medium text-linen transition hover:border-linen/40"
+          >
+            See how it works
+          </a>
         </div>
-        <p className={`foh-rise-late mt-4 text-small text-smoke-2`}>14-day free trial. No card needed.</p>
+        <p className={`foh-rise-late mt-4 text-small text-smoke-2`}>
+          Opens Petit Comptoir, a sample restaurant. No account or card needed.
+        </p>
 
         <div className={`foh-window-rise relative mx-auto mt-16 max-w-[1120px] sm:mt-20`}>
           <ProductWindow />

@@ -43,10 +43,13 @@ export function Pricing() {
             <h2 className="font-serif text-display-2 [text-wrap:balance]">
               Priced per restaurant, not per reply
             </h2>
-            <p className="mt-3 text-body text-smoke">Every plan starts with a 14-day free trial. No card needed.</p>
+            <p className="mt-3 max-w-[34rem] text-body text-smoke">
+              Planned pricing: every plan will start with a 14-day free trial. The live demo is open now, with no
+              account or card.
+            </p>
           </div>
           <div
-            role="radiogroup"
+            role="group"
             aria-label="Billing period"
             className="inline-flex self-start rounded-[10px] border border-line-strong bg-night-2 p-1 md:self-auto"
           >
@@ -54,8 +57,7 @@ export function Pricing() {
               <button
                 key={b}
                 type="button"
-                role="radio"
-                aria-checked={billing === b}
+                aria-pressed={billing === b}
                 onClick={() => setBilling(b)}
                 className={`rounded-md px-4 py-1.5 text-small transition ${
                   billing === b ? "bg-linen text-night" : "text-smoke hover:text-linen"
@@ -93,17 +95,14 @@ export function Pricing() {
                 href="/sign-in"
                 className="block rounded-lg border border-line-strong px-5 py-2.5 text-center text-body font-medium transition hover:border-linen/40"
               >
-                Start free trial
+                Try the live demo
               </Link>
             </div>
           </div>
 
           {/* Pro: the raised, lit panel */}
           <div className="relative flex flex-col rounded-[16px] border border-line-strong bg-night-2 px-6 py-8 sm:px-9 lg:-my-4 lg:py-12">
-            <div className="relative flex items-center justify-between">
-              <h3 className="text-title font-semibold">Pro</h3>
-              <span className="text-small text-smoke">Most restaurants pick this</span>
-            </div>
+            <h3 className="relative text-title font-semibold">Pro</h3>
             <p className="relative mt-1 text-small text-smoke">For busy rooms and small groups</p>
             <p className="relative mt-6 flex items-baseline gap-1.5">
               <span className="font-serif text-display-2 leading-none text-linen">${pro}</span>
@@ -127,7 +126,7 @@ export function Pricing() {
                 href="/sign-in"
                 className="block rounded-lg bg-linen px-5 py-3 text-center text-body font-semibold text-night transition hover:bg-white"
               >
-                Start free trial
+                Try the live demo
               </Link>
             </div>
           </div>
@@ -146,7 +145,7 @@ export function Pricing() {
                 href="/sign-in"
                 className="block rounded-lg border border-line-strong px-5 py-2.5 text-center text-body font-medium transition hover:border-linen/40"
               >
-                Contact sales
+                Try the live demo
               </Link>
             </div>
           </div>
