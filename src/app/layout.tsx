@@ -14,10 +14,16 @@ const sans = Instrument_Sans({
   subsets: ["latin"],
 });
 
+const title = "Front of House — the review reply desk for restaurants";
+const description =
+  "Front of House reads every guest review from Google, TripAdvisor, Yelp and OpenTable, drafts a reply in your restaurant's voice, and holds the risky ones for the owner.";
+
 export const metadata: Metadata = {
-  title: "Front of House — the review reply desk for restaurants",
-  description:
-    "Front of House reads every guest review from Google, TripAdvisor, Yelp and OpenTable, drafts a reply in your restaurant's voice, and holds the risky ones for the owner.",
+  metadataBase: new URL("https://front-of-house-one.vercel.app"),
+  title,
+  description,
+  openGraph: { title, description, siteName: "Front of House", type: "website" },
+  twitter: { card: "summary_large_image", title, description },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

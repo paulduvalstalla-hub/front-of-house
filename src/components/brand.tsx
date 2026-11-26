@@ -1,17 +1,38 @@
 import type { Platform } from "@/lib/demo-reviews";
 
-/** Wordmark: the lamp dot is the brand's one warm light in a dark room. */
+/**
+ * The service bell: a review rings, the restaurant answers. Drawn on a 48-unit
+ * grid; the same geometry is in app/icon.svg, the favicon and the share image.
+ * The plunger is the brand's one warm light.
+ */
+export function BellMark({ size = 24, glow = true, className = "" }: { size?: number; glow?: boolean; className?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden className={`shrink-0 ${className}`}>
+      <rect x="5" y="37" width="38" height="5" rx="2.5" className="fill-linen" />
+      <path d="M9 35 A15 15 0 0 1 39 35 Z" className="fill-linen" />
+      <rect x="22.5" y="15" width="3" height="6" className="fill-linen" />
+      <circle
+        cx="24"
+        cy="13"
+        r="4"
+        className="fill-lamp"
+        style={glow ? { filter: "drop-shadow(0 0 3px rgb(242 182 109 / 0.75))" } : undefined}
+      />
+      <path d="M12.5 8 L16 11.5 M35.5 8 L32 11.5" className="stroke-lamp" strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/** Wordmark: the bell sits on the baseline beside the serif name. */
 export function Logo({ className = "", size = 20 }: { className?: string; size?: number }) {
   return (
     <span
-      className={`inline-flex items-baseline gap-[0.32em] whitespace-nowrap font-serif tracking-[-0.03em] text-linen ${className}`}
+      className={`inline-flex items-baseline gap-[0.34em] whitespace-nowrap font-serif tracking-[-0.03em] text-linen ${className}`}
       style={{ fontSize: size }}
     >
-      <span
-        aria-hidden
-        className="inline-block translate-y-[-0.08em] rounded-full bg-lamp shadow-[0_0_14px_2px_rgb(242_182_109/0.55)]"
-        style={{ width: size * 0.34, height: size * 0.34 }}
-      />
+      {/* An inline SVG's baseline is its bottom edge; the drawing leaves 6/48 empty below the
+          bell's base, so shift it down by that much to set the base on the text baseline. */}
+      <BellMark size={Math.round(size * 1.32)} className="translate-y-[0.16em]" />
       Front of House
     </span>
   );
