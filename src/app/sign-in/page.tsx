@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Logo, PlatformMark, Stars } from "@/components/brand";
+import { Logo, Stars } from "@/components/brand";
+import { PlatformLogo } from "@/components/platform-logo";
 import { DuskSky } from "@/components/marketing/dusk-sky";
 import { RiskBadge } from "@/components/marketing/risk-badge";
 import { SignInForm } from "@/components/marketing/sign-in-form";
@@ -28,11 +29,11 @@ export default function SignInPage() {
       </div>
 
       <div className="relative hidden overflow-hidden lg:block">
-        <DuskSky glow={0.65} />
+        <DuskSky />
         <div className="relative z-[3] flex h-full flex-col justify-center px-14 py-16">
           <figure className="max-w-[500px] rounded-2xl border border-line-strong bg-night/85 shadow-[0_40px_100px_-30px_rgb(0_0_0/0.85)] backdrop-blur">
             <div className="flex items-center gap-2.5 border-b border-line px-5 py-3.5">
-              <PlatformMark platform="Google" size={22} />
+              <PlatformLogo platform="Google" size={18} />
               <span className="text-[13.5px] font-medium">Sarah M.</span>
               <Stars value={5} className="text-[12px]" />
               <RiskBadge risk="ready" className="ml-auto" />

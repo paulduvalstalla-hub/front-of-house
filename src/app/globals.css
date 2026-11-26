@@ -2,8 +2,10 @@
 
 /*
   Front of House design tokens — "the dining room after close".
-  Night-navy base, linen text, one warm lamp accent for the primary action,
-  sage / lamp / wine only for review risk. Display serif (Newsreader) + UI sans (Instrument Sans).
+  Night-navy base, linen text. Primary buttons are flat linen, never glowing.
+  Lamp (amber) is kept for star ratings and the "tell the owner" state; sage / lamp / wine
+  only for review risk. Platforms show their real logos (platform-logo.tsx).
+  Display serif (Newsreader) + UI sans (Instrument Sans).
 */
 
 @theme inline {

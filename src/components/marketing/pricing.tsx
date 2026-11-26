@@ -9,15 +9,15 @@ function price(monthly: number, billing: Billing) {
   return billing === "monthly" ? monthly : Math.round(monthly * 0.8);
 }
 
-function Check({ tone = "smoke" }: { tone?: "smoke" | "lamp" }) {
+function Check({ tone = "smoke" }: { tone?: "smoke" | "strong" }) {
   return (
-    <svg viewBox="0 0 16 16" className={`mt-[3px] size-3.5 shrink-0 ${tone === "lamp" ? "text-lamp" : "text-smoke-2"}`} aria-hidden>
+    <svg viewBox="0 0 16 16" className={`mt-[3px] size-3.5 shrink-0 ${tone === "strong" ? "text-linen" : "text-smoke-2"}`} aria-hidden>
       <path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
-function Features({ items, tone }: { items: string[]; tone?: "smoke" | "lamp" }) {
+function Features({ items, tone }: { items: string[]; tone?: "smoke" | "strong" }) {
   return (
     <ul className="mt-6 space-y-2.5">
       {items.map((f) => (
@@ -48,7 +48,7 @@ export function Pricing() {
           <div
             role="radiogroup"
             aria-label="Billing period"
-            className="inline-flex self-start rounded-full border border-line-strong bg-night-2 p-1 md:self-auto"
+            className="inline-flex self-start rounded-[10px] border border-line-strong bg-night-2 p-1 md:self-auto"
           >
             {(["monthly", "annual"] as const).map((b) => (
               <button
@@ -57,7 +57,7 @@ export function Pricing() {
                 role="radio"
                 aria-checked={billing === b}
                 onClick={() => setBilling(b)}
-                className={`rounded-full px-4 py-1.5 text-[13.5px] transition ${
+                className={`rounded-md px-4 py-1.5 text-[13.5px] transition ${
                   billing === b ? "bg-linen text-night" : "text-smoke hover:text-linen"
                 }`}
               >
@@ -85,7 +85,7 @@ export function Pricing() {
             <div className="mt-auto pt-8">
               <Link
                 href="/sign-in"
-                className="block rounded-full border border-line-strong px-5 py-2.5 text-center text-[14.5px] font-medium transition hover:border-linen/40"
+                className="block rounded-lg border border-line-strong px-5 py-2.5 text-center text-[14.5px] font-medium transition hover:border-linen/40"
               >
                 Start free trial
               </Link>
@@ -93,16 +93,10 @@ export function Pricing() {
           </div>
 
           {/* Pro: the raised, lit panel */}
-          <div className="relative flex flex-col overflow-hidden rounded-[22px] border border-lamp/60 bg-[linear-gradient(170deg,#24253a_0%,#171a29_55%,#1a1822_100%)] px-6 py-8 shadow-[0_0_80px_-20px_rgb(242_182_109/0.45)] sm:px-9 lg:-my-4 lg:py-12">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -top-24 left-1/2 h-48 w-[80%] -translate-x-1/2 rounded-full bg-lamp/20 blur-3xl"
-            />
+          <div className="relative flex flex-col rounded-[16px] border border-line-strong bg-night-2 px-6 py-8 sm:px-9 lg:-my-4 lg:py-12">
             <div className="relative flex items-center justify-between">
               <h3 className="text-[17px] font-semibold">Pro</h3>
-              <span className="rounded-full bg-lamp/15 px-2.5 py-0.5 text-[12px] font-medium text-lamp">
-                Best fit for most restaurants
-              </span>
+              <span className="text-[12.5px] text-smoke">Most restaurants pick this</span>
             </div>
             <p className="relative mt-1 text-[14px] text-smoke">For busy rooms and small groups</p>
             <p className="relative mt-6 flex items-baseline gap-1.5">
@@ -113,7 +107,7 @@ export function Pricing() {
               {billing === "annual" ? `Billed $${pro * 12} a year` : "Billed monthly"}
             </p>
             <Features
-              tone="lamp"
+              tone="strong"
               items={[
                 "Up to 3 locations",
                 "Unlimited AI drafts",
@@ -125,7 +119,7 @@ export function Pricing() {
             <div className="relative mt-auto pt-8">
               <Link
                 href="/sign-in"
-                className="block rounded-full bg-lamp px-5 py-3 text-center text-[15px] font-semibold text-night shadow-[0_0_30px_-6px_rgb(242_182_109/0.7)] transition hover:bg-[#f6c584]"
+                className="block rounded-lg bg-linen px-5 py-3 text-center text-[15px] font-semibold text-night transition hover:bg-white"
               >
                 Start free trial
               </Link>
@@ -144,7 +138,7 @@ export function Pricing() {
             <div className="mt-auto pt-8">
               <Link
                 href="/sign-in"
-                className="block rounded-full border border-line-strong px-5 py-2.5 text-center text-[14.5px] font-medium transition hover:border-linen/40"
+                className="block rounded-lg border border-line-strong px-5 py-2.5 text-center text-[14.5px] font-medium transition hover:border-linen/40"
               >
                 Contact sales
               </Link>

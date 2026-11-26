@@ -1,21 +1,20 @@
+import { StatusLabel } from "@/components/status";
+
 export type Risk = "ready" | "tell" | "hold";
 
-const RISK: Record<Risk, { label: string; dot: string; text: string; bg: string }> = {
-  ready: { label: "Ready to post", dot: "bg-sage", text: "text-sage", bg: "bg-sage/10" },
-  tell: { label: "Tell the owner", dot: "bg-lamp", text: "text-lamp", bg: "bg-lamp/10" },
-  hold: { label: "Hold for owner", dot: "bg-wine", text: "text-wine", bg: "bg-wine/10" },
+const LABEL: Record<Risk, string> = {
+  ready: "Ready to post",
+  tell: "Tell the owner",
+  hold: "Hold for owner",
 };
 
-export function RiskBadge({ risk, className = "" }: { risk: Risk; className?: string }) {
-  const r = RISK[risk];
+/** Review status for the marketing mocks: icon plus plain text, same as the app. */
+export function RiskBadge({ risk, className = "", size = 13 }: { risk: Risk; className?: string; size?: number }) {
   return (
-    <span
-      className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2 py-[3px] text-[11.5px] font-medium ${r.bg} ${r.text} ${className}`}
-    >
-      <span className={`size-1.5 rounded-full ${r.dot}`} />
-      {r.label}
-    </span>
+    <StatusLabel level={risk} size={size} className={`text-[12px] text-smoke ${className}`}>
+      {LABEL[risk]}
+    </StatusLabel>
   );
 }
 
-export const RISK_LABEL = (risk: Risk) => RISK[risk].label;
+export const RISK_LABEL = (risk: Risk) => LABEL[risk];

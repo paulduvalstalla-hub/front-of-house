@@ -66,7 +66,7 @@ export function VoiceEditor() {
             type="button"
             disabled={isDefault}
             onClick={() => desk.setProfile(fallback)}
-            className="rounded-full border border-line px-3.5 py-1.5 text-smoke hover:border-line-strong hover:text-linen disabled:opacity-40"
+            className="rounded-lg border border-line px-3.5 py-1.5 text-smoke hover:border-line-strong hover:text-linen disabled:opacity-40"
           >
             {desk.workspace.mode === "custom" ? "Rebuild from onboarding" : "Reset to default"}
           </button>

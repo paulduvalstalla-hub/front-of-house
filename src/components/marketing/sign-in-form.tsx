@@ -15,8 +15,8 @@ function SubmitButton({ children, variant }: { children: string; variant: "prima
       disabled={pending}
       className={
         variant === "primary"
-          ? "w-full rounded-full bg-lamp px-5 py-3 text-[15px] font-semibold text-night shadow-[0_0_30px_-8px_rgb(242_182_109/0.7)] transition hover:bg-[#f6c584] disabled:opacity-60"
-          : "w-full rounded-full border border-line-strong px-5 py-3 text-[15px] font-medium text-linen transition hover:border-linen/40 disabled:opacity-60"
+          ? "w-full rounded-lg bg-linen px-5 py-3 text-[15px] font-semibold text-night transition hover:bg-white disabled:opacity-60"
+          : "w-full rounded-lg border border-line-strong px-5 py-3 text-[15px] font-medium text-linen transition hover:border-linen/40 disabled:opacity-60"
       }
     >
       {pending ? "Opening the dashboard…" : children}

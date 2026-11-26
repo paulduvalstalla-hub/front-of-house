@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { PlatformMark } from "@/components/brand";
+import { PlatformLogo } from "@/components/platform-logo";
 import { DEMO_REVIEWS, PLATFORMS, type Platform } from "@/lib/demo-reviews";
 import { useDesk } from "./desk-store";
 import { CheckIcon } from "./icons";
@@ -34,7 +34,7 @@ function ConnectDialog({ platform, onClose }: { platform: Platform; onClose: () 
       className="m-auto w-[min(440px,calc(100vw-32px))] rounded-[var(--radius-window)] border border-line-strong bg-night-2 p-0 text-linen shadow-[0_40px_80px_-30px_rgb(0_0_0/0.8)] backdrop:bg-black/60"
     >
       <div className="flex items-center gap-3 border-b border-line px-5 py-4">
-        <PlatformMark platform={platform} size={28} />
+        <PlatformLogo platform={platform} size={36} tile />
         <div>
           <p className="text-[15px] font-medium">Connect {meta.name}</p>
           <p className="text-[12.5px] text-smoke-2">Demo connector: no real account is contacted</p>
@@ -60,14 +60,14 @@ function ConnectDialog({ platform, onClose }: { platform: Platform; onClose: () 
             <button
               type="button"
               onClick={() => ref.current?.close()}
-              className="rounded-full px-4 py-2 text-[14px] text-smoke hover:text-linen"
+              className="rounded-lg px-4 py-2 text-[14px] text-smoke hover:text-linen"
             >
               Cancel
             </button>
             <button
               type="button"
               onClick={allow}
-              className="rounded-full bg-lamp px-4 py-2 text-[14px] font-medium text-night hover:bg-lamp/90"
+              className="rounded-lg bg-linen px-4 py-2 text-[14px] font-medium text-night hover:bg-white"
             >
               Allow and connect
             </button>
@@ -96,7 +96,7 @@ function ConnectDialog({ platform, onClose }: { platform: Platform; onClose: () 
             <button
               type="button"
               onClick={() => ref.current?.close()}
-              className="rounded-full bg-linen px-4 py-2 text-[14px] font-medium text-night"
+              className="rounded-lg bg-linen px-4 py-2 text-[14px] font-medium text-night"
             >
               Done
             </button>
@@ -128,7 +128,7 @@ export function Integrations() {
           const count = DEMO_REVIEWS.filter((r) => r.platform === p.id).length;
           return (
             <li key={p.id} className="flex flex-wrap items-center gap-4 px-5 py-4">
-              <PlatformMark platform={p.id} size={36} />
+              <PlatformLogo platform={p.id} size={40} tile />
               <div className="min-w-[180px] flex-1">
                 <p className="text-[15px] font-medium">{p.name}</p>
                 <p className="text-[13px] text-smoke-2">{p.detail}</p>
@@ -146,7 +146,7 @@ export function Integrations() {
                 <button
                   type="button"
                   onClick={() => desk.disconnect(p.id)}
-                  className="rounded-full border border-line px-3.5 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
+                  className="rounded-lg border border-line px-3.5 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
                 >
                   Disconnect
                 </button>
@@ -154,7 +154,7 @@ export function Integrations() {
                 <button
                   type="button"
                   onClick={() => setConnecting(p.id)}
-                  className="rounded-full bg-linen px-3.5 py-1.5 text-[13.5px] font-medium text-night hover:bg-linen/90"
+                  className="rounded-lg bg-linen px-3.5 py-1.5 text-[13.5px] font-medium text-night hover:bg-white"
                 >
                   Connect
                 </button>

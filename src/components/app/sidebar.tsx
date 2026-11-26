@@ -76,7 +76,7 @@ function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
         >
           <p className="text-[13px] text-linen">Pro trial</p>
           <div className="mt-2 h-1 overflow-hidden rounded-full bg-night-4">
-            <div className="h-full rounded-full bg-lamp" style={{ width: `${(trialDaysLeft / 14) * 100}%` }} />
+            <div className="h-full rounded-full bg-linen/70" style={{ width: `${(trialDaysLeft / 14) * 100}%` }} />
           </div>
           <p className="mt-1.5 text-[12px] text-smoke-2">{trialDaysLeft} days left</p>
         </Link>

@@ -1,13 +1,12 @@
 import Link from "next/link";
 import { DuskSky } from "./dusk-sky";
-import { LampTile, ReplyTile, StarTile } from "./hero-tiles";
 import { ProductWindow } from "./product-window";
 import styles from "./marketing.module.css";
 
 export function Hero() {
   return (
     <section className="relative overflow-hidden">
-      <DuskSky className="top-[26%]" glow={0.8} />
+      <DuskSky className="top-[26%]" />
       {/* fade the sky into the page above and below */}
       <div
         aria-hidden
@@ -20,9 +19,9 @@ export function Hero() {
 
       <div className="relative z-[3] mx-auto max-w-[1200px] px-5 pb-24 pt-16 text-center sm:px-8 sm:pt-24">
         <h1
-          className={`${styles.rise} mx-auto max-w-[980px] font-serif text-[46px] font-normal leading-[1.02] tracking-[-0.035em] text-linen sm:text-[68px] lg:text-[86px]`}
+          className={`${styles.rise} mx-auto max-w-[900px] font-serif text-[46px] font-normal leading-[1.02] tracking-[-0.035em] text-linen [text-wrap:balance] sm:text-[68px] lg:text-[84px]`}
         >
-          Every <StarTile /> review answered <ReplyTile /> in your own <LampTile /> voice.
+          Every review answered in your own voice.
         </h1>
         <p
           className={`${styles.riseLate} mx-auto mt-7 max-w-[600px] text-[17px] leading-relaxed text-smoke sm:text-[18px]`}
@@ -33,13 +32,13 @@ export function Hero() {
         <div className={`${styles.riseLate} mt-9 flex flex-wrap items-center justify-center gap-3`}>
           <Link
             href="/sign-in"
-            className="rounded-full bg-lamp px-6 py-3 text-[15px] font-semibold text-night shadow-[0_0_40px_-6px_rgb(242_182_109/0.7)] transition hover:bg-[#f6c584]"
+            className="rounded-lg bg-linen px-6 py-3 text-[15px] font-semibold text-night transition hover:bg-white"
           >
             Start free trial
           </Link>
           <Link
             href="/sign-in"
-            className="rounded-full border border-line-strong bg-night-2/60 px-6 py-3 text-[15px] font-medium text-linen backdrop-blur transition hover:border-linen/40"
+            className="rounded-lg border border-line-strong bg-night-2/60 px-6 py-3 text-[15px] font-medium text-linen transition hover:border-linen/40"
           >
             Try the live demo
           </Link>
@@ -47,10 +46,6 @@ export function Hero() {
         <p className={`${styles.riseLate} mt-4 text-[13.5px] text-smoke-2`}>14-day free trial. No card needed.</p>
 
         <div className={`${styles.windowRise} relative mx-auto mt-16 max-w-[1120px] sm:mt-20`}>
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-[8%] -bottom-10 top-[40%] rounded-full bg-lamp/30 blur-[90px]"
-          />
           <ProductWindow />
         </div>
       </div>

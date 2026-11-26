@@ -2,6 +2,7 @@
 
 import { useChat } from "@ai-sdk/react";
 import { useState, type FormEvent } from "react";
+import { StatusIcon } from "@/components/status";
 import type { DemoReview } from "@/lib/demo-reviews";
 import type { ReplyDraft } from "@/lib/reply-tool";
 import { useDesk, type DeskMessage } from "./desk-store";
@@ -111,7 +112,7 @@ export function DraftPanel({ review }: { review: DemoReview }) {
         <button
           type="button"
           onClick={() => desk.draftReview(review.id)}
-          className="mt-5 rounded-full bg-lamp px-5 py-2.5 text-[14px] font-medium text-night shadow-[0_0_24px_-6px_rgb(242_182_109/0.7)] hover:bg-lamp/90"
+          className="mt-5 rounded-lg bg-linen px-5 py-2.5 text-[14px] font-medium text-night hover:bg-white"
         >
           Draft a reply
         </button>
@@ -138,9 +139,15 @@ export function DraftPanel({ review }: { review: DemoReview }) {
 
   return (
     <section aria-label="Draft reply" className="overflow-hidden rounded-[var(--radius-window)] border border-line bg-night-2">
-      <header className={`flex flex-wrap items-center gap-x-3 gap-y-1 border-b px-5 py-3 ${risk ? risk.strip : "border-line"}`}>
+      <header className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-line px-5 py-3">
         <span className="flex items-center gap-2 text-[14px] font-medium">
-          <span className={`size-2 rounded-full ${risk ? risk.dot : "bg-smoke-2"}`} />
+          {withOwner ? (
+            <StatusIcon level="hold" size={15} />
+          ) : risk ? (
+            <StatusIcon level={risk.level} size={15} />
+          ) : (
+            <span className="size-2 rounded-full bg-smoke-2" />
+          )}
           {withOwner ? `Waiting for ${owner}` : risk ? risk.label : "Drafting"}
           {busy && (
             <span className="dot-pulse ml-1 inline-flex gap-1" aria-hidden>
@@ -155,18 +162,20 @@ export function DraftPanel({ review }: { review: DemoReview }) {
 
       <div className="space-y-5 px-5 py-4">
         {(praised.length > 0 || problems.length > 0) && (
-          <ul aria-label="What the guest mentioned" className="flex flex-wrap gap-1.5">
-            {praised.map((p) => (
-              <li key={`p-${p}`} className="rounded-full bg-sage/[0.12] px-2.5 py-0.5 text-[12.5px] text-sage">
-                {p}
-              </li>
-            ))}
-            {problems.map((p) => (
-              <li key={`x-${p}`} className="rounded-full bg-wine/[0.12] px-2.5 py-0.5 text-[12.5px] text-wine">
-                {p}
-              </li>
-            ))}
-          </ul>
+          <dl aria-label="What the guest mentioned" className="space-y-1 text-[13px] leading-snug">
+            {praised.length > 0 && (
+              <div className="flex gap-2">
+                <dt className="w-[78px] shrink-0 text-smoke-2">Praised</dt>
+                <dd className="text-smoke">{praised.join(" · ")}</dd>
+              </div>
+            )}
+            {problems.length > 0 && (
+              <div className="flex gap-2">
+                <dt className="w-[78px] shrink-0 text-smoke-2">Went wrong</dt>
+                <dd className="text-linen">{problems.join(" · ")}</dd>
+              </div>
+            )}
+          </dl>
         )}
 
         <div>
@@ -216,7 +225,7 @@ export function DraftPanel({ review }: { review: DemoReview }) {
                 <button
                   type="button"
                   onClick={() => desk.sendToOwner(review.id)}
-                  className="flex items-center gap-2 rounded-full bg-wine px-4 py-2 text-[14px] font-medium text-night hover:bg-wine/90"
+                  className="flex items-center gap-2 rounded-lg bg-wine px-4 py-2 text-[14px] font-medium text-night hover:bg-wine/90"
                 >
                   <HoldIcon />
                   Send to {owner} for approval
@@ -224,7 +233,7 @@ export function DraftPanel({ review }: { review: DemoReview }) {
                 <button
                   type="button"
                   onClick={() => desk.approve(review.id, replyText)}
-                  className="rounded-full border border-line-strong px-4 py-2 text-[14px] text-smoke hover:text-linen"
+                  className="rounded-lg border border-line-strong px-4 py-2 text-[14px] text-smoke hover:text-linen"
                 >
                   Post anyway
                 </button>
@@ -233,7 +242,7 @@ export function DraftPanel({ review }: { review: DemoReview }) {
               <button
                 type="button"
                 onClick={() => desk.approve(review.id, replyText)}
-                className="flex items-center gap-2 rounded-full bg-lamp px-4 py-2 text-[14px] font-medium text-night shadow-[0_0_24px_-8px_rgb(242_182_109/0.8)] hover:bg-lamp/90"
+                className="flex items-center gap-2 rounded-lg bg-linen px-4 py-2 text-[14px] font-medium text-night hover:bg-white"
               >
                 <CheckIcon />
                 {withOwner ? `${owner} approved: post to ${review.platform}` : `Approve and post to ${review.platform}`}
@@ -242,14 +251,14 @@ export function DraftPanel({ review }: { review: DemoReview }) {
             <button
               type="button"
               onClick={() => navigator.clipboard?.writeText(replyText).catch(() => {})}
-              className="rounded-full px-3 py-2 text-[13.5px] text-smoke hover:bg-night-3 hover:text-linen"
+              className="rounded-lg px-3 py-2 text-[13.5px] text-smoke hover:bg-night-3 hover:text-linen"
             >
               Copy
             </button>
             <button
               type="button"
               onClick={() => desk.draftReview(review.id)}
-              className="rounded-full px-3 py-2 text-[13.5px] text-smoke hover:bg-night-3 hover:text-linen"
+              className="rounded-lg px-3 py-2 text-[13.5px] text-smoke hover:bg-night-3 hover:text-linen"
             >
               Redraft
             </button>
@@ -261,7 +270,7 @@ export function DraftPanel({ review }: { review: DemoReview }) {
                 key={r.label}
                 type="button"
                 onClick={() => revise(r.prompt)}
-                className="rounded-full border border-line px-3 py-1 text-[13px] text-smoke hover:border-line-strong hover:text-linen"
+                className="rounded-lg border border-line px-3 py-1 text-[13px] text-smoke hover:border-line-strong hover:text-linen"
               >
                 {r.label}
               </button>
@@ -274,7 +283,7 @@ export function DraftPanel({ review }: { review: DemoReview }) {
               value={ask}
               onChange={(e) => setAsk(e.target.value)}
               placeholder="Ask for a change, e.g. mention the new brunch menu"
-              className="min-w-[220px] flex-1 rounded-full border border-line bg-night px-3.5 py-1.5 text-[13.5px] outline-none placeholder:text-smoke-2 focus:border-line-strong"
+              className="min-w-[220px] flex-1 rounded-lg border border-line bg-night px-3.5 py-1.5 text-[13.5px] outline-none placeholder:text-smoke-2 focus:border-line-strong"
             />
           </form>
         </footer>

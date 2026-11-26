@@ -1,4 +1,5 @@
-import { Logo, PlatformMark, Stars } from "@/components/brand";
+import { Logo, Stars } from "@/components/brand";
+import { PlatformLogo } from "@/components/platform-logo";
 import { DEMO_REVIEWS, timeAgo, type DemoReview } from "@/lib/demo-reviews";
 import { RiskBadge, type Risk } from "./risk-badge";
 
@@ -51,7 +52,7 @@ export function ProductWindow() {
           <span className="size-2.5 rounded-full bg-linen/15" />
           <span className="size-2.5 rounded-full bg-linen/15" />
         </span>
-        <span className="mx-auto rounded-md bg-night-3/80 px-3 py-0.5 text-[11.5px] text-smoke">
+        <span className="mx-auto truncate whitespace-nowrap rounded-md bg-night-3/80 px-3 py-0.5 text-[11.5px] text-smoke">
           Petit Comptoir, inbox
         </span>
         <span className="w-[46px]" aria-hidden />
@@ -76,7 +77,7 @@ export function ProductWindow() {
                 <NavIcon name={n.icon} />
                 {n.label}
                 {"count" in n && (
-                  <span className="ml-auto rounded-full bg-lamp/15 px-1.5 text-[10.5px] font-medium text-lamp">
+                  <span className="ml-auto rounded-full bg-night-4 px-1.5 text-[10.5px] tabular-nums text-linen/90">
                     {n.count}
                   </span>
                 )}
@@ -93,7 +94,7 @@ export function ProductWindow() {
         <section className="hidden min-w-0 flex-col border-r border-line md:flex">
           <div className="flex items-center justify-between border-b border-line px-4 py-3">
             <p className="text-[13px] font-medium">Needs reply</p>
-            <span className="rounded-full bg-lamp px-2.5 py-1 text-[11px] font-semibold text-night">
+            <span className="rounded-md bg-linen px-2.5 py-1 text-[11px] font-semibold text-night">
               Triage all
             </span>
           </div>
@@ -109,16 +110,16 @@ export function ProductWindow() {
               return (
                 <li
                   key={id}
-                  className={`border-b border-line px-4 py-2.5 ${active ? "bg-night-3/80 shadow-[inset_2px_0_0_#f2b66d]" : ""}`}
+                  className={`border-b border-line px-4 py-2.5 ${active ? "bg-night-3/80 shadow-[inset_2px_0_0_#f3eee4]" : ""}`}
                 >
                   <div className="flex items-center gap-2">
-                    <PlatformMark platform={r.platform} size={18} />
+                    <PlatformLogo platform={r.platform} size={14} />
                     <span className="truncate text-[12.5px] font-medium">{r.author}</span>
                     <Stars value={r.stars} className="text-[10px]" />
                     <span className="ml-auto shrink-0 text-[10.5px] text-smoke-2">{timeAgo(r.hoursAgo)}</span>
                   </div>
                   <p className="mt-1 line-clamp-1 text-[11.5px] text-smoke">{r.text}</p>
-                  <RiskBadge risk={risk} className="mt-1.5 !text-[10.5px]" />
+                  <RiskBadge risk={risk} size={12} className="mt-1.5 !text-[10.5px]" />
                 </li>
               );
             })}
@@ -128,7 +129,7 @@ export function ProductWindow() {
         {/* open review */}
         <section className="flex min-w-0 flex-col overflow-hidden">
           <div className="flex items-center gap-2.5 border-b border-line px-5 py-3">
-            <PlatformMark platform={selected.platform} size={22} />
+            <PlatformLogo platform={selected.platform} size={32} tile />
             <div className="min-w-0">
               <p className="text-[13px] font-medium">{selected.author}</p>
               <p className="text-[11px] text-smoke-2">Google review, {timeAgo(selected.hoursAgo)}</p>
@@ -139,40 +140,35 @@ export function ProductWindow() {
             <p className="font-serif text-[14.5px] italic leading-relaxed text-smoke">{selected.text}</p>
 
             <div className="overflow-hidden rounded-xl border border-line-strong bg-night-2">
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-line bg-sage/[0.07] px-4 py-2.5">
-                <RiskBadge risk="ready" />
-                <span className="text-[11.5px] text-smoke">Positive review, no escalation or flag triggers.</span>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-line px-4 py-2.5">
+                <RiskBadge risk="ready" className="font-medium !text-linen" />
+                <span className="text-[11.5px] text-smoke-2">Positive review, no escalation or flag triggers.</span>
               </div>
               <div className="px-4 py-3.5">
-                <div className="flex flex-wrap gap-1.5">
-                  {["Duck confit was perfect", "Server remembered the celebration", "Candle in the crème brûlée"].map(
-                    (t) => (
-                      <span key={t} className="rounded-full bg-sage/10 px-2 py-0.5 text-[11px] text-sage">
-                        {t}
-                      </span>
-                    ),
-                  )}
-                </div>
+                <p className="text-[11.5px] leading-snug text-smoke-2">
+                  <span className="text-smoke">Praised:</span> duck confit was perfect, server remembered the
+                  celebration, candle in the crème brûlée
+                </p>
                 <p className="mt-3 font-serif text-[15px] leading-[1.6] text-linen">{DRAFT}</p>
                 <p className="mt-2 font-serif text-[15px] text-linen">— Camille, General Manager</p>
                 <div className="mt-3.5 flex flex-wrap items-center gap-2">
-                  <span className="rounded-full bg-lamp px-3 py-1.5 text-[11.5px] font-semibold text-night">
+                  <span className="rounded-md bg-linen px-3 py-1.5 text-[11.5px] font-semibold text-night">
                     Approve and post
                   </span>
-                  <span className="rounded-full border border-line-strong px-3 py-1.5 text-[11.5px] text-linen">
+                  <span className="rounded-md border border-line-strong px-3 py-1.5 text-[11.5px] text-linen">
                     Edit
                   </span>
-                  <span className="hidden rounded-full border border-line px-2.5 py-1 text-[11px] text-smoke sm:inline">
+                  <span className="hidden rounded-md border border-line px-2.5 py-1 text-[11px] text-smoke sm:inline">
                     Shorter
                   </span>
-                  <span className="hidden rounded-full border border-line px-2.5 py-1 text-[11px] text-smoke sm:inline">
+                  <span className="hidden rounded-md border border-line px-2.5 py-1 text-[11px] text-smoke sm:inline">
                     In French
                   </span>
                   <span className="ml-auto text-[11px] text-smoke-2">55 words</span>
                 </div>
               </div>
-              <div className="border-t border-line bg-lamp/[0.06] px-4 py-2.5 text-[11.5px] text-smoke">
-                <span className="text-lamp">For Camille only:</span> pass the compliment on to Léa.
+              <div className="border-t border-line px-4 py-2.5 text-[11.5px] text-smoke">
+                <span className="font-medium text-linen">For Camille only:</span> pass the compliment on to Léa.
               </div>
             </div>
           </div>

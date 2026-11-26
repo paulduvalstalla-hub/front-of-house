@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { PlatformMark, Stars } from "@/components/brand";
+import { Stars } from "@/components/brand";
+import { PlatformLogo } from "@/components/platform-logo";
+import { StatusLabel } from "@/components/status";
 import { PLATFORMS, timeAgo, type DemoReview, type Platform } from "@/lib/demo-reviews";
 import { useDesk, type ReviewRecord } from "./desk-store";
 import { AddReviewDialog } from "./add-review";
@@ -43,10 +45,9 @@ function RowStatus({ rec, owner }: { rec?: ReviewRecord; owner: string }) {
   if (rec.draft) {
     const m = riskMeta(rec.draft.risk, owner);
     return (
-      <span className={`flex items-center gap-1.5 text-[12px] ${m.text}`}>
-        <span className={`size-1.5 rounded-full ${m.dot}`} />
+      <StatusLabel level={m.level} size={13} className="text-[12px] text-smoke">
         {m.short}
-      </span>
+      </StatusLabel>
     );
   }
   return <span className="text-[12px] text-smoke-2">New</span>;
@@ -117,7 +118,7 @@ export function Inbox() {
         <button
           type="button"
           onClick={() => setAdding(true)}
-          className="rounded-full border border-line-strong px-4 py-2 text-[14px] text-linen hover:bg-night-2"
+          className="rounded-lg border border-line-strong px-4 py-2 text-[14px] text-linen hover:bg-night-2"
         >
           Add a review
         </button>
@@ -125,7 +126,7 @@ export function Inbox() {
           type="button"
           onClick={() => desk.triageAll()}
           disabled={desk.triage.running || untriaged === 0}
-          className="flex items-center gap-2 rounded-full bg-lamp px-4 py-2 text-[14px] font-medium text-night shadow-[0_0_28px_-8px_rgb(242_182_109/0.8)] transition hover:bg-lamp/90 disabled:bg-night-3 disabled:text-smoke disabled:shadow-none"
+          className="flex items-center gap-2 rounded-lg bg-linen px-4 py-2 text-[14px] font-medium text-night transition hover:bg-white disabled:bg-night-3 disabled:text-smoke disabled:shadow-none"
         >
           <LayersIcon />
           {desk.triage.running
@@ -173,7 +174,7 @@ export function Inbox() {
               title={p.name}
               className={`rounded-lg p-1 ${platform === p.id ? "bg-night-3" : "opacity-70 hover:opacity-100"}`}
             >
-              <PlatformMark platform={p.id} size={22} />
+              <PlatformLogo platform={p.id} size={18} />
             </button>
           ))}
         </div>
@@ -199,7 +200,7 @@ export function Inbox() {
               <button
                 type="button"
                 onClick={() => setAdding(true)}
-                className="mt-4 rounded-full bg-lamp px-4 py-2 text-[14px] font-medium text-night hover:bg-lamp/90"
+                className="mt-4 rounded-lg bg-linen px-4 py-2 text-[14px] font-medium text-night hover:bg-white"
               >
                 Add a review
               </button>
@@ -223,9 +224,9 @@ export function Inbox() {
                       active ? "bg-night-3" : "hover:bg-night-2"
                     }`}
                   >
-                    {active && <span className="absolute inset-y-2 left-0 w-[2px] rounded-full bg-lamp" />}
+                    {active && <span className="absolute inset-y-2 left-0 w-[2px] rounded-full bg-linen" />}
                     <span className="flex items-center gap-2.5">
-                      <PlatformMark platform={r.platform} size={20} />
+                      <PlatformLogo platform={r.platform} size={16} />
                       <span className="min-w-0 flex-1 truncate text-[14px] font-medium">{r.author}</span>
                       <span className="text-[12px] text-smoke-2">{timeAgo(r.hoursAgo)}</span>
                     </span>
@@ -233,9 +234,9 @@ export function Inbox() {
                       <Stars value={r.stars} className="text-[12px]" />
                       {drafting ? (
                         <span className="dot-pulse flex gap-1" aria-label="Drafting">
-                          <span className="size-1 rounded-full bg-lamp" />
-                          <span className="size-1 rounded-full bg-lamp" />
-                          <span className="size-1 rounded-full bg-lamp" />
+                          <span className="size-1 rounded-full bg-smoke" />
+                          <span className="size-1 rounded-full bg-smoke" />
+                          <span className="size-1 rounded-full bg-smoke" />
                         </span>
                       ) : (
                         <RowStatus rec={rec} owner={owner} />
@@ -253,7 +254,7 @@ export function Inbox() {
           {current ? (
             <article className="mx-auto max-w-[760px] px-5 py-7 lg:px-10">
               <header className="flex flex-wrap items-center gap-3">
-                <PlatformMark platform={current.platform} size={30} />
+                <PlatformLogo platform={current.platform} size={40} tile />
                 <div className="min-w-0">
                   <h2 className="font-serif text-[24px] leading-tight tracking-[-0.015em]">{current.author}</h2>
                   <p className="flex flex-wrap items-center gap-x-3 text-[13px] text-smoke">

@@ -50,7 +50,7 @@ export function ProfilePreview({ markdown, focus, done }: { markdown: string; fo
         </span>
         <span className="truncate rounded-md bg-night-3 px-2.5 py-0.5 text-[12.5px] text-smoke">restaurant-profile.md</span>
         <span className="flex items-center gap-1.5 text-[12.5px] text-smoke-2">
-          <span className={`size-1.5 rounded-full ${done ? "bg-sage" : "animate-pulse bg-lamp"}`} />
+          <span className={`size-1.5 rounded-full ${done ? "bg-sage" : "animate-pulse bg-smoke"}`} />
           {done ? "Ready" : "Building"}
         </span>
       </div>

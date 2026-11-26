@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { PLATFORM_COLOR, PlatformMark } from "@/components/brand";
+import { PLATFORM_COLOR } from "@/components/brand";
+import { PlatformLogo } from "@/components/platform-logo";
 import type { Platform } from "@/lib/demo-reviews";
 import { useDesk } from "./desk-store";
 
@@ -243,17 +244,20 @@ export function Analytics() {
           <div className="mt-5 grid gap-6 md:grid-cols-2">
             {(
               [
-                ["Praised", stats.praised, "bg-sage/[0.12] text-sage"],
-                ["Went wrong", stats.problems, "bg-wine/[0.12] text-wine"],
+                ["Praised", stats.praised],
+                ["Went wrong", stats.problems],
               ] as const
-            ).map(([title, list, cls]) => (
+            ).map(([title, list]) => (
               <div key={title}>
-                <h3 className="text-[13px] text-smoke">{title}</h3>
-                <ul className="mt-2 flex flex-wrap gap-1.5">
+                <h3 className="flex justify-between text-[12.5px] text-smoke-2">
+                  <span>{title}</span>
+                  <span>Mentions</span>
+                </h3>
+                <ul className="mt-1.5">
                   {list.map(([theme, n]) => (
-                    <li key={theme} className={`rounded-full px-2.5 py-1 text-[13px] ${cls}`}>
-                      {theme}
-                      {n > 1 && <span className="ml-1.5 tabular-nums opacity-75">{n}</span>}
+                    <li key={theme} className="flex justify-between gap-4 border-t border-line py-1.5 text-[13.5px]">
+                      <span className="text-linen">{theme}</span>
+                      <span className="tabular-nums text-smoke">{n}</span>
                     </li>
                   ))}
                 </ul>
@@ -266,7 +270,7 @@ export function Analytics() {
       <p className="mt-6 flex flex-wrap items-center gap-2 text-[12.5px] text-smoke-2">
         Connected:
         {ORDER.filter((p) => desk.connections[p]).map((p) => (
-          <PlatformMark key={p} platform={p} size={18} />
+          <PlatformLogo key={p} platform={p} size={15} />
         ))}
       </p>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { PlatformMark } from "@/components/brand";
+import { PlatformLogo } from "@/components/platform-logo";
 import { PLATFORMS, type Platform } from "@/lib/demo-reviews";
 import { useDesk } from "./desk-store";
 
@@ -54,11 +54,11 @@ export function AddReviewDialog({ onClose, onAdded }: { onClose: () => void; onA
                   type="button"
                   aria-pressed={platform === p.id}
                   onClick={() => setPlatform(p.id)}
-                  className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-[13.5px] ${
+                  className={`flex items-center gap-2 rounded-lg border px-3 py-1.5 text-[13.5px] ${
                     platform === p.id ? "border-line-strong bg-night-3 text-linen" : "border-line text-smoke hover:text-linen"
                   }`}
                 >
-                  <PlatformMark platform={p.id} size={18} /> {p.id}
+                  <PlatformLogo platform={p.id} size={15} /> {p.id}
                 </button>
               ))}
             </div>
@@ -106,13 +106,13 @@ export function AddReviewDialog({ onClose, onAdded }: { onClose: () => void; onA
           </label>
         </div>
         <div className="flex justify-end gap-2 border-t border-line px-5 py-3.5">
-          <button type="button" onClick={() => ref.current?.close()} className="rounded-full px-4 py-2 text-[14px] text-smoke hover:text-linen">
+          <button type="button" onClick={() => ref.current?.close()} className="rounded-lg px-4 py-2 text-[14px] text-smoke hover:text-linen">
             Cancel
           </button>
           <button
             type="submit"
             disabled={text.trim().length < 10}
-            className="rounded-full bg-lamp px-4 py-2 text-[14px] font-medium text-night disabled:bg-night-4 disabled:text-smoke-2"
+            className="rounded-lg bg-linen px-4 py-2 text-[14px] font-medium text-night disabled:bg-night-4 disabled:text-smoke-2"
           >
             Add and draft a reply
           </button>

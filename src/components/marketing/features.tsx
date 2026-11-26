@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { PlatformMark } from "@/components/brand";
+import { PlatformLogo } from "@/components/platform-logo";
 import { DEMO_REVIEWS, type DemoReview } from "@/lib/demo-reviews";
 import { RESTAURANT_PROFILE } from "@/lib/restaurant-profile";
 import { RiskBadge, type Risk } from "./risk-badge";
@@ -52,7 +52,7 @@ function TriageVisual() {
       <div className="grid gap-3 sm:grid-cols-3">
         {COLUMNS.map((c) => (
           <div key={c.risk} className="rounded-xl bg-night/70 p-2.5">
-            <RiskBadge risk={c.risk} />
+            <RiskBadge risk={c.risk} className="px-0.5 text-[12.5px] font-medium !text-linen" />
             <p className="mt-1.5 px-0.5 text-[11.5px] text-smoke-2">{c.note}</p>
             <ul className="mt-2.5 space-y-2">
               {c.ids.map((id) => {
@@ -60,7 +60,7 @@ function TriageVisual() {
                 return (
                   <li key={id} className="rounded-lg border border-line bg-night-3/60 px-2.5 py-2">
                     <div className="flex items-center gap-1.5">
-                      <PlatformMark platform={r.platform} size={16} />
+                      <PlatformLogo platform={r.platform} size={13} />
                       <span className="truncate text-[12px] font-medium">{r.author}</span>
                       <span className="ml-auto text-[11px] text-lamp">{r.stars}★</span>
                     </div>
@@ -84,15 +84,13 @@ function VoiceVisual() {
     <div className="relative rounded-[20px] border border-line bg-[linear-gradient(170deg,#1b2031,#141826)] p-6 pb-28 sm:p-8 sm:pb-28">
       <div className="flex items-center justify-between">
         <p className="text-[13px] text-smoke-2">Knowledge file, Petit Comptoir</p>
-        <span className="rounded-full border border-line-strong px-2.5 py-0.5 text-[11.5px] text-smoke">
-          Sent with every draft
-        </span>
+        <span className="text-[12px] text-smoke-2">Sent with every draft</span>
       </div>
       <p className="mt-5 font-serif text-[22px] tracking-[-0.01em]">Brand voice</p>
       <ul className="mt-2 space-y-1.5">
         {voice.map((v) => (
           <li key={v} className="relative pl-4 text-[13.5px] leading-snug text-smoke">
-            <span className="absolute left-0 top-[0.55em] size-1 rounded-full bg-lamp" />
+            <span className="absolute left-0 top-[0.55em] size-1 rounded-full bg-linen/40" />
             {v}
           </li>
         ))}
@@ -106,7 +104,7 @@ function VoiceVisual() {
           </li>
         ))}
       </ul>
-      <div className="absolute -bottom-5 left-5 right-5 max-w-[320px] rotate-[1.5deg] sm:left-auto rounded-xl border border-line-strong bg-night-3 px-4 py-3 shadow-[0_20px_40px_-12px_rgb(0_0_0/0.7)] sm:right-8">
+      <div className="absolute -bottom-5 left-5 right-5 max-w-[320px] sm:left-auto rounded-xl border border-line-strong bg-night-3 px-4 py-3 shadow-[0_20px_40px_-12px_rgb(0_0_0/0.7)] sm:right-8">
         <p className="font-serif text-[14px] leading-snug text-linen">
           &ldquo;I&rsquo;m glad Léa remembered the occasion and brought that candle to the crème brûlée.&rdquo;
         </p>

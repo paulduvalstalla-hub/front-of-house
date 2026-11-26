@@ -37,14 +37,14 @@ export function Billing() {
             {desk.trialDaysLeft} days left. After the trial, Pro is $79 a month per restaurant group, billed monthly.
           </p>
           <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-night-4">
-            <div className="h-full rounded-full bg-lamp" style={{ width: `${(desk.trialDaysLeft / 14) * 100}%` }} />
+            <div className="h-full rounded-full bg-linen/70" style={{ width: `${(desk.trialDaysLeft / 14) * 100}%` }} />
           </div>
           <div className="mt-5 flex flex-wrap items-center gap-3">
             <button
               type="button"
               disabled
               aria-describedby="payments-note"
-              className="cursor-not-allowed rounded-full bg-night-4 px-4 py-2 text-[14px] text-smoke"
+              className="cursor-not-allowed rounded-lg bg-night-4 px-4 py-2 text-[14px] text-smoke"
             >
               Add a payment method
             </button>
@@ -100,7 +100,7 @@ export function Billing() {
         <div className="mt-3 flex flex-wrap gap-2">
           <Link
             href="/onboarding"
-            className="rounded-full border border-line px-4 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
+            className="rounded-lg border border-line px-4 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
           >
             Set up a restaurant
           </Link>
@@ -108,7 +108,7 @@ export function Billing() {
             <button
               type="button"
               onClick={() => desk.startSample()}
-              className="rounded-full border border-line px-4 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
+              className="rounded-lg border border-line px-4 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
             >
               Switch to the sample restaurant
             </button>
@@ -125,7 +125,7 @@ export function Billing() {
         <button
           type="button"
           onClick={() => desk.resetDemo()}
-          className="mt-3 rounded-full border border-line px-4 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
+          className="mt-3 rounded-lg border border-line px-4 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
         >
           Reset demo data
         </button>

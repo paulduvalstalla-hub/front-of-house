@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState, type ReactNode } from "react";
 import { useDesk } from "@/components/app/desk-store";
 import { CheckIcon } from "@/components/app/icons";
-import { Logo, PlatformMark } from "@/components/brand";
+import { Logo } from "@/components/brand";
+import { PlatformLogo } from "@/components/platform-logo";
 import { PLATFORMS, type Platform } from "@/lib/demo-reviews";
 import { TONE_EXAMPLES, buildProfile, defaultSignoff } from "@/lib/profile-builder";
 import { EMPTY_ANSWERS, workspaceFrom, type Answers, type Tone } from "@/lib/workspace";
@@ -200,14 +201,14 @@ export function Onboarding() {
               <button
                 type="button"
                 onClick={() => setStarted(true)}
-                className="rounded-full bg-lamp px-5 py-3 text-[15px] font-medium text-night shadow-[0_0_32px_-8px_rgb(242_182_109/0.8)] hover:bg-lamp/90"
+                className="rounded-lg bg-linen px-5 py-3 text-[15px] font-medium text-night hover:bg-white"
               >
                 Set up my restaurant
               </button>
               <button
                 type="button"
                 onClick={sample}
-                className="rounded-full border border-line-strong px-5 py-3 text-[15px] text-linen hover:bg-night-2"
+                className="rounded-lg border border-line-strong px-5 py-3 text-[15px] text-linen hover:bg-night-2"
               >
                 Explore the sample restaurant
               </button>
@@ -241,7 +242,7 @@ export function Onboarding() {
           <ol aria-label="Progress" className="mt-8 grid grid-cols-5 gap-1.5">
             {STEPS.map((st, i) => (
               <li key={st.title}>
-                <span className={`block h-1 rounded-full ${i <= step ? "bg-lamp" : "bg-night-4"}`} />
+                <span className={`block h-1 rounded-full ${i <= step ? "bg-linen/70" : "bg-night-4"}`} />
                 <span className={`mt-2 block truncate text-[12px] ${i === step ? "text-linen" : "text-smoke-2"} max-sm:hidden`}>
                   {i + 1}. {st.title}
                 </span>
@@ -320,15 +321,15 @@ export function Onboarding() {
                       type="button"
                       onClick={importFacts}
                       disabled={importing || paste.trim().length < 40}
-                      className="rounded-full bg-lamp px-4 py-2 text-[14px] font-medium text-night hover:bg-lamp/90 disabled:bg-night-4 disabled:text-smoke-2"
+                      className="rounded-lg bg-linen px-4 py-2 text-[14px] font-medium text-night hover:bg-white disabled:bg-night-4 disabled:text-smoke-2"
                     >
                       {importing ? "Reading your text" : "Fill in from this text"}
                     </button>
                     {importing && (
                       <span className="dot-pulse flex gap-1" aria-hidden>
-                        <span className="size-1.5 rounded-full bg-lamp" />
-                        <span className="size-1.5 rounded-full bg-lamp" />
-                        <span className="size-1.5 rounded-full bg-lamp" />
+                        <span className="size-1.5 rounded-full bg-smoke" />
+                        <span className="size-1.5 rounded-full bg-smoke" />
+                        <span className="size-1.5 rounded-full bg-smoke" />
                       </span>
                     )}
                   </div>
@@ -478,11 +479,11 @@ export function Onboarding() {
                           onClick={() =>
                             set("platforms", on ? a.platforms.filter((x) => x !== p.id) : [...a.platforms, p.id])
                           }
-                          className={`flex items-center gap-2 rounded-full border px-3.5 py-2 text-[13.5px] ${
+                          className={`flex items-center gap-2 rounded-lg border px-3.5 py-2 text-[13.5px] ${
                             on ? "border-line-strong bg-night-3 text-linen" : "border-line text-smoke hover:text-linen"
                           }`}
                         >
-                          <PlatformMark platform={p.id} size={18} /> {p.name}
+                          <PlatformLogo platform={p.id} size={15} /> {p.name}
                         </button>
                       );
                     })}
@@ -524,11 +525,11 @@ export function Onboarding() {
                         type="button"
                         aria-pressed={first.platform === p.id}
                         onClick={() => setFirst({ ...first, platform: p.id })}
-                        className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[12.5px] ${
+                        className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-[12.5px] ${
                           first.platform === p.id ? "border-line-strong bg-night-3 text-linen" : "border-line text-smoke"
                         }`}
                       >
-                        <PlatformMark platform={p.id} size={16} /> {p.id}
+                        <PlatformLogo platform={p.id} size={14} /> {p.id}
                       </button>
                     ))}
                   </div>
@@ -552,7 +553,7 @@ export function Onboarding() {
             <button
               type="button"
               onClick={() => (step === 0 ? setStarted(false) : setStep(step - 1))}
-              className="rounded-full px-4 py-2 text-[14px] text-smoke hover:text-linen"
+              className="rounded-lg px-4 py-2 text-[14px] text-smoke hover:text-linen"
             >
               Back
             </button>
@@ -560,7 +561,7 @@ export function Onboarding() {
               <button
                 type="button"
                 onClick={finish}
-                className="rounded-full bg-lamp px-5 py-2.5 text-[14.5px] font-medium text-night shadow-[0_0_28px_-8px_rgb(242_182_109/0.8)] hover:bg-lamp/90"
+                className="rounded-lg bg-linen px-5 py-2.5 text-[14.5px] font-medium text-night hover:bg-white"
               >
                 Save my profile and open the inbox
               </button>
@@ -568,7 +569,7 @@ export function Onboarding() {
               <button
                 type="button"
                 onClick={next}
-                className="rounded-full bg-linen px-5 py-2.5 text-[14.5px] font-medium text-night hover:bg-linen/90"
+                className="rounded-lg bg-linen px-5 py-2.5 text-[14.5px] font-medium text-night hover:bg-white"
               >
                 Continue
               </button>

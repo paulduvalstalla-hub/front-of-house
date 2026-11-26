@@ -3,6 +3,7 @@
 import { useChat } from "@ai-sdk/react";
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import { Stars } from "@/components/brand";
+import { StatusIcon } from "@/components/status";
 import { useDesk, type DeskMessage } from "./desk-store";
 import { riskMeta } from "./risk";
 
@@ -68,7 +69,7 @@ export function QuickReply() {
               stop();
               setMessages([]);
             }}
-            className="rounded-full border border-line px-3.5 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
+            className="rounded-lg border border-line px-3.5 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
           >
             Start over
           </button>
@@ -83,7 +84,7 @@ export function QuickReply() {
                 key={s.label}
                 type="button"
                 onClick={() => send(s.text)}
-                className="rounded-full border border-line px-3.5 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
+                className="rounded-lg border border-line px-3.5 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
               >
                 {s.label}
               </button>
@@ -118,9 +119,13 @@ export function QuickReply() {
                   const streaming = part.state === "input-streaming";
                   return (
                     <article key={part.toolCallId} className="overflow-hidden rounded-[var(--radius-window)] border border-line bg-night-2">
-                      <header className={`flex flex-wrap items-center gap-x-3 gap-y-1 border-b px-5 py-3 ${risk ? risk.strip : "border-line"}`}>
+                      <header className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-line px-5 py-3">
                         <span className="flex items-center gap-2 text-[14px] font-medium">
-                          <span className={`size-2 rounded-full ${risk ? risk.dot : "bg-smoke-2"}`} />
+                          {risk ? (
+                            <StatusIcon level={risk.level} size={15} />
+                          ) : (
+                            <span className="size-2 rounded-full bg-smoke-2" />
+                          )}
                           {risk ? risk.label : "Drafting"}
                         </span>
                         {d.riskReason && <span className="text-[13px] text-smoke">{d.riskReason}</span>}
@@ -160,7 +165,7 @@ export function QuickReply() {
                                 })
                                 .catch(() => {})
                             }
-                            className="rounded-full bg-lamp px-4 py-2 text-[14px] font-medium text-night hover:bg-lamp/90"
+                            className="rounded-lg bg-linen px-4 py-2 text-[14px] font-medium text-night hover:bg-white"
                           >
                             {copied === part.toolCallId ? "Copied" : "Copy reply"}
                           </button>
@@ -188,7 +193,7 @@ export function QuickReply() {
         {error && (
           <p className="flex flex-wrap items-center gap-3 rounded-xl bg-wine/[0.12] px-4 py-3 text-[14px]">
             Front of House couldn&rsquo;t reach the model.
-            <button type="button" onClick={() => regenerate()} className="rounded-full bg-linen px-3 py-1 text-[13px] font-medium text-night">
+            <button type="button" onClick={() => regenerate()} className="rounded-lg bg-linen px-3 py-1 text-[13px] font-medium text-night">
               Try again
             </button>
           </p>
@@ -214,14 +219,14 @@ export function QuickReply() {
           <div className="flex items-center justify-between gap-3 px-3 pb-2.5">
             <span className="pl-1 text-[12.5px] text-smoke-2 max-sm:hidden">Enter to send, Shift + Enter for a new line</span>
             {busy ? (
-              <button type="button" onClick={() => stop()} className="ml-auto rounded-full border border-line px-4 py-1.5 text-[14px]">
+              <button type="button" onClick={() => stop()} className="ml-auto rounded-lg border border-line px-4 py-1.5 text-[14px]">
                 Stop
               </button>
             ) : (
               <button
                 type="submit"
                 disabled={!input.trim()}
-                className="ml-auto rounded-full bg-lamp px-4 py-1.5 text-[14px] font-medium text-night disabled:bg-night-4 disabled:text-smoke-2"
+                className="ml-auto rounded-lg bg-linen px-4 py-1.5 text-[14px] font-medium text-night disabled:bg-night-4 disabled:text-smoke-2"
               >
                 Send
               </button>
