@@ -2,9 +2,21 @@ import { RESTAURANT_PROFILE } from "./restaurant-profile";
 
 export const PROMPT_VERSION = "v2";
 
-/** The same prompt with a restaurant's own (possibly edited) knowledge file appended. */
-export function buildPrompt(profile: string) {
-  return AGENT_PROMPT.replace(RESTAURANT_PROFILE, profile);
+const SAMPLE_EMPLOYER = "Right now you work for Camille, general manager of Petit Comptoir.";
+
+/**
+ * The same prompt for another restaurant: only the "you work for" sentence and
+ * the appended knowledge file change. With no arguments it is AGENT_PROMPT exactly.
+ */
+export function buildPrompt(profile: string, who?: { manager: string; role: string; restaurant: string }) {
+  let prompt = AGENT_PROMPT.replace(RESTAURANT_PROFILE, profile);
+  if (who) {
+    prompt = prompt.replace(
+      SAMPLE_EMPLOYER,
+      `Right now you work for ${who.manager}, ${who.role.toLowerCase()} of ${who.restaurant}.`,
+    );
+  }
+  return prompt;
 }
 
 export const AGENT_PROMPT = `You are Front of House, an AI assistant for general managers of independent restaurants. Right now you work for Camille, general manager of Petit Comptoir.

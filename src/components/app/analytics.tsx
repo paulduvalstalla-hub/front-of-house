@@ -201,12 +201,12 @@ export function Analytics() {
   return (
     <div className="mx-auto max-w-[1080px] px-5 py-8 lg:px-10">
       <h1 className="font-serif text-[30px] leading-none tracking-[-0.025em]">Analytics</h1>
-      <p className="mt-3 text-[14.5px] text-smoke">How Petit Comptoir is answering its guests, across every connected platform.</p>
+      <p className="mt-3 text-[14.5px] text-smoke">How {desk.workspace.restaurant} is answering its guests, across every connected platform.</p>
 
       <div className="mt-8 grid grid-cols-2 divide-line rounded-[var(--radius-window)] border border-line max-md:divide-y md:grid-cols-4 md:divide-x">
         <Tile label="Response rate" value={`${stats.rate}%`} detail={`${stats.replied} of ${desk.reviews.length} reviews answered`} />
         <Tile label="Average rating" value={stats.avg.toFixed(1)} detail={`Across ${desk.reviews.length} reviews in your inbox`} />
-        <Tile label="Held for Julien" value={String(stats.held)} detail="Illness, allergies, discrimination, likely fakes" />
+        <Tile label={`Held for ${desk.workspace.owner}`} value={String(stats.held)} detail="Illness, allergies, discrimination, likely fakes" />
         <Tile label="Drafts written" value={String(desk.drafts)} detail="By Front of House in this trial" />
       </div>
 

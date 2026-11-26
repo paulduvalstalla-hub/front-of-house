@@ -19,7 +19,7 @@ export async function signInDemo(formData: FormData) {
     maxAge: 60 * 60 * 24 * 14,
   });
 
-  redirect(next.startsWith("/dashboard") ? next : "/dashboard");
+  redirect(next.startsWith("/dashboard") || next.startsWith("/onboarding") ? next : "/dashboard");
 }
 
 export async function signOut() {

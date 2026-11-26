@@ -15,6 +15,7 @@ import {
 import { DEMO_REVIEWS, PLATFORMS, reviewPrompt, type DemoReview, type Platform } from "@/lib/demo-reviews";
 import type { ReplyDraft } from "@/lib/reply-tool";
 import { RESTAURANT_PROFILE } from "@/lib/restaurant-profile";
+import { SAMPLE_WORKSPACE, type Answers, type Workspace } from "@/lib/workspace";
 
 export type DeskTools = { fileReply: { input: ReplyDraft; output: { status: string } } };
 export type DeskMessage = UIMessage<never, UIDataTypes, DeskTools>;
@@ -31,33 +32,45 @@ export type ReviewRecord = {
 };
 
 type Persisted = {
-  v: 1;
+  v: 2;
+  /** null until the restaurant is chosen: onboarding or the sample. */
+  workspace: Workspace | null;
+  answers?: Answers;
   connections: Record<Platform, boolean>;
   records: Record<string, ReviewRecord>;
+  customReviews: DemoReview[];
   profile: string;
   drafts: number;
   trialStartedAt: number;
+  /** Set by onboarding when it hands over reviews to draft on arrival in the inbox. */
+  autoTriage?: boolean;
 };
 
 const STORAGE_KEY = "foh-demo-v1";
 const TRIAL_DAYS = 14;
 const CONCURRENCY = 3;
 
-/** `now` is 0 on the server's first render; the browser passes the real clock. */
-function initialState(now = 0): Persisted {
+function sampleRecords(now: number) {
   const records: Record<string, ReviewRecord> = {};
   for (const r of DEMO_REVIEWS) {
     records[r.id] = r.pastReply
       ? { status: "replied", posted: r.pastReply, postedAt: now - (r.hoursAgo - 3) * 3_600_000 }
       : { status: "new" };
   }
+  return records;
+}
+
+const defaultConnections = () =>
+  Object.fromEntries(PLATFORMS.map((p) => [p.id, p.initiallyConnected])) as Record<Platform, boolean>;
+
+/** `now` is 0 on the server's first render; the browser passes the real clock. */
+function initialState(now = 0): Persisted {
   return {
-    v: 1,
-    connections: Object.fromEntries(PLATFORMS.map((p) => [p.id, p.initiallyConnected])) as Record<
-      Platform,
-      boolean
-    >,
-    records,
+    v: 2,
+    workspace: null,
+    connections: defaultConnections(),
+    records: sampleRecords(now),
+    customReviews: [],
     profile: RESTAURANT_PROFILE,
     drafts: 0,
     trialStartedAt: now - 2 * 86_400_000,
@@ -68,15 +81,19 @@ function load(now: number): Persisted {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return initialState(now);
-    const parsed = JSON.parse(raw) as Persisted;
-    if (parsed.v !== 1) return initialState(now);
+    const parsed = JSON.parse(raw) as Omit<Partial<Persisted>, "v"> & { v: number };
     const base = initialState(now);
+    if (parsed.v === 1) {
+      // Saved before onboarding existed: it was the sample restaurant.
+      return { ...base, ...parsed, v: 2, workspace: SAMPLE_WORKSPACE, customReviews: [] } as Persisted;
+    }
+    if (parsed.v !== 2) return base;
     return {
       ...base,
       ...parsed,
       records: { ...base.records, ...parsed.records },
       connections: { ...base.connections, ...parsed.connections },
-    };
+    } as Persisted;
   } catch {
     return initialState(now);
   }
@@ -97,6 +114,10 @@ export function readAssistant(message: DeskMessage): { draft?: ReplyDraft; text?
 
 type DeskContextValue = {
   ready: boolean;
+  /** The restaurant being worked for (the sample until one is chosen). */
+  workspace: Workspace;
+  hasWorkspace: boolean;
+  answers?: Answers;
   reviews: DemoReview[];
   records: Record<string, ReviewRecord>;
   connections: Record<Platform, boolean>;
@@ -114,6 +135,11 @@ type DeskContextValue = {
   connect: (p: Platform) => void;
   disconnect: (p: Platform) => void;
   setProfile: (profile: string) => void;
+  addReview: (r: Omit<DemoReview, "id" | "hoursAgo">) => string;
+  startSample: () => void;
+  finishOnboarding: (ws: Workspace, answers: Answers, profile: string, autoTriage: boolean) => void;
+  autoTriage: boolean;
+  clearAutoTriage: () => void;
   resetDemo: () => void;
 };
 
@@ -132,13 +158,13 @@ export function DeskProvider({ children }: { children: ReactNode }) {
   const [drafting, setDrafting] = useState<Record<string, boolean>>({});
   const [now, setNow] = useState(0);
   const chats = useRef(new Map<string, Chat<DeskMessage>>());
-  const profileRef = useRef(state.profile);
-  const recordsRef = useRef(state.records);
+  // Reviews with a draft request in flight, so one review is never sent twice at once.
+  const inFlight = useRef(new Set<string>());
+  const stateRef = useRef(state);
 
   useEffect(() => {
-    profileRef.current = state.profile;
-    recordsRef.current = state.records;
-  }, [state.profile, state.records]);
+    stateRef.current = state;
+  }, [state]);
 
   // Load the saved demo after mount, so server and client render the same first frame.
   useEffect(() => {
@@ -163,12 +189,22 @@ export function DeskProvider({ children }: { children: ReactNode }) {
     setState((s) => ({ ...s, records: { ...s.records, [id]: { ...s.records[id], ...patch } } }));
   }, []);
 
+  // Reviews added this render cycle, so they can be drafted before state commits.
+  const justAdded = useRef(new Map<string, DemoReview>());
+  const findReview = useCallback(
+    (id: string) =>
+      justAdded.current.get(id) ??
+      stateRef.current.customReviews.find((r) => r.id === id) ??
+      DEMO_REVIEWS.find((r) => r.id === id),
+    [],
+  );
+
   const getChat = useCallback(
     (id: string) => {
       const existing = chats.current.get(id);
       if (existing) return existing;
-      const review = DEMO_REVIEWS.find((r) => r.id === id);
-      const record = recordsRef.current[id];
+      const review = findReview(id);
+      const record = stateRef.current.records[id];
       // Rebuild the conversation from a saved draft so revisions keep their context after a reload.
       const seed: DeskMessage[] =
         review && record?.draft
@@ -194,7 +230,13 @@ export function DeskProvider({ children }: { children: ReactNode }) {
         messages: seed,
         transport: new DefaultChatTransport({
           api: "/api/chat",
-          body: () => ({ profile: profileRef.current }),
+          body: () => {
+            const s = stateRef.current;
+            const ws = s.workspace;
+            return ws?.mode === "custom"
+              ? { profile: s.profile, workspace: { manager: ws.manager, role: ws.role, restaurant: ws.restaurant } }
+              : { profile: s.profile };
+          },
         }),
         onFinish: ({ message }) => {
           const { draft, text } = readAssistant(message);
@@ -217,32 +259,38 @@ export function DeskProvider({ children }: { children: ReactNode }) {
       chats.current.set(id, chat);
       return chat;
     },
-    [patchRecord],
+    [patchRecord, findReview],
   );
 
   const draftReview = useCallback(
     async (id: string) => {
-      const review = DEMO_REVIEWS.find((r) => r.id === id);
+      const review = findReview(id);
       if (!review) return;
       const chat = getChat(id);
-      if (chat.status === "submitted" || chat.status === "streaming") return;
+      if (inFlight.current.has(id) || chat.status === "submitted" || chat.status === "streaming") return;
+      inFlight.current.add(id);
       patchRecord(id, { error: undefined });
       setDrafting((d) => ({ ...d, [id]: true }));
       try {
         if (chat.messages.length === 0) await chat.sendMessage({ text: reviewPrompt(review) });
         else await chat.regenerate();
       } finally {
+        inFlight.current.delete(id);
         setDrafting((d) => ({ ...d, [id]: false }));
       }
     },
-    [getChat, patchRecord],
+    [getChat, patchRecord, findReview],
   );
 
-  const reviews = useMemo(() => DEMO_REVIEWS.filter((r) => state.connections[r.platform]), [state.connections]);
+  const workspace = state.workspace ?? SAMPLE_WORKSPACE;
+  const reviews = useMemo(() => {
+    const sample = workspace.mode === "sample" ? DEMO_REVIEWS.filter((r) => state.connections[r.platform]) : [];
+    return [...state.customReviews, ...sample];
+  }, [state.connections, state.customReviews, workspace.mode]);
 
   const triageAll = useCallback(async () => {
     const queue = reviews.filter((r) => {
-      const rec = recordsRef.current[r.id];
+      const rec = stateRef.current.records[r.id];
       return rec?.status === "new" && !rec.draft;
     });
     if (queue.length === 0) return;
@@ -264,6 +312,9 @@ export function DeskProvider({ children }: { children: ReactNode }) {
 
   const value: DeskContextValue = {
     ready,
+    workspace,
+    hasWorkspace: state.workspace !== null,
+    answers: state.answers,
     reviews,
     records: state.records,
     connections: state.connections,
@@ -279,10 +330,46 @@ export function DeskProvider({ children }: { children: ReactNode }) {
     triageAll,
     approve: (id, reply) => patchRecord(id, { status: "replied", posted: reply, postedAt: Date.now() }),
     sendToOwner: (id) => patchRecord(id, { status: "with-owner" }),
-    reopen: (id) => patchRecord(id, { status: recordsRef.current[id]?.draft ? "drafted" : "new" }),
+    reopen: (id) => patchRecord(id, { status: stateRef.current.records[id]?.draft ? "drafted" : "new" }),
     connect: (p) => setState((s) => ({ ...s, connections: { ...s.connections, [p]: true } })),
     disconnect: (p) => setState((s) => ({ ...s, connections: { ...s.connections, [p]: false } })),
     setProfile: (profile) => setState((s) => ({ ...s, profile })),
+    addReview: (r) => {
+      const id = `c-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
+      const review: DemoReview = { ...r, id, hoursAgo: 0 };
+      justAdded.current.set(id, review);
+      setState((s) => ({
+        ...s,
+        customReviews: [review, ...s.customReviews],
+        records: { ...s.records, [id]: { status: "new" } },
+      }));
+      return id;
+    },
+    startSample: () => {
+      chats.current.clear();
+      setState((s) => ({
+        ...initialState(Date.now()),
+        trialStartedAt: s.trialStartedAt,
+        workspace: SAMPLE_WORKSPACE,
+      }));
+    },
+    finishOnboarding: (ws, answers, profile, autoTriage) => {
+      chats.current.clear();
+      setState((s) => ({
+        ...initialState(Date.now()),
+        trialStartedAt: s.trialStartedAt,
+        workspace: ws,
+        answers,
+        profile,
+        autoTriage,
+        connections: Object.fromEntries(PLATFORMS.map((p) => [p.id, answers.platforms.includes(p.id)])) as Record<
+          Platform,
+          boolean
+        >,
+      }));
+    },
+    autoTriage: state.autoTriage ?? false,
+    clearAutoTriage: () => setState((s) => ({ ...s, autoTriage: false })),
     resetDemo: () => {
       chats.current.clear();
       setState(initialState(Date.now()));

@@ -6,7 +6,9 @@ import {
   toUIMessageStream,
   type UIMessage,
 } from "ai";
+import { RESTAURANT_PROFILE } from "@/lib/restaurant-profile";
 import { AGENT_PROMPT, buildPrompt } from "@/lib/system-prompt";
+import { cleanName } from "@/lib/workspace";
 import { fileReply } from "@/lib/reply-tool";
 
 export const maxDuration = 60;
@@ -35,11 +37,22 @@ export async function POST(req: Request) {
 
   let messages: UIMessage[];
   let profile: unknown;
+  let workspace: unknown;
   try {
-    ({ messages, profile } = (await req.json()) as { messages: UIMessage[]; profile?: unknown });
+    ({ messages, profile, workspace } = (await req.json()) as {
+      messages: UIMessage[];
+      profile?: unknown;
+      workspace?: unknown;
+    });
   } catch {
     return Response.json({ error: "Invalid request body." }, { status: 400 });
   }
+  // An onboarded restaurant sends who the agent works for; names are cleaned to one short line.
+  const ws = workspace as Partial<Record<"manager" | "role" | "restaurant", unknown>> | undefined;
+  const who =
+    ws && typeof ws.manager === "string" && typeof ws.role === "string" && typeof ws.restaurant === "string"
+      ? { manager: cleanName(ws.manager, 40), role: cleanName(ws.role, 40), restaurant: cleanName(ws.restaurant) }
+      : undefined;
   // A restaurant may send its own edited knowledge file from the Brand voice page.
   const knowledge =
     typeof profile === "string" && profile.trim().length > 200 && profile.length <= MAX_PROFILE_CHARS
@@ -63,7 +76,7 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: anthropic(MODEL),
-    instructions: knowledge ? buildPrompt(knowledge) : AGENT_PROMPT,
+    instructions: knowledge || who ? buildPrompt(knowledge ?? RESTAURANT_PROFILE, who) : AGENT_PROMPT,
     messages: await convertToModelMessages(recent),
     tools: { fileReply },
     maxOutputTokens: 2000,

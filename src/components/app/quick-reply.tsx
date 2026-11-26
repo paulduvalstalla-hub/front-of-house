@@ -4,7 +4,7 @@ import { useChat } from "@ai-sdk/react";
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import { Stars } from "@/components/brand";
 import { useDesk, type DeskMessage } from "./desk-store";
-import { RISK_META } from "./risk";
+import { riskMeta } from "./risk";
 
 const STARTERS = [
   {
@@ -114,7 +114,7 @@ export function QuickReply() {
                 }
                 if (part.type === "tool-fileReply" && part.state !== "output-error") {
                   const d = part.input ?? {};
-                  const risk = d.risk ? RISK_META[d.risk] : null;
+                  const risk = d.risk ? riskMeta(d.risk, desk.workspace.owner) : null;
                   const streaming = part.state === "input-streaming";
                   return (
                     <article key={part.toolCallId} className="overflow-hidden rounded-[var(--radius-window)] border border-line bg-night-2">

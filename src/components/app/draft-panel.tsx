@@ -6,7 +6,7 @@ import type { DemoReview } from "@/lib/demo-reviews";
 import type { ReplyDraft } from "@/lib/reply-tool";
 import { useDesk, type DeskMessage } from "./desk-store";
 import { CheckIcon, HoldIcon } from "./icons";
-import { RISK_META } from "./risk";
+import { riskMeta } from "./risk";
 
 const REVISIONS = [
   { label: "Shorter", prompt: "Make the reply shorter." },
@@ -129,7 +129,8 @@ export function DraftPanel({ review }: { review: DemoReview }) {
     );
   }
 
-  const risk = draft?.risk ? RISK_META[draft.risk] : null;
+  const owner = desk.workspace.owner;
+  const risk = draft?.risk ? riskMeta(draft.risk, owner) : null;
   const praised = (draft?.praised ?? []).filter(Boolean).slice(0, 4) as string[];
   const problems = (draft?.problems ?? []).filter(Boolean).slice(0, 4) as string[];
   const escalate = draft?.risk === "escalate";
@@ -140,7 +141,7 @@ export function DraftPanel({ review }: { review: DemoReview }) {
       <header className={`flex flex-wrap items-center gap-x-3 gap-y-1 border-b px-5 py-3 ${risk ? risk.strip : "border-line"}`}>
         <span className="flex items-center gap-2 text-[14px] font-medium">
           <span className={`size-2 rounded-full ${risk ? risk.dot : "bg-smoke-2"}`} />
-          {withOwner ? "Waiting for Julien" : risk ? risk.label : "Drafting"}
+          {withOwner ? `Waiting for ${owner}` : risk ? risk.label : "Drafting"}
           {busy && (
             <span className="dot-pulse ml-1 inline-flex gap-1" aria-hidden>
               <span className="size-1 rounded-full bg-smoke" />
@@ -218,7 +219,7 @@ export function DraftPanel({ review }: { review: DemoReview }) {
                   className="flex items-center gap-2 rounded-full bg-wine px-4 py-2 text-[14px] font-medium text-night hover:bg-wine/90"
                 >
                   <HoldIcon />
-                  Send to Julien for approval
+                  Send to {owner} for approval
                 </button>
                 <button
                   type="button"
@@ -235,7 +236,7 @@ export function DraftPanel({ review }: { review: DemoReview }) {
                 className="flex items-center gap-2 rounded-full bg-lamp px-4 py-2 text-[14px] font-medium text-night shadow-[0_0_24px_-8px_rgb(242_182_109/0.8)] hover:bg-lamp/90"
               >
                 <CheckIcon />
-                {withOwner ? `Julien approved: post to ${review.platform}` : `Approve and post to ${review.platform}`}
+                {withOwner ? `${owner} approved: post to ${review.platform}` : `Approve and post to ${review.platform}`}
               </button>
             )}
             <button

@@ -46,7 +46,7 @@ function ConnectDialog({ platform, onClose }: { platform: Platform; onClose: () 
           <p className="text-[14px] text-smoke">Front of House will be able to:</p>
           <ul className="mt-3 space-y-2.5 text-[14px]">
             <li className="flex gap-2.5">
-              <CheckIcon className="mt-0.5 shrink-0 text-sage" /> Read new reviews for Petit Comptoir
+              <CheckIcon className="mt-0.5 shrink-0 text-sage" /> Read new reviews for {desk.workspace.restaurant}
             </li>
             <li className="flex gap-2.5">
               <CheckIcon className="mt-0.5 shrink-0 text-sage" /> Post replies, only after you approve each one
@@ -166,7 +166,7 @@ export function Integrations() {
 
       <h2 className="mt-12 font-serif text-[21px] tracking-[-0.015em]">Not in this prototype yet</h2>
       <ul className="mt-3 space-y-2 text-[14px] text-smoke">
-        <li>Slack: a message to Julien whenever a review is held for him.</li>
+        <li>Slack: a message to {desk.workspace.owner} whenever a review is held for them.</li>
         <li>Weekly email digest: ratings, response time and what guests mention most.</li>
         <li>Resy and SevenRooms guest notes, so replies can mention a regular by name.</li>
       </ul>

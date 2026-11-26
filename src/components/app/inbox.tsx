@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { PlatformMark, Stars } from "@/components/brand";
 import { PLATFORMS, timeAgo, type DemoReview, type Platform } from "@/lib/demo-reviews";
 import { useDesk, type ReviewRecord } from "./desk-store";
+import { AddReviewDialog } from "./add-review";
 import { DraftPanel } from "./draft-panel";
 import { CheckIcon, HoldIcon, LayersIcon } from "./icons";
-import { RISK_META } from "./risk";
+import { riskMeta } from "./risk";
 
 type Tab = "reply" | "hold" | "replied" | "all";
 
@@ -18,14 +19,14 @@ function tabOf(rec: ReviewRecord | undefined): Exclude<Tab, "all"> {
   return "reply";
 }
 
-const TABS: { id: Tab; label: string }[] = [
+const tabsFor = (owner: string): { id: Tab; label: string }[] => [
   { id: "reply", label: "To reply" },
-  { id: "hold", label: "Held for Julien" },
+  { id: "hold", label: `Held for ${owner}` },
   { id: "replied", label: "Replied" },
   { id: "all", label: "All" },
 ];
 
-function RowStatus({ rec }: { rec?: ReviewRecord }) {
+function RowStatus({ rec, owner }: { rec?: ReviewRecord; owner: string }) {
   if (!rec) return null;
   if (rec.status === "replied")
     return (
@@ -36,11 +37,11 @@ function RowStatus({ rec }: { rec?: ReviewRecord }) {
   if (rec.status === "with-owner")
     return (
       <span className="flex items-center gap-1 text-[12px] text-wine">
-        <HoldIcon width={13} height={13} /> With Julien
+        <HoldIcon width={13} height={13} /> With {owner}
       </span>
     );
   if (rec.draft) {
-    const m = RISK_META[rec.draft.risk];
+    const m = riskMeta(rec.draft.risk, owner);
     return (
       <span className={`flex items-center gap-1.5 text-[12px] ${m.text}`}>
         <span className={`size-1.5 rounded-full ${m.dot}`} />
@@ -53,9 +54,11 @@ function RowStatus({ rec }: { rec?: ReviewRecord }) {
 
 export function Inbox() {
   const desk = useDesk();
+  const owner = desk.workspace.owner;
   const [tab, setTab] = useState<Tab>("reply");
   const [platform, setPlatform] = useState<Platform | "all">("all");
   const [selected, setSelected] = useState<string | null>(null);
+  const [adding, setAdding] = useState(false);
 
   const sorted = useMemo(() => [...desk.reviews].sort((a, b) => a.hoursAgo - b.hoursAgo), [desk.reviews]);
   const counts = useMemo(() => {
@@ -70,6 +73,15 @@ export function Inbox() {
   const current: DemoReview | undefined =
     visible.find((r) => r.id === selected) ?? sorted.find((r) => r.id === selected) ?? visible[0];
   const untriaged = sorted.filter((r) => desk.records[r.id]?.status === "new" && !desk.records[r.id]?.draft).length;
+
+  // Reviews handed over by onboarding are drafted as soon as the inbox opens.
+  const autoStarted = useRef(false);
+  useEffect(() => {
+    if (!desk.ready || !desk.autoTriage || autoStarted.current) return;
+    autoStarted.current = true;
+    desk.clearAutoTriage();
+    void desk.triageAll();
+  }, [desk]);
 
   // J / K to move through the list, like an email client.
   useEffect(() => {
@@ -94,13 +106,21 @@ export function Inbox() {
         <div>
           <h1 className="font-serif text-[30px] leading-none tracking-[-0.025em]">Inbox</h1>
           <p className="mt-2 text-[14px] text-smoke">
-            {counts.reply} to reply, {counts.hold} held for Julien, from {connectedPlatforms.length} connected{" "}
+            {counts.reply} to reply, {counts.hold} held for {owner}, from {connectedPlatforms.length} connected{" "}
             {connectedPlatforms.length === 1 ? "platform" : "platforms"}.{" "}
             <Link href="/dashboard/integrations" className="text-linen underline decoration-line-strong underline-offset-4 hover:decoration-linen">
               Manage
             </Link>
           </p>
         </div>
+        <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setAdding(true)}
+          className="rounded-full border border-line-strong px-4 py-2 text-[14px] text-linen hover:bg-night-2"
+        >
+          Add a review
+        </button>
         <button
           type="button"
           onClick={() => desk.triageAll()}
@@ -114,12 +134,13 @@ export function Inbox() {
               ? `Triage ${untriaged} new ${untriaged === 1 ? "review" : "reviews"}`
               : "Everything is triaged"}
         </button>
+        </div>
       </div>
 
       {/* Filters */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-2.5 lg:px-8">
         <div role="tablist" aria-label="Filter reviews" className="flex gap-1 overflow-x-auto">
-          {TABS.map((t) => (
+          {tabsFor(owner).map((t) => (
             <button
               key={t.id}
               role="tab"
@@ -169,6 +190,20 @@ export function Inbox() {
               <span className="skeleton block h-14 rounded-lg" />
               <span className="skeleton block h-14 rounded-lg" />
             </li>
+          ) : sorted.length === 0 ? (
+            <li className="px-6 py-12 text-center">
+              <p className="font-serif text-[20px] tracking-[-0.01em]">No reviews yet</p>
+              <p className="mx-auto mt-2 max-w-[34ch] text-[13.5px] text-smoke">
+                Paste one of your latest reviews and Front of House drafts the reply in your voice.
+              </p>
+              <button
+                type="button"
+                onClick={() => setAdding(true)}
+                className="mt-4 rounded-full bg-lamp px-4 py-2 text-[14px] font-medium text-night hover:bg-lamp/90"
+              >
+                Add a review
+              </button>
+            </li>
           ) : visible.length === 0 ? (
             <li className="px-6 py-10 text-center text-[14px] text-smoke">
               {tab === "reply" ? "Every review has a reply. Nice work." : "Nothing here right now."}
@@ -203,7 +238,7 @@ export function Inbox() {
                           <span className="size-1 rounded-full bg-lamp" />
                         </span>
                       ) : (
-                        <RowStatus rec={rec} />
+                        <RowStatus rec={rec} owner={owner} />
                       )}
                     </span>
                     <span className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-smoke">{r.text}</span>
@@ -243,6 +278,18 @@ export function Inbox() {
           )}
         </div>
       </div>
+
+      {adding && (
+        <AddReviewDialog
+          onClose={() => setAdding(false)}
+          onAdded={(id) => {
+            setTab("reply");
+            setPlatform("all");
+            setSelected(id);
+            void desk.draftReview(id);
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useDesk } from "./desk-store";
 import { CheckIcon } from "./icons";
 
@@ -91,9 +92,35 @@ export function Billing() {
       </div>
 
       <section className="mt-12 border-t border-line pt-6">
+        <h2 className="text-[15px] font-medium">Restaurant</h2>
+        <p className="mt-1 text-[13.5px] text-smoke">
+          You&rsquo;re working as {desk.workspace.restaurant}
+          {desk.workspace.mode === "sample" ? ", the sample restaurant." : "."}
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Link
+            href="/onboarding"
+            className="rounded-full border border-line px-4 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
+          >
+            Set up a restaurant
+          </Link>
+          {desk.workspace.mode !== "sample" && (
+            <button
+              type="button"
+              onClick={() => desk.startSample()}
+              className="rounded-full border border-line px-4 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
+            >
+              Switch to the sample restaurant
+            </button>
+          )}
+        </div>
+      </section>
+
+      <section className="mt-10 border-t border-line pt-6">
         <h2 className="text-[15px] font-medium">Reset the demo</h2>
         <p className="mt-1 text-[13.5px] text-smoke">
-          Clears drafts, replies, connections and brand-voice edits saved in this browser.
+          Clears your restaurant, drafts, replies, connections and brand-voice edits saved in this browser, and starts
+          onboarding again.
         </p>
         <button
           type="button"

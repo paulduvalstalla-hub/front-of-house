@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { buildProfile } from "@/lib/profile-builder";
 import { RESTAURANT_PROFILE } from "@/lib/restaurant-profile";
 import { useDesk } from "./desk-store";
 
@@ -36,7 +37,9 @@ export function VoiceEditor() {
   const { head, sections } = split(desk.profile);
   const [active, setActive] = useState(0);
   const current = sections[Math.min(active, sections.length - 1)];
-  const isDefault = desk.profile === RESTAURANT_PROFILE;
+  // "Default" is the sample file, or the file onboarding built for this restaurant.
+  const fallback = desk.workspace.mode === "custom" && desk.answers ? buildProfile(desk.answers) : RESTAURANT_PROFILE;
+  const isDefault = desk.profile === fallback;
   const over = desk.profile.length > LIMIT;
 
   function update(body: string) {
@@ -50,7 +53,7 @@ export function VoiceEditor() {
         <div>
           <h1 className="font-serif text-[30px] leading-none tracking-[-0.025em]">Brand voice</h1>
           <p className="mt-3 max-w-[62ch] text-[14.5px] text-smoke">
-            This is everything Front of House knows about Petit Comptoir. It is sent with every draft, and the agent may only
+            This is everything Front of House knows about {desk.workspace.restaurant}. It is sent with every draft, and the agent may only
             use these facts and the review itself.
           </p>
         </div>
@@ -62,10 +65,10 @@ export function VoiceEditor() {
           <button
             type="button"
             disabled={isDefault}
-            onClick={() => desk.setProfile(RESTAURANT_PROFILE)}
+            onClick={() => desk.setProfile(fallback)}
             className="rounded-full border border-line px-3.5 py-1.5 text-smoke hover:border-line-strong hover:text-linen disabled:opacity-40"
           >
-            Reset to default
+            {desk.workspace.mode === "custom" ? "Rebuild from onboarding" : "Reset to default"}
           </button>
         </div>
       </div>

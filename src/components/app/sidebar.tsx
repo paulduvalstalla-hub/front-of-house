@@ -23,7 +23,7 @@ const cookieSnapshot = () => document.cookie;
 
 function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
-  const { reviews, records, trialDaysLeft } = useDesk();
+  const { reviews, records, trialDaysLeft, workspace } = useDesk();
   // Subscribe to the raw cookie string (stable between renders), then decode it.
   const rawCookie = useSyncExternalStore(subscribe, cookieSnapshot, () => "");
   const session = useMemo(() => (rawCookie ? readClientSession() : null), [rawCookie]);
@@ -39,8 +39,10 @@ function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
       </Link>
 
       <div className="rounded-xl border border-line bg-night-2 px-3 py-2.5">
-        <p className="text-[13.5px] font-medium text-linen">Petit Comptoir</p>
-        <p className="text-[12.5px] text-smoke-2">South End, Boston</p>
+        <p className="truncate text-[13.5px] font-medium text-linen">{workspace.restaurant}</p>
+        <p className="truncate text-[12.5px] text-smoke-2">
+          {workspace.mode === "sample" ? "Sample restaurant" : workspace.location || "Your restaurant"}
+        </p>
       </div>
 
       <nav aria-label="Dashboard" className="flex flex-col gap-0.5">
@@ -84,7 +86,7 @@ function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
             {(session?.name ?? "C").slice(0, 1).toUpperCase()}
           </span>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-[13.5px]">{session?.name ?? "Camille Durand"}</p>
+            <p className="truncate text-[13.5px]">{session?.name ?? workspace.manager}</p>
             <p className="truncate text-[12px] text-smoke-2">{session?.email ?? "Demo account"}</p>
           </div>
           <form action={signOut}>
