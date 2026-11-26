@@ -1,36 +1,48 @@
 # Front of House
 
-An AI assistant that drafts replies to online guest reviews for the general manager of an independent restaurant, and flags the risky ones for the owner before anything is posted.
+The review reply desk for independent restaurants. Front of House reads every guest review from Google, TripAdvisor, Yelp and OpenTable, drafts a reply in the restaurant's own voice, and holds the risky ones (illness, allergies, discrimination, likely fakes) until the owner has seen them.
 
-Built as a prototype for a Hult International Business School assignment on AI agents. **Petit Comptoir**, the restaurant used in the demo, is fictional.
+Built as a prototype for a Hult International Business School assignment on AI agents. **Petit Comptoir**, the restaurant in the demo, is fictional.
+
+**Live:** https://front-of-house-one.vercel.app
 
 ## The job it does
 
 > When a new review lands on Google, Yelp or TripAdvisor, I want a reply drafted in my restaurant's voice that follows our policy, so I can answer every guest within a day without losing an hour to it, and never post something risky by accident.
 
-Paste a review and the agent returns:
+## What is real and what is simulated
 
-- **A risk level:** ready to post, post and tell the owner, or hold until the owner has seen it (illness, legal threats, suspected fake reviews).
-- **The read:** star rating, platform, language, what the guest praised and what went wrong.
-- **A draft reply** in the restaurant's voice and the guest's language, ready to copy. Nothing is posted automatically.
-- **A private note** for the manager about what to check or fix.
+| Part | Status |
+| --- | --- |
+| The AI agent: reading reviews, risk triage, drafting, revisions, refusals | **Live** (Claude Haiku 5.5) |
+| Landing page, pricing, dashboard, analytics | Live |
+| Sign-in | Demo account (a cookie; no real user accounts) |
+| Google, TripAdvisor, Yelp and OpenTable connections | **Simulated** with sample reviews. Google's review API needs a business approval; TripAdvisor and Yelp have no public API for posting replies. |
+| Payments | Not enabled (pricing page and trial only) |
 
-Follow-up requests revise the draft (shorter, warmer, more formal, another language).
+## The product
 
-## How it works
+- **Inbox:** every review from connected platforms in one list. **Triage** drafts a reply for every new review at once and sorts them into *Ready to post*, *Post, then tell the owner* and *Hold for the owner*.
+- **Draft panel:** edit the reply, ask for changes (shorter, warmer, in French, or anything typed), then approve, or send it to the owner when it is held.
+- **Quick reply:** paste a review from anywhere, such as an email or a platform that isn't connected.
+- **Brand voice:** the restaurant's knowledge file, editable section by section. The agent may only use these facts and the review itself.
+- **Integrations, Analytics, Billing.**
+
+Demo data lives in the browser (localStorage); Billing → *Reset demo data* starts over.
+
+## How the agent works
 
 | Piece | Where |
 | --- | --- |
 | System prompt | [`src/lib/system-prompt.ts`](src/lib/system-prompt.ts) |
-| Knowledge file (facts, brand voice, reply policy, escalation rules) | [`src/lib/restaurant-profile.ts`](src/lib/restaurant-profile.ts) |
+| Knowledge file (facts, voice, reply policy, escalation rules) | [`src/lib/restaurant-profile.ts`](src/lib/restaurant-profile.ts) |
 | Structured output tool (`fileReply`) | [`src/lib/reply-tool.ts`](src/lib/reply-tool.ts) |
 | Server route that calls the model | [`src/app/api/chat/route.ts`](src/app/api/chat/route.ts) |
-| Interface | [`src/components/`](src/components/) |
-| Test conversations | [`scripts/scenarios.json`](scripts/scenarios.json), run with [`scripts/ask.mjs`](scripts/ask.mjs) |
+| Dashboard | [`src/components/app/`](src/components/app/) |
+| Landing page and sign-in | [`src/components/marketing/`](src/components/marketing/) |
+| Test conversations and transcripts | [`scripts/`](scripts/), [`test-runs/`](test-runs/) |
 
-- **Model:** Anthropic Claude Haiku 5.5 (`claude-haiku-5-5`), called through the Vercel AI SDK.
-- **Stack:** Next.js (App Router), Tailwind CSS, deployed on Vercel.
-- **API key:** read from the `ANTHROPIC_API_KEY` environment variable on the server only. It is never sent to the browser or committed to this repository.
+The API key is read from `ANTHROPIC_API_KEY` on the server only; it never reaches the browser and is not in this repository.
 
 ## Run it locally
 
@@ -40,7 +52,7 @@ echo "ANTHROPIC_API_KEY=your-key-here" > .env.local
 npm run dev
 ```
 
-Then open http://localhost:3000.
+Open http://localhost:3000 and choose **Try the live demo**.
 
 To replay the test conversations against a running copy:
 
