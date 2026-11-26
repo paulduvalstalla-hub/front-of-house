@@ -24,7 +24,8 @@ Built as a prototype for a Hult International Business School assignment on AI a
 ## The product
 
 - **Onboarding:** five steps that build a restaurant's knowledge file live as you answer. Paste a menu or website and Claude Haiku fills in only the facts written in it; the safety rules and section structure are fixed. Or explore the sample restaurant, Petit Comptoir.
-- **Inbox:** every review from connected platforms in one list. **Triage** drafts a reply for every new review at once and sorts them into *Ready to post*, *Post, then tell the owner* and *Hold for the owner*.
+- **Inbox, on Autopilot:** every review from connected platforms in one list. The sample restaurant gets a live feed (a new Google or TripAdvisor review every 20–35 seconds, simulated). The agent drafts each review the moment it lands and sorts it into *Ready to post*, *Post, then tell the owner* and *Hold for the owner*. Ready replies to 4- and 5-star reviews post on their own after a 12-second countdown that anyone can stop; everything else waits for a person, and held reviews never post on their own. Switch the agent off and the **Triage** button drafts everything at once instead.
+- **Posted replies** are shown the way guests see them on Google or TripAdvisor (a preview: the connection is simulated).
 - **Draft panel:** edit the reply, ask for changes (shorter, warmer, in French, or anything typed), then approve, or send it to the owner when it is held.
 - **Quick reply:** paste a review from anywhere, such as an email or a platform that isn't connected.
 - **Brand voice:** the restaurant's knowledge file, editable section by section. The agent may only use these facts and the review itself.

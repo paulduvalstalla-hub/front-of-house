@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AgentToasts } from "@/components/app/agent-toasts";
 import { Sidebar } from "@/components/app/sidebar";
 import { WorkspaceGate } from "@/components/app/workspace-gate";
 
@@ -13,6 +14,7 @@ export default function DashboardLayout({ children }: LayoutProps<"/dashboard">)
         <Sidebar />
         <main className="min-w-0 flex-1">{children}</main>
       </div>
+      <AgentToasts />
     </WorkspaceGate>
   );
 }

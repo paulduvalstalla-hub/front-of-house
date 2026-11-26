@@ -23,7 +23,8 @@ const cookieSnapshot = () => document.cookie;
 
 function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
-  const { reviews, records, trialDaysLeft, workspace } = useDesk();
+  const { reviews, records, trialDaysLeft, workspace, agentOn, connections } = useDesk();
+  const watching = Object.values(connections).filter(Boolean).length;
   // Subscribe to the raw cookie string (stable between renders), then decode it.
   const rawCookie = useSyncExternalStore(subscribe, cookieSnapshot, () => "");
   const session = useMemo(() => (rawCookie ? readClientSession() : null), [rawCookie]);
@@ -42,6 +43,15 @@ function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
         <p className="truncate text-[13.5px] font-medium text-linen">{workspace.restaurant}</p>
         <p className="truncate text-[12.5px] text-smoke-2">
           {workspace.mode === "sample" ? "Sample restaurant" : workspace.location || "Your restaurant"}
+        </p>
+        <p className="mt-2 flex items-center gap-2 border-t border-line pt-2 text-[12.5px]">
+          <span className="relative flex size-1.5 shrink-0">
+            {agentOn && <span className="live-ping absolute inline-flex size-full rounded-full bg-sage" />}
+            <span className={`relative inline-flex size-1.5 rounded-full ${agentOn ? "bg-sage" : "bg-smoke-2"}`} />
+          </span>
+          <span className={agentOn ? "text-linen/90" : "text-smoke-2"}>
+            {agentOn ? `Agent on · ${watching} ${watching === 1 ? "platform" : "platforms"}` : "Agent paused"}
+          </span>
         </p>
       </div>
 

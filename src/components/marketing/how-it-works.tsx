@@ -5,11 +5,11 @@ const STEPS = [
   },
   {
     title: "Front of House drafts and triages",
-    body: "One click on Triage all reads every new review, drafts a reply in your voice and flags what the owner must see.",
+    body: "Every new review is read the moment it lands. The agent drafts a reply in your voice and flags what the owner must see.",
   },
   {
-    title: "You approve and post",
-    body: "Edit a line if you want, then approve. Nothing is posted until a person says yes.",
+    title: "Safe replies post themselves",
+    body: "With Autopilot on, Ready replies to 4- and 5-star reviews go straight back to Google or TripAdvisor. Anything risky waits for a person.",
   },
 ];
 

@@ -1,7 +1,7 @@
 const QUESTIONS = [
   {
     q: "Does it post replies automatically?",
-    a: "No. Front of House drafts the reply and you approve it. Nothing goes public until a person on your team says yes.",
+    a: "Only the safe ones, and only with Autopilot on. It posts replies it marked Ready to 4- and 5-star reviews, after a few seconds in which you can stop it. Illness, allergies, discrimination, legal threats and suspected fakes are always held for the owner, and everything else waits for your approval.",
   },
   {
     q: "Which platforms does it work with?",

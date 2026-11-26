@@ -44,6 +44,14 @@ export type DemoReview = {
   text: string;
   /** Older reviews that were already answered before Front of House. */
   pastReply?: string;
+  /** When the review reached the inbox (live arrivals and pasted reviews); otherwise `hoursAgo` applies. */
+  receivedAt?: number;
+  /** The reviewer's profile line, e.g. "Local Guide · 41 reviews" on Google. */
+  meta?: string;
+  /** TripAdvisor review headline. */
+  title?: string;
+  /** Visit details, e.g. "Dine in · Dinner · $50–100" on Google or "November 2026 · Couples" on TripAdvisor. */
+  visit?: string;
 };
 
 export const DEMO_REVIEWS: DemoReview[] = [
@@ -53,6 +61,8 @@ export const DEMO_REVIEWS: DemoReview[] = [
     author: "Sarah M.",
     stars: 5,
     hoursAgo: 2,
+    meta: "Local Guide · 36 reviews",
+    visit: "Dine in · Dinner · $100+",
     text: "Came for my mom's 60th birthday. The duck confit was perfect and our server Léa remembered it was a celebration and brought a candle in the crème brûlée. Cosy room, great wine list. We'll definitely be back!",
   },
   {
@@ -61,6 +71,9 @@ export const DEMO_REVIEWS: DemoReview[] = [
     author: "Hélène D.",
     stars: 2,
     hoursAgo: 5,
+    meta: "Lyon, France · 14 contributions",
+    title: "Cadre charmant, mais inquiète",
+    visit: "November 2026 · Couples",
     text: "Dîner vendredi soir. Le cadre est charmant et le serveur très gentil, mais 45 minutes d'attente pour les plats. Pire : mon mari a été malade toute la nuit après la bouillabaisse. Je ne sais pas si c'est lié mais c'est inquiétant.",
   },
   {
@@ -69,6 +82,8 @@ export const DEMO_REVIEWS: DemoReview[] = [
     author: "Priya K.",
     stars: 4,
     hoursAgo: 9,
+    meta: "Local Guide · 88 reviews",
+    visit: "Dine in · Dinner · $50–100",
     text: "Sat at the zinc bar on a Thursday and had the prix fixe — honestly great value for $49. The tarte tatin is the best I've had outside Paris. Only gripe: it gets very loud after 8pm, hard to hear each other.",
   },
   {
@@ -77,6 +92,8 @@ export const DEMO_REVIEWS: DemoReview[] = [
     author: "Dana W.",
     stars: 1,
     hoursAgo: 14,
+    meta: "4 reviews",
+    visit: "Dine in · Dinner",
     text: "The host at the door was openly rude to my wife and me and seated a group that arrived after us first. It felt like we were being treated differently because of who we are. We left before ordering.",
   },
   {
@@ -85,6 +102,9 @@ export const DEMO_REVIEWS: DemoReview[] = [
     author: "James from Leeds",
     stars: 5,
     hoursAgo: 20,
+    meta: "Leeds, UK · 52 contributions",
+    title: "A real neighbourhood gem",
+    visit: "November 2026 · Business",
     text: "Visiting Boston for a conference and a colleague recommended this place. The French onion soup alone was worth the trip — rich, proper gruyère crust. Service was relaxed but attentive. A real neighbourhood gem.",
   },
   {
@@ -93,6 +113,8 @@ export const DEMO_REVIEWS: DemoReview[] = [
     author: "Tom R.",
     stars: 3,
     hoursAgo: 28,
+    meta: "Local Guide · 27 reviews",
+    visit: "Dine in · Dinner · $50–100",
     text: "Used to be our favourite. The duck confit was a bit dry this time and the frites were average. Staff were lovely as always. Hoping it was an off night.",
   },
   {
@@ -101,6 +123,8 @@ export const DEMO_REVIEWS: DemoReview[] = [
     author: "Ana L.",
     stars: 5,
     hoursAgo: 33,
+    meta: "11 reviews",
+    visit: "Brunch · $20–30",
     text: "¡Increíble! Fuimos al brunch del domingo y todo estaba delicioso. El camarero nos recomendó la tarta tatin y fue lo mejor de la mañana. Volveremos seguro.",
   },
   {
@@ -109,6 +133,9 @@ export const DEMO_REVIEWS: DemoReview[] = [
     author: "Mike P.",
     stars: 2,
     hoursAgo: 46,
+    meta: "Hartford, CT · 7 contributions",
+    title: "Nut allergy not taken seriously",
+    visit: "November 2026 · Family",
     text: "I told our server my daughter has a nut allergy and asked twice about the dessert. The crème brûlée came with a tuile that had almonds in it. We caught it in time but I'm shocked. Food was otherwise good.",
   },
   {
@@ -157,6 +184,8 @@ export const DEMO_REVIEWS: DemoReview[] = [
     author: "Paul A.",
     stars: 5,
     hoursAgo: 120,
+    meta: "Local Guide · 210 reviews",
+    visit: "Dine in · Dinner · $50–100",
     text: "Best bistro in the South End. Steak frites, a glass of Bordeaux, done.",
     pastReply:
       "Paul, that sounds like the perfect order. Thank you for coming in, and for the kind words about the steak frites. See you at the bar soon.\n\n— Camille, General Manager",
@@ -167,11 +196,30 @@ export const DEMO_REVIEWS: DemoReview[] = [
     author: "Inès V.",
     stars: 4,
     hoursAgo: 150,
+    meta: "Paris, France · 18 contributions",
+    title: "Très bonne adresse",
+    visit: "October 2026 · Couples",
     text: "Très bonne adresse. Le confit de canard était parfait, un peu bruyant le samedi.",
     pastReply:
       "Merci Inès ! Je suis ravie que le confit de canard vous ait plu. Le samedi soir est animé, c'est vrai : en semaine, la salle est plus calme si vous préférez.\n\n— Camille, General Manager",
   },
 ];
+
+/** How long ago a review arrived, in hours: from its timestamp when it has one. */
+export function ageHours(r: DemoReview, now: number) {
+  return r.receivedAt && now ? Math.max(0, (now - r.receivedAt) / 3_600_000) : r.hoursAgo;
+}
+
+/** "just now", "4 min ago", "2h ago"… for a review, using its timestamp when it has one. */
+export function reviewAge(r: DemoReview, now: number) {
+  if (r.receivedAt && now) {
+    const min = Math.floor(Math.max(0, now - r.receivedAt) / 60_000);
+    if (min < 1) return "just now";
+    if (min < 60) return `${min} min ago`;
+    return timeAgo(Math.floor(min / 60));
+  }
+  return timeAgo(r.hoursAgo);
+}
 
 export function timeAgo(hours: number) {
   if (hours < 1) return "just now";

@@ -49,7 +49,8 @@ function ConnectDialog({ platform, onClose }: { platform: Platform; onClose: () 
               <CheckIcon className="mt-0.5 shrink-0 text-sage" /> Read new reviews for {desk.workspace.restaurant}
             </li>
             <li className="flex gap-2.5">
-              <CheckIcon className="mt-0.5 shrink-0 text-sage" /> Post replies, only after you approve each one
+              <CheckIcon className="mt-0.5 shrink-0 text-sage" /> Post replies: on its own only for Ready replies to
+              4- and 5-star reviews when Autopilot is on, otherwise after you approve
             </li>
           </ul>
           <p className="mt-4 text-[13px] leading-relaxed text-smoke-2">
@@ -90,7 +91,7 @@ function ConnectDialog({ platform, onClose }: { platform: Platform; onClose: () 
             <CheckIcon className="text-sage" /> {meta.name} is connected
           </p>
           <p className="mt-2 text-[14px] text-smoke">
-            {count} reviews were added to your inbox. Use Triage in the inbox to draft replies to all of them at once.
+            {count} reviews were added to your inbox. Front of House is drafting replies to them now.
           </p>
           <div className="mt-5 flex justify-end">
             <button

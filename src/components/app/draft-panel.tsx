@@ -7,7 +7,9 @@ import type { DemoReview } from "@/lib/demo-reviews";
 import type { ReplyDraft } from "@/lib/reply-tool";
 import { useDesk, type DeskMessage } from "./desk-store";
 import { CheckIcon, HoldIcon } from "./icons";
+import { ListingPreview } from "./listing-preview";
 import { riskMeta } from "./risk";
+import { useNow } from "./use-now";
 
 const REVISIONS = [
   { label: "Shorter", prompt: "Make the reply shorter." },
@@ -53,6 +55,7 @@ export function DraftPanel({ review }: { review: DemoReview }) {
   const { messages, status, sendMessage, stop } = useChat({ chat });
   const record = desk.records[review.id] ?? { status: "new" as const };
   const busy = status === "submitted" || status === "streaming";
+  const now = useNow(1000);
 
   const live = latest(messages);
   const draft: LooseDraft | undefined = live.draft ?? record.draft;
@@ -66,6 +69,7 @@ export function DraftPanel({ review }: { review: DemoReview }) {
 
   function revise(text: string) {
     if (busy || !text.trim()) return;
+    desk.holdAutoPost(review.id);
     sendMessage({ text: text.trim() });
     setAsk("");
   }
@@ -74,18 +78,33 @@ export function DraftPanel({ review }: { review: DemoReview }) {
     revise(ask);
   }
 
-  // Already answered.
+  // Already answered: show the reply as guests see it on the platform.
   if (record.status === "replied" && record.posted) {
+    const auto = record.postedBy === "autopilot";
     return (
       <section aria-label="Posted reply" className="rounded-[var(--radius-window)] border border-line bg-night-2">
-        <header className="flex items-center gap-2 border-b border-line px-5 py-3 text-[13.5px]">
+        <header className="flex flex-wrap items-center gap-x-2 gap-y-1 border-b border-line px-5 py-3 text-[13.5px]">
           <CheckIcon className="text-sage" />
-          <span className="text-linen">Posted to {review.platform}</span>
+          <span className="text-linen">Live on {review.platform}</span>
           <span className="text-smoke-2">
-            {record.postedAt ? new Date(record.postedAt).toLocaleString([], { dateStyle: "medium", timeStyle: "short" }) : ""}
+            {auto ? "Posted automatically by Front of House" : "Posted"}
+            {record.postedAt
+              ? `, ${new Date(record.postedAt).toLocaleString([], { dateStyle: "medium", timeStyle: "short" })}`
+              : ""}
           </span>
         </header>
-        <p className="whitespace-pre-wrap px-5 py-4 font-serif text-[17px] leading-[1.6] text-linen/90">{record.posted}</p>
+        <div className="px-5 py-5">
+          <ListingPreview
+            review={review}
+            reply={record.posted}
+            postedAt={record.postedAt}
+            now={now || record.postedAt || 0}
+            workspace={desk.workspace}
+          />
+          <p className="mt-2.5 text-[12px] text-smoke-2">
+            How the reply appears on {review.platform}. In this prototype the {review.platform} connection is simulated.
+          </p>
+        </div>
         <div className="border-t border-line px-5 py-3">
           <button
             type="button"
@@ -94,6 +113,27 @@ export function DraftPanel({ review }: { review: DemoReview }) {
           >
             Edit reply
           </button>
+        </div>
+      </section>
+    );
+  }
+
+  // Nothing drafted yet, but the agent is on: it is next in the queue.
+  if (!draft && !busy && !note && desk.agentOn && !record.error) {
+    return (
+      <section className="rounded-[var(--radius-window)] border border-line bg-night-2 px-5 py-4">
+        <p className="flex items-center gap-2 text-[14px] text-linen">
+          Front of House is reading this review
+          <span className="dot-pulse inline-flex gap-1" aria-hidden>
+            <span className="size-1 rounded-full bg-smoke" />
+            <span className="size-1 rounded-full bg-smoke" />
+            <span className="size-1 rounded-full bg-smoke" />
+          </span>
+        </p>
+        <div className="mt-4 space-y-2.5 rounded-xl bg-night px-4 py-4">
+          <Skeleton w="94%" />
+          <Skeleton w="88%" />
+          <Skeleton w="60%" />
         </div>
       </section>
     );
@@ -136,6 +176,10 @@ export function DraftPanel({ review }: { review: DemoReview }) {
   const problems = (draft?.problems ?? []).filter(Boolean).slice(0, 4) as string[];
   const escalate = draft?.risk === "escalate";
   const withOwner = record.status === "with-owner";
+  const secondsLeft =
+    record.autoPostAt && record.status === "drafted" && !busy && now
+      ? Math.max(0, Math.ceil((record.autoPostAt - now) / 1000))
+      : null;
 
   return (
     <section aria-label="Draft reply" className="overflow-hidden rounded-[var(--radius-window)] border border-line bg-night-2">
@@ -159,6 +203,35 @@ export function DraftPanel({ review }: { review: DemoReview }) {
         </span>
         {draft?.riskReason && <span className="text-[13px] text-smoke">{draft.riskReason}</span>}
       </header>
+
+      {secondsLeft !== null && draft?.reply && (
+        <div
+          aria-live="polite"
+          className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-line bg-sage/[0.07] px-5 py-2.5 text-[13.5px]"
+        >
+          <span className="relative flex size-2">
+            <span className="live-ping absolute inline-flex size-full rounded-full bg-sage" />
+            <span className="relative inline-flex size-2 rounded-full bg-sage" />
+          </span>
+          <span className="flex-1 text-linen">
+            Autopilot posts this to {review.platform} in <span className="tabular-nums">{secondsLeft}</span> s
+          </span>
+          <button
+            type="button"
+            onClick={() => desk.approve(review.id, replyText)}
+            className="rounded-lg bg-linen px-3 py-1 text-[13px] font-medium text-night hover:bg-white"
+          >
+            Post now
+          </button>
+          <button
+            type="button"
+            onClick={() => desk.holdAutoPost(review.id)}
+            className="rounded-lg px-2.5 py-1 text-[13px] text-smoke hover:bg-night-3 hover:text-linen"
+          >
+            Stop, I&rsquo;ll check it
+          </button>
+        </div>
+      )}
 
       <div className="space-y-5 px-5 py-4">
         {(praised.length > 0 || problems.length > 0) && (
@@ -188,6 +261,7 @@ export function DraftPanel({ review }: { review: DemoReview }) {
               id={`reply-${review.id}`}
               value={replyText}
               onChange={(e) => setEdited({ base: draft.reply ?? "", text: e.target.value })}
+              onFocus={() => desk.holdAutoPost(review.id)}
               readOnly={busy}
               rows={Math.min(14, Math.max(6, Math.ceil(replyText.length / 72) + replyText.split("\n").length))}
               className="block w-full resize-y rounded-xl border border-transparent bg-night px-4 py-3 font-serif text-[17px] leading-[1.6] text-linen outline-none transition focus:border-line-strong"
@@ -250,14 +324,10 @@ export function DraftPanel({ review }: { review: DemoReview }) {
             )}
             <button
               type="button"
-              onClick={() => navigator.clipboard?.writeText(replyText).catch(() => {})}
-              className="rounded-lg px-3 py-2 text-[13.5px] text-smoke hover:bg-night-3 hover:text-linen"
-            >
-              Copy
-            </button>
-            <button
-              type="button"
-              onClick={() => desk.draftReview(review.id)}
+              onClick={() => {
+                desk.holdAutoPost(review.id);
+                void desk.draftReview(review.id);
+              }}
               className="rounded-lg px-3 py-2 text-[13.5px] text-smoke hover:bg-night-3 hover:text-linen"
             >
               Redraft

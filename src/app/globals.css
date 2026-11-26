@@ -119,9 +119,55 @@ body {
   animation: shimmer 1.4s infinite linear;
 }
 
+/* A review that just arrived from a platform warms up, then settles. */
+@keyframes row-arrive {
+  from {
+    background-color: rgb(242 182 109 / 0.16);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+.row-arrive {
+  animation: row-arrive 2.6s ease-out;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.toast-in {
+  animation: toast-in 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* The "agent on" light. */
+@keyframes live-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  80%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+.live-ping {
+  animation: live-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .dot-pulse span,
-  .skeleton {
+  .skeleton,
+  .row-arrive,
+  .toast-in,
+  .live-ping {
     animation: none;
   }
   * {
