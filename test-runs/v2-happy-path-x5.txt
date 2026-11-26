@@ -1,0 +1,75 @@
+
+=================== happy ===================
+
+>>> USER:
+Google, 5 stars, from Sarah M.: Came for my mom's 60th birthday. The duck confit was perfect and our server Léa remembered it was a celebration and brought a candle in the crème brûlée. Cosy room, great wine list. We'll definitely be back!
+
+<<< AGENT (2.7s):
+[fileReply] risk=ready | Google | stars=5 | English | positive
+  riskReason: Positive 5-star review with no escalation or flag triggers.
+  praised: ["Duck confit was perfect","Server remembered the celebration","Candle in crème brûlée","Cosy room and wine list"] problems: []
+  reply (57 words):
+    Hi Sarah, thank you for sharing your mom's 60th birthday with us. It means a lot that the duck confit landed so well, and I'm glad Léa noticed the occasion and added a candle to the crème brûlée. Please pass on our congratulations to your mom. We look forward to welcoming you back.
+    
+    — Camille, General Manager
+  managerNote: No action needed. Consider passing Léa's candle moment on to her directly, since the guest singled her out.
+
+=================== happy ===================
+
+>>> USER:
+Google, 5 stars, from Sarah M.: Came for my mom's 60th birthday. The duck confit was perfect and our server Léa remembered it was a celebration and brought a candle in the crème brûlée. Cosy room, great wine list. We'll definitely be back!
+
+<<< AGENT (2.4s):
+[fileReply] risk=ready | Google | stars=5 | English | positive
+  riskReason: Positive 5-star review with no escalation or flag triggers.
+  praised: ["Duck confit was perfect","Server remembered the celebration","Candle in crème brûlée","Cosy room and wine list"] problems: []
+  reply (58 words):
+    Hi Sarah, thank you so much for sharing your mom's 60th birthday with us. It made our evening. I'm glad the duck confit hit the mark, and I'll pass on your kind words to Léa for remembering the occasion and bringing the candle to the crème brûlée. We hope you'll both come back soon.
+    
+    — Camille, General Manager
+  managerNote: Nothing to check. Consider passing Sarah's praise for Léa to her directly, since it is a named server.
+
+=================== happy ===================
+
+>>> USER:
+Google, 5 stars, from Sarah M.: Came for my mom's 60th birthday. The duck confit was perfect and our server Léa remembered it was a celebration and brought a candle in the crème brûlée. Cosy room, great wine list. We'll definitely be back!
+
+<<< AGENT (3.2s):
+[fileReply] risk=ready | Google | stars=5 | English | positive
+  riskReason: Positive review with no escalation or flag triggers.
+  praised: ["Duck confit was perfect","Server remembered the celebration","Candle in crème brûlée","Cosy room and wine list"] problems: []
+  reply (66 words):
+    Hi Sarah, thank you for coming in to celebrate your mom's 60th. The duck confit is one of our favourites, so I am glad it was perfect for you. I will pass on your thanks to Léa for remembering the occasion and adding that candle to the crème brûlée. It made the evening special. We would love to see you both again.
+    
+    — Camille, General Manager
+  managerNote: No issues. Consider passing Sarah's praise for Léa on to her directly, as it is a staff compliment, not a discipline matter.
+
+=================== happy ===================
+
+>>> USER:
+Google, 5 stars, from Sarah M.: Came for my mom's 60th birthday. The duck confit was perfect and our server Léa remembered it was a celebration and brought a candle in the crème brûlée. Cosy room, great wine list. We'll definitely be back!
+
+<<< AGENT (2.6s):
+[fileReply] risk=ready | Google | stars=5 | English | positive
+  riskReason: Positive 5-star review with no escalation or owner-notification triggers.
+  praised: ["Duck confit was perfect","Server remembered the celebration","Candle in crème brûlée","Cosy room and wine list"] problems: []
+  reply (77 words):
+    Hi Sarah, thank you so much for coming in to celebrate your mom's 60th. It made our evening to hear the duck confit landed so well. A big thank you to Léa for spotting the occasion and bringing the candle to the crème brûlée; that is exactly the kind of care we hope for. We are glad the room and wine list felt right, and we look forward to welcoming you both back.
+    
+    — Camille, General Manager
+  managerNote: Consider passing Sarah's praise for Léa on to her directly, since it is a named staff compliment.
+
+=================== happy ===================
+
+>>> USER:
+Google, 5 stars, from Sarah M.: Came for my mom's 60th birthday. The duck confit was perfect and our server Léa remembered it was a celebration and brought a candle in the crème brûlée. Cosy room, great wine list. We'll definitely be back!
+
+<<< AGENT (2.5s):
+[fileReply] risk=ready | Google | stars=5 | English | positive
+  riskReason: Positive 5-star review with no escalation or owner-notify triggers.
+  praised: ["Duck confit was perfect","Server remembered the celebration","Candle on crème brûlée","Cosy room and wine list"] problems: []
+  reply (61 words):
+    Hi Sarah, thank you for sharing your mom's 60th birthday with us. It made our evening. I'm so glad the duck confit hit the mark, and I'll pass on your thanks to Léa for remembering the occasion and adding that candle to the crème brûlée. Happy birthday to your mom. We look forward to welcoming you back.
+    
+    — Camille, General Manager
+  managerNote: No action needed. Consider passing Sarah's praise for Léa to her privately.

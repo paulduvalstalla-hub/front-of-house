@@ -1,17 +1,24 @@
 import { RESTAURANT_PROFILE } from "@/lib/restaurant-profile";
 
-type Section = { title: string; intro: string[]; bullets: string[] };
+type Block = { kind: "text" | "bullets"; lines: string[] };
+type Section = { title: string; blocks: Block[] };
 
+// Keeps paragraphs and bullet lists in the order they appear in the file.
 function parseProfile(md: string): Section[] {
   const sections: Section[] = [];
-  for (const line of md.split("\n")) {
-    if (line.startsWith("## ")) {
-      sections.push({ title: line.slice(3).trim(), intro: [], bullets: [] });
-    } else if (sections.length > 0 && line.startsWith("- ")) {
-      sections[sections.length - 1].bullets.push(line.slice(2).trim());
-    } else if (sections.length > 0 && line.trim()) {
-      sections[sections.length - 1].intro.push(line.trim());
+  for (const raw of md.split("\n")) {
+    const line = raw.trim();
+    if (raw.startsWith("## ")) {
+      sections.push({ title: raw.slice(3).trim(), blocks: [] });
+      continue;
     }
+    const section = sections[sections.length - 1];
+    if (!section || !line) continue;
+    const kind = line.startsWith("- ") ? "bullets" : "text";
+    const text = kind === "bullets" ? line.slice(2) : line;
+    const last = section.blocks[section.blocks.length - 1];
+    if (last && last.kind === kind) last.lines.push(text);
+    else section.blocks.push({ kind, lines: [text] });
   }
   return sections;
 }
@@ -46,24 +53,28 @@ export function ProfilePanel() {
             >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-serif text-[17.5px] tracking-[-0.01em] [&::-webkit-details-marker]:hidden">
                 {s.title}
-                <span
-                  aria-hidden
-                  className="text-[15px] text-ink-faint transition group-open:rotate-45"
-                >
+                <span aria-hidden className="text-[15px] text-ink-faint transition group-open:rotate-45">
                   +
                 </span>
               </summary>
-              {s.intro.length > 0 && (
-                <p className="mt-2 text-[13.5px] text-ink-soft">{s.intro.join(" ")}</p>
-              )}
-              <ul className="mt-2 space-y-1.5">
-                {s.bullets.map((b) => (
-                  <li key={b} className="relative pl-3.5 text-[13.5px] leading-snug text-ink-soft">
-                    <span className="absolute left-0 top-[0.55em] size-1 rounded-full bg-ink-faint" />
-                    {b}
-                  </li>
-                ))}
-              </ul>
+              <div className="mt-2 space-y-2">
+                {s.blocks.map((b, i) =>
+                  b.kind === "text" ? (
+                    <p key={i} className="text-[13.5px] leading-snug text-ink-soft">
+                      {b.lines.join(" ")}
+                    </p>
+                  ) : (
+                    <ul key={i} className="space-y-1.5">
+                      {b.lines.map((line) => (
+                        <li key={line} className="relative pl-3.5 text-[13.5px] leading-snug text-ink-soft">
+                          <span className="absolute left-0 top-[0.55em] size-1 rounded-full bg-ink-faint" />
+                          {line}
+                        </li>
+                      ))}
+                    </ul>
+                  ),
+                )}
+              </div>
             </details>
           ))}
         </div>
