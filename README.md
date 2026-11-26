@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Front of House
 
-## Getting Started
+An AI assistant that drafts replies to online guest reviews for the general manager of an independent restaurant, and flags the risky ones for the owner before anything is posted.
 
-First, run the development server:
+Built as a prototype for a Hult International Business School assignment on AI agents. **Petit Comptoir**, the restaurant used in the demo, is fictional.
+
+## The job it does
+
+> When a new review lands on Google, Yelp or TripAdvisor, I want a reply drafted in my restaurant's voice that follows our policy, so I can answer every guest within a day without losing an hour to it, and never post something risky by accident.
+
+Paste a review and the agent returns:
+
+- **A risk level:** ready to post, post and tell the owner, or hold until the owner has seen it (illness, legal threats, suspected fake reviews).
+- **The read:** star rating, platform, language, what the guest praised and what went wrong.
+- **A draft reply** in the restaurant's voice and the guest's language, ready to copy. Nothing is posted automatically.
+- **A private note** for the manager about what to check or fix.
+
+Follow-up requests revise the draft (shorter, warmer, more formal, another language).
+
+## How it works
+
+| Piece | Where |
+| --- | --- |
+| System prompt | [`src/lib/system-prompt.ts`](src/lib/system-prompt.ts) |
+| Knowledge file (facts, brand voice, reply policy, escalation rules) | [`src/lib/restaurant-profile.ts`](src/lib/restaurant-profile.ts) |
+| Structured output tool (`fileReply`) | [`src/lib/reply-tool.ts`](src/lib/reply-tool.ts) |
+| Server route that calls the model | [`src/app/api/chat/route.ts`](src/app/api/chat/route.ts) |
+| Interface | [`src/components/`](src/components/) |
+| Test conversations | [`scripts/scenarios.json`](scripts/scenarios.json), run with [`scripts/ask.mjs`](scripts/ask.mjs) |
+
+- **Model:** Anthropic Claude Haiku 5.5 (`claude-haiku-5-5`), called through the Vercel AI SDK.
+- **Stack:** Next.js (App Router), Tailwind CSS, deployed on Vercel.
+- **API key:** read from the `ANTHROPIC_API_KEY` environment variable on the server only. It is never sent to the browser or committed to this repository.
+
+## Run it locally
 
 ```bash
+npm install
+echo "ANTHROPIC_API_KEY=your-key-here" > .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To replay the test conversations against a running copy:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+node scripts/ask.mjs http://localhost:3000 scripts/scenarios.json
+```

@@ -1,68 +1,46 @@
-import Image from "next/image";
+import { ProfilePanel } from "@/components/profile-panel";
+import { ReviewDesk } from "@/components/review-desk";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-dvh">
+      <nav className="sticky top-3 z-20 mx-auto mt-3 flex max-w-[1180px] items-center justify-between rounded-full border border-black/5 bg-white/75 px-5 py-2.5 shadow-[0_8px_30px_-18px_rgba(0,0,0,0.3)] backdrop-blur-md max-[1212px]:mx-4">
+        <span className="whitespace-nowrap font-serif text-[21px] leading-none tracking-[-0.03em]">
+          Front of House
+          <span className="ml-2 hidden font-sans text-[13px] tracking-normal text-ink-faint sm:inline">
+            for Petit Comptoir
+          </span>
+        </span>
+        <span className="whitespace-nowrap rounded-full bg-paper px-3 py-1.5 text-[12.5px] text-ink-soft">
+          Prototype<span className="hidden sm:inline"> · Claude Haiku 5.5</span>
+        </span>
+      </nav>
+
+      <header className="mx-auto max-w-[1180px] px-4 pb-8 pt-12 sm:px-6 sm:pt-16">
+        <p className="text-[12.5px] font-medium uppercase tracking-[0.14em] text-ink-soft">
+          Review desk · South End, Boston
+        </p>
+        <h1 className="mt-4 max-w-[820px] font-serif text-[42px] font-normal leading-[1.02] tracking-[-0.04em] sm:text-[62px]">
+          Answer every review in your own voice.
+        </h1>
+        <p className="mt-5 max-w-[620px] text-[17px] leading-relaxed text-ink-soft">
+          Paste a guest review. Front of House reads it, checks it against Petit Comptoir&rsquo;s reply
+          policy, and drafts a reply you can post — or tells you when Julien needs to see it first.
+        </p>
+      </header>
+
+      <main className="mx-auto max-w-[1180px] px-2 pb-16 sm:px-6">
+        <div className="rounded-[34px] bg-periwinkle p-2 sm:p-5 lg:p-7">
+          <div className="grid gap-3 sm:gap-5 lg:grid-cols-[minmax(0,1fr)_330px]">
+            <ReviewDesk />
+            <ProfilePanel />
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+
+        <footer className="mx-auto mt-8 flex max-w-[1180px] flex-col gap-1 px-2 text-[13px] text-ink-faint sm:flex-row sm:justify-between">
+          <span>Petit Comptoir is a fictional restaurant. Drafts are suggestions — a person posts every reply.</span>
+          <span>Built for a Hult AI product assignment.</span>
+        </footer>
       </main>
     </div>
   );
