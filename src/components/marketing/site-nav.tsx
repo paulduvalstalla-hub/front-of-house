@@ -20,7 +20,7 @@ export function SiteNav() {
             <a
               key={l.href}
               href={l.href}
-              className="rounded-lg px-3 py-1.5 text-[14px] text-smoke transition hover:text-linen"
+              className="rounded-lg px-3 py-1.5 text-small text-smoke transition hover:text-linen"
             >
               {l.label}
             </a>
@@ -29,13 +29,13 @@ export function SiteNav() {
         <div className="ml-auto flex items-center gap-2">
           <Link
             href="/sign-in"
-            className="hidden rounded-lg px-3 py-1.5 text-[14px] text-smoke transition hover:text-linen sm:inline-block"
+            className="hidden rounded-lg px-3 py-1.5 text-small text-smoke transition hover:text-linen sm:inline-block"
           >
             Sign in
           </Link>
           <Link
             href="/sign-in"
-            className="hidden whitespace-nowrap rounded-lg bg-linen px-4 py-2 text-[14px] font-semibold text-night transition hover:bg-white min-[400px]:inline-block"
+            className="hidden whitespace-nowrap rounded-lg bg-linen px-4 py-2 text-small font-semibold text-night transition hover:bg-white min-[400px]:inline-block"
           >
             Start free trial
           </Link>
@@ -50,16 +50,16 @@ export function SiteNav() {
             </summary>
             <div className="absolute right-0 top-11 flex w-48 flex-col rounded-xl border border-line-strong bg-night-2 p-1.5 shadow-[0_20px_50px_-10px_rgb(0_0_0/0.7)]">
               {LINKS.map((l) => (
-                <a key={l.href} href={l.href} className="rounded-lg px-3 py-2 text-[14px] text-linen hover:bg-night-3">
+                <a key={l.href} href={l.href} className="rounded-lg px-3 py-2 text-small text-linen hover:bg-night-3">
                   {l.label}
                 </a>
               ))}
-              <Link href="/sign-in" className="rounded-lg px-3 py-2 text-[14px] text-linen hover:bg-night-3">
+              <Link href="/sign-in" className="rounded-lg px-3 py-2 text-small text-linen hover:bg-night-3">
                 Sign in
               </Link>
               <Link
                 href="/sign-in"
-                className="mt-1 rounded-lg bg-linen px-3 py-2 text-[14px] font-semibold text-night min-[400px]:hidden"
+                className="mt-1 rounded-lg bg-linen px-3 py-2 text-small font-semibold text-night min-[400px]:hidden"
               >
                 Start free trial
               </Link>

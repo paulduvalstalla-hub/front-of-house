@@ -11,7 +11,7 @@ const LABEL: Record<Risk, string> = {
 /** Review status for the marketing mocks: icon plus plain text, same as the app. */
 export function RiskBadge({ risk, className = "", size = 13 }: { risk: Risk; className?: string; size?: number }) {
   return (
-    <StatusLabel level={risk} size={size} className={`text-[12px] text-smoke ${className}`}>
+    <StatusLabel level={risk} size={size} className={`text-micro text-smoke ${className}`}>
       {LABEL[risk]}
     </StatusLabel>
   );

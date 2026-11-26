@@ -31,8 +31,8 @@ function Row({
   return (
     <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
       <div className={flip ? "lg:order-2" : ""}>
-        <h3 className="font-serif text-[30px] leading-[1.08] tracking-[-0.025em] [text-wrap:balance] sm:text-[42px]">{title}</h3>
-        <p className="mt-4 max-w-[440px] text-[16.5px] leading-relaxed text-smoke">{body}</p>
+        <h3 className="font-serif text-display-3 [text-wrap:balance]">{title}</h3>
+        <p className="mt-4 max-w-[440px] text-lead [text-wrap:pretty] text-smoke">{body}</p>
       </div>
       <div className={flip ? "lg:order-1" : ""}>{visual}</div>
     </div>
@@ -52,8 +52,8 @@ function TriageVisual() {
       <div className="grid gap-3 sm:grid-cols-3">
         {COLUMNS.map((c) => (
           <div key={c.risk} className="rounded-xl bg-night/70 p-2.5">
-            <RiskBadge risk={c.risk} className="px-0.5 text-[12.5px] font-medium !text-linen" />
-            <p className="mt-1.5 px-0.5 text-[11.5px] text-smoke-2">{c.note}</p>
+            <RiskBadge risk={c.risk} className="px-0.5 text-small font-medium !text-linen" />
+            <p className="mt-1.5 px-0.5 text-micro text-smoke-2">{c.note}</p>
             <ul className="mt-2.5 space-y-2">
               {c.ids.map((id) => {
                 const r = byId(id);
@@ -61,10 +61,10 @@ function TriageVisual() {
                   <li key={id} className="rounded-lg border border-line bg-night-3/60 px-2.5 py-2">
                     <div className="flex items-center gap-1.5">
                       <PlatformLogo platform={r.platform} size={13} />
-                      <span className="truncate text-[12px] font-medium">{r.author}</span>
-                      <span className="ml-auto text-[11px] text-lamp">{r.stars}★</span>
+                      <span className="truncate text-small font-medium">{r.author}</span>
+                      <span className="ml-auto text-micro text-lamp">{r.stars}★</span>
                     </div>
-                    <p className="mt-1 line-clamp-2 text-[11px] leading-snug text-smoke">{r.text}</p>
+                    <p className="mt-1 line-clamp-2 text-micro leading-snug text-smoke">{r.text}</p>
                   </li>
                 );
               })}
@@ -83,32 +83,32 @@ function VoiceVisual() {
   return (
     <div className="relative rounded-[20px] border border-line bg-[linear-gradient(170deg,#1b2031,#141826)] p-6 pb-28 sm:p-8 sm:pb-28">
       <div className="flex items-center justify-between">
-        <p className="text-[13px] text-smoke-2">Knowledge file, Petit Comptoir</p>
-        <span className="text-[12px] text-smoke-2">Sent with every draft</span>
+        <p className="text-small text-smoke-2">Knowledge file, Petit Comptoir</p>
+        <span className="text-micro text-smoke-2">Sent with every draft</span>
       </div>
-      <p className="mt-5 font-serif text-[22px] tracking-[-0.01em]">Brand voice</p>
+      <p className="mt-5 font-serif text-lead leading-tight tracking-[-0.01em] text-linen">Brand voice</p>
       <ul className="mt-2 space-y-1.5">
         {voice.map((v) => (
-          <li key={v} className="relative pl-4 text-[13.5px] leading-snug text-smoke">
+          <li key={v} className="relative pl-4 text-small leading-snug text-smoke">
             <span className="absolute left-0 top-[0.55em] size-1 rounded-full bg-linen/40" />
             {v}
           </li>
         ))}
       </ul>
-      <p className="mt-5 font-serif text-[22px] tracking-[-0.01em]">Reply policy</p>
+      <p className="mt-5 font-serif text-lead leading-tight tracking-[-0.01em] text-linen">Reply policy</p>
       <ul className="mt-2 space-y-1.5">
         {policy.map((v) => (
-          <li key={v} className="relative pl-4 text-[13.5px] leading-snug text-smoke">
+          <li key={v} className="relative pl-4 text-small leading-snug text-smoke">
             <span className="absolute left-0 top-[0.55em] size-1 rounded-full bg-linen/40" />
             {v}
           </li>
         ))}
       </ul>
       <div className="absolute -bottom-5 left-5 right-5 max-w-[320px] sm:left-auto rounded-xl border border-line-strong bg-night-3 px-4 py-3 shadow-[0_20px_40px_-12px_rgb(0_0_0/0.7)] sm:right-8">
-        <p className="font-serif text-[14px] leading-snug text-linen">
+        <p className="font-serif text-small leading-snug text-linen">
           &ldquo;I&rsquo;m glad Léa remembered the occasion and brought that candle to the crème brûlée.&rdquo;
         </p>
-        <p className="mt-1.5 text-[11.5px] text-smoke-2">From a live draft, signed by Camille</p>
+        <p className="mt-1.5 text-micro text-smoke-2">From a live draft, signed by Camille</p>
       </div>
     </div>
   );
@@ -118,12 +118,12 @@ function VoiceVisual() {
 function Exchange({ ask, answer, answerLabel }: { ask: string; answer: string; answerLabel: string }) {
   return (
     <div className="space-y-2.5">
-      <p className="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-night-4 px-4 py-2.5 text-[13.5px] leading-snug text-linen">
+      <p className="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-night-4 px-4 py-2.5 text-small leading-snug text-linen">
         {ask}
       </p>
       <div className="max-w-[92%] rounded-2xl rounded-bl-md border border-wine/25 bg-wine/[0.06] px-4 py-3">
-        <p className="text-[11.5px] text-wine">{answerLabel}</p>
-        <p className="mt-1 font-serif text-[15px] leading-snug text-linen">{answer}</p>
+        <p className="text-micro text-wine">{answerLabel}</p>
+        <p className="mt-1 font-serif text-body leading-snug text-linen">{answer}</p>
       </div>
     </div>
   );
@@ -142,7 +142,7 @@ function RefusalVisual() {
         answerLabel="Note for Camille, kept off the public reply"
         answer="I can't put a free dinner or any compensation in a public reply, and the reply can't mention the health inspector; compensation is your call, made privately by email."
       />
-      <p className="text-[12px] text-smoke-2">Both answers quoted from test runs on the live agent.</p>
+      <p className="text-micro text-smoke-2">Both answers quoted from test runs on the live agent.</p>
     </div>
   );
 }
@@ -152,7 +152,7 @@ export function Features() {
     <section id="product" className="scroll-mt-20">
       <div className="mx-auto max-w-[1200px] space-y-28 px-5 py-28 sm:px-8 lg:space-y-36">
         <div className="max-w-[720px]">
-          <h2 className="font-serif text-[40px] leading-[1.05] tracking-[-0.03em] sm:text-[56px]">
+          <h2 className="font-serif text-display-2 [text-wrap:balance]">
             The reply desk that reads like your best manager.
           </h2>
         </div>

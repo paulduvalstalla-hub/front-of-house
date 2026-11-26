@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { DuskSky } from "./dusk-sky";
 import { ProductWindow } from "./product-window";
-import styles from "./marketing.module.css";
+import "./marketing.css";
 
 export function Hero() {
   return (
@@ -19,33 +19,33 @@ export function Hero() {
 
       <div className="relative z-[3] mx-auto max-w-[1200px] px-5 pb-24 pt-16 text-center sm:px-8 sm:pt-24">
         <h1
-          className={`${styles.rise} mx-auto max-w-[900px] font-serif text-[46px] font-normal leading-[1.02] tracking-[-0.035em] text-linen [text-wrap:balance] sm:text-[68px] lg:text-[84px]`}
+          className={`foh-rise mx-auto max-w-[900px] font-serif text-display-1 font-normal text-linen [text-wrap:balance]`}
         >
           Every review answered in your own voice.
         </h1>
         <p
-          className={`${styles.riseLate} mx-auto mt-7 max-w-[600px] text-[17px] leading-relaxed text-smoke sm:text-[18px]`}
+          className={`foh-rise-late mx-auto mt-7 max-w-[600px] text-lead text-smoke [text-wrap:pretty]`}
         >
           Front of House reads every review from Google, TripAdvisor, Yelp and OpenTable, drafts a reply in your
           restaurant&rsquo;s voice, and holds the risky ones until the owner has seen them.
         </p>
-        <div className={`${styles.riseLate} mt-9 flex flex-wrap items-center justify-center gap-3`}>
+        <div className={`foh-rise-late mt-9 flex flex-wrap items-center justify-center gap-3`}>
           <Link
             href="/sign-in"
-            className="rounded-lg bg-linen px-6 py-3 text-[15px] font-semibold text-night transition hover:bg-white"
+            className="rounded-lg bg-linen px-6 py-3 text-body font-semibold text-night transition hover:bg-white"
           >
             Start free trial
           </Link>
           <Link
             href="/sign-in"
-            className="rounded-lg border border-line-strong bg-night-2/60 px-6 py-3 text-[15px] font-medium text-linen transition hover:border-linen/40"
+            className="rounded-lg border border-line-strong bg-night-2/60 px-6 py-3 text-body font-medium text-linen transition hover:border-linen/40"
           >
             Try the live demo
           </Link>
         </div>
-        <p className={`${styles.riseLate} mt-4 text-[13.5px] text-smoke-2`}>14-day free trial. No card needed.</p>
+        <p className={`foh-rise-late mt-4 text-small text-smoke-2`}>14-day free trial. No card needed.</p>
 
-        <div className={`${styles.windowRise} relative mx-auto mt-16 max-w-[1120px] sm:mt-20`}>
+        <div className={`foh-window-rise relative mx-auto mt-16 max-w-[1120px] sm:mt-20`}>
           <ProductWindow />
         </div>
       </div>

@@ -24,7 +24,8 @@
 
   --color-linen: #f3eee4;
   --color-smoke: #a3a8b8;
-  --color-smoke-2: #737a8e;
+  /* Tertiary text: 5.0:1 on night-3, the lightest surface text sits on (was #737a8e, 3.7:1). */
+  --color-smoke-2: #8a90a2;
 
   --color-lamp: #f2b66d;
   --color-lamp-deep: #c98a3f;
@@ -32,6 +33,30 @@
   --color-wine: #ec7a83;
 
   --radius-window: 16px;
+
+  /*
+    Type roles (landing page first). Serif display sizes are fluid between a phone
+    and a wide desktop; UI text uses fixed steps, and nothing readable goes below 12px.
+  */
+  --text-display-1: clamp(2.875rem, 1.95rem + 4vw, 5.25rem); /* 46 → 84: the hero headline */
+  --text-display-1--line-height: 1.02;
+  --text-display-1--letter-spacing: -0.035em;
+  --text-display-2: clamp(2.25rem, 1.7rem + 2.2vw, 3.25rem); /* 36 → 52: section headings */
+  --text-display-2--line-height: 1.06;
+  --text-display-2--letter-spacing: -0.028em;
+  --text-display-3: clamp(1.75rem, 1.45rem + 1.3vw, 2.375rem); /* 28 → 38: feature and sub-section headings */
+  --text-display-3--line-height: 1.1;
+  --text-display-3--letter-spacing: -0.022em;
+  --text-lead: 1.125rem; /* 18: the paragraph under a heading */
+  --text-lead--line-height: 1.6;
+  --text-title: 1.125rem; /* 18 semibold: plan names, step titles */
+  --text-title--line-height: 1.35;
+  --text-body: 1rem; /* 16: running text, FAQ, list items, main buttons */
+  --text-body--line-height: 1.6;
+  --text-small: 0.875rem; /* 14: secondary lines, nav, footer, compact buttons */
+  --text-small--line-height: 1.5;
+  --text-micro: 0.75rem; /* 12: captions, metadata, labels inside product previews */
+  --text-micro--line-height: 1.45;
 }
 
 html {
@@ -60,6 +85,20 @@ body {
   :focus-visible {
     outline: 2px solid var(--color-lamp);
     outline-offset: 2px;
+  }
+
+  /* Line breaks: balanced headings, no lone last word in running text. */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p,
+  li,
+  dd,
+  blockquote,
+  summary {
+    text-wrap: pretty;
   }
 }
 

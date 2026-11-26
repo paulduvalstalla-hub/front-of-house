@@ -1,8 +1,8 @@
-import styles from "./marketing.module.css";
+import "./marketing.css";
 
 /**
- * Craft-style sky, at night: deep blue overhead, a few cloud banks, and only a
- * faint warmth at the horizon. No glow blobs.
+ * Night sky: deep blue overhead, faint stars, film grain, and only a slight
+ * warmth at the horizon. No clouds or glow shapes.
  */
 export function DuskSky({ className = "" }: { className?: string }) {
   return (
@@ -13,22 +13,6 @@ export function DuskSky({ className = "" }: { className?: string }) {
           background:
             "linear-gradient(180deg, #0b0e18 0%, #121831 38%, #1a2038 66%, #232434 86%, #2a2629 100%)",
         }}
-      />
-      <div
-        className={styles.cloud}
-        style={{ left: "-8%", top: "46%", width: "46%", height: "26%", background: "rgb(120 132 190 / 0.22)" }}
-      />
-      <div
-        className={styles.cloud}
-        style={{ right: "-6%", top: "40%", width: "42%", height: "30%", background: "rgb(108 118 176 / 0.2)" }}
-      />
-      <div
-        className={styles.cloud}
-        style={{ left: "8%", top: "12%", width: "30%", height: "14%", background: "rgb(96 108 168 / 0.18)" }}
-      />
-      <div
-        className={styles.cloud}
-        style={{ right: "12%", top: "8%", width: "24%", height: "12%", background: "rgb(96 108 168 / 0.16)" }}
       />
       {/* a few stars, very faint */}
       {[
@@ -47,7 +31,7 @@ export function DuskSky({ className = "" }: { className?: string }) {
           style={{ left: `${x}%`, top: `${y}%`, opacity: 0.35 + (i % 3) * 0.15 }}
         />
       ))}
-      <div className={styles.grainOverlay} />
+      <div className="foh-grain" />
     </div>
   );
 }

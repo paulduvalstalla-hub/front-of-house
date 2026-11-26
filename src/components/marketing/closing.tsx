@@ -9,19 +9,19 @@ export function ClosingCta() {
       <div className="relative mx-auto max-w-[1240px] overflow-hidden rounded-[28px] border border-line">
         <DuskSky />
         <div className="relative z-[3] px-6 py-24 text-center sm:py-32">
-          <h2 className="mx-auto max-w-[760px] font-serif text-[40px] leading-[1.05] tracking-[-0.03em] sm:text-[60px]">
+          <h2 className="mx-auto max-w-[760px] font-serif text-display-2 [text-wrap:balance]">
             Answer tonight&rsquo;s reviews before the chairs go up.
           </h2>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/sign-in"
-              className="rounded-lg bg-linen px-6 py-3 text-[15px] font-semibold text-night transition hover:bg-white"
+              className="rounded-lg bg-linen px-6 py-3 text-body font-semibold text-night transition hover:bg-white"
             >
               Start free trial
             </Link>
             <Link
               href="/sign-in"
-              className="rounded-lg border border-linen/25 bg-night/40 px-6 py-3 text-[15px] font-medium text-linen backdrop-blur transition hover:border-linen/50"
+              className="rounded-lg border border-linen/25 bg-night/40 px-6 py-3 text-body font-medium text-linen backdrop-blur transition hover:border-linen/50"
             >
               Try the live demo
             </Link>
@@ -39,7 +39,7 @@ export function SiteFooter() {
         <HomeLink className="self-start rounded-md">
           <Logo size={18} />
         </HomeLink>
-        <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2 text-[14px] text-smoke">
+        <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2 text-small text-smoke">
           <a href="#product" className="hover:text-linen">
             Product
           </a>
@@ -54,7 +54,7 @@ export function SiteFooter() {
           </Link>
         </nav>
       </div>
-      <p className="mt-8 max-w-[640px] text-[13px] leading-relaxed text-smoke-2">
+      <p className="mt-8 max-w-[31rem] text-small leading-relaxed text-smoke-2">
         A prototype built for a Hult International Business School assignment. Petit Comptoir is a fictional
         restaurant; platform connections are simulated. Google, Tripadvisor, Yelp and OpenTable are trademarks of
         their owners and are shown only to name the platforms; Front of House is not affiliated with them.

@@ -52,7 +52,7 @@ export function ProductWindow() {
           <span className="size-2.5 rounded-full bg-linen/15" />
           <span className="size-2.5 rounded-full bg-linen/15" />
         </span>
-        <span className="mx-auto truncate whitespace-nowrap rounded-md bg-night-3/80 px-3 py-0.5 text-[11.5px] text-smoke">
+        <span className="mx-auto truncate whitespace-nowrap rounded-md bg-night-3/80 px-3 py-0.5 text-micro text-smoke">
           Petit Comptoir, inbox
         </span>
         <span className="w-[46px]" aria-hidden />
@@ -63,21 +63,21 @@ export function ProductWindow() {
         <aside className="hidden flex-col border-r border-line bg-night-2/60 px-3 py-4 lg:flex">
           <Logo size={15} className="px-2" />
           <div className="mt-5 rounded-lg border border-line bg-night-3/50 px-2.5 py-2">
-            <p className="text-[12.5px] font-medium text-linen">Petit Comptoir</p>
-            <p className="text-[11px] text-smoke-2">South End, Boston</p>
+            <p className="text-small font-medium text-linen">Petit Comptoir</p>
+            <p className="text-micro text-smoke-2">South End, Boston</p>
           </div>
           <nav className="mt-4 flex flex-col gap-0.5">
             {NAV.map((n) => (
               <span
                 key={n.label}
-                className={`flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[12.5px] ${
+                className={`flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-small ${
                   "active" in n ? "bg-night-4/70 text-linen" : "text-smoke"
                 }`}
               >
                 <NavIcon name={n.icon} />
                 {n.label}
                 {"count" in n && (
-                  <span className="ml-auto rounded-full bg-night-4 px-1.5 text-[10.5px] tabular-nums text-linen/90">
+                  <span className="ml-auto rounded-full bg-night-4 px-1.5 text-micro tabular-nums text-linen/90">
                     {n.count}
                   </span>
                 )}
@@ -85,20 +85,20 @@ export function ProductWindow() {
             ))}
           </nav>
           <div className="mt-auto rounded-lg border border-line px-2.5 py-2">
-            <p className="text-[11px] text-smoke">Pro trial</p>
-            <p className="text-[11px] text-smoke-2">12 days left</p>
+            <p className="text-micro text-smoke">Pro trial</p>
+            <p className="text-micro text-smoke-2">12 days left</p>
           </div>
         </aside>
 
         {/* review list */}
         <section className="hidden min-w-0 flex-col border-r border-line md:flex">
           <div className="flex items-center justify-between border-b border-line px-4 py-3">
-            <p className="text-[13px] font-medium">Needs reply</p>
-            <span className="rounded-md bg-linen px-2.5 py-1 text-[11px] font-semibold text-night">
+            <p className="text-small font-medium">Needs reply</p>
+            <span className="rounded-md bg-linen px-2.5 py-1 text-micro font-semibold text-night">
               Triage all
             </span>
           </div>
-          <div className="flex gap-1 border-b border-line px-3 py-2 text-[11.5px] text-smoke">
+          <div className="flex gap-1 border-b border-line px-3 py-2 text-micro text-smoke">
             <span className="rounded-md bg-night-3 px-2 py-0.5 text-linen">All 9</span>
             <span className="px-2 py-0.5">With owner 3</span>
             <span className="px-2 py-0.5">Replied 2</span>
@@ -114,12 +114,12 @@ export function ProductWindow() {
                 >
                   <div className="flex items-center gap-2">
                     <PlatformLogo platform={r.platform} size={14} />
-                    <span className="truncate text-[12.5px] font-medium">{r.author}</span>
-                    <Stars value={r.stars} className="text-[10px]" />
-                    <span className="ml-auto shrink-0 text-[10.5px] text-smoke-2">{timeAgo(r.hoursAgo)}</span>
+                    <span className="truncate text-small font-medium">{r.author}</span>
+                    <Stars value={r.stars} className="text-micro" />
+                    <span className="ml-auto shrink-0 text-micro text-smoke-2">{timeAgo(r.hoursAgo)}</span>
                   </div>
-                  <p className="mt-1 line-clamp-1 text-[11.5px] text-smoke">{r.text}</p>
-                  <RiskBadge risk={risk} size={12} className="mt-1.5 !text-[10.5px]" />
+                  <p className="mt-1 line-clamp-1 text-micro text-smoke">{r.text}</p>
+                  <RiskBadge risk={risk} size={12} className="mt-1.5" />
                 </li>
               );
             })}
@@ -131,43 +131,43 @@ export function ProductWindow() {
           <div className="flex items-center gap-2.5 border-b border-line px-5 py-3">
             <PlatformLogo platform={selected.platform} size={32} tile />
             <div className="min-w-0">
-              <p className="text-[13px] font-medium">{selected.author}</p>
-              <p className="text-[11px] text-smoke-2">Google review, {timeAgo(selected.hoursAgo)}</p>
+              <p className="text-small font-medium">{selected.author}</p>
+              <p className="text-micro text-smoke-2">Google review, {timeAgo(selected.hoursAgo)}</p>
             </div>
-            <Stars value={selected.stars} className="ml-auto text-[12px]" />
+            <Stars value={selected.stars} className="ml-auto text-micro" />
           </div>
           <div className="flex-1 space-y-4 overflow-hidden px-5 py-4">
-            <p className="font-serif text-[14.5px] italic leading-relaxed text-smoke">{selected.text}</p>
+            <p className="max-w-[64ch] font-serif text-small italic leading-relaxed text-smoke">{selected.text}</p>
 
             <div className="overflow-hidden rounded-xl border border-line-strong bg-night-2">
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-line px-4 py-2.5">
                 <RiskBadge risk="ready" className="font-medium !text-linen" />
-                <span className="text-[11.5px] text-smoke-2">Positive review, no escalation or flag triggers.</span>
+                <span className="text-micro text-smoke-2">Positive review, no escalation or flag triggers.</span>
               </div>
               <div className="px-4 py-3.5">
-                <p className="text-[11.5px] leading-snug text-smoke-2">
+                <p className="text-micro leading-snug text-smoke-2">
                   <span className="text-smoke">Praised:</span> duck confit was perfect, server remembered the
                   celebration, candle in the crème brûlée
                 </p>
-                <p className="mt-3 font-serif text-[15px] leading-[1.6] text-linen">{DRAFT}</p>
-                <p className="mt-2 font-serif text-[15px] text-linen">— Camille, General Manager</p>
+                <p className="mt-3 font-serif text-body leading-[1.6] text-linen">{DRAFT}</p>
+                <p className="mt-2 font-serif text-body text-linen">— Camille, General Manager</p>
                 <div className="mt-3.5 flex flex-wrap items-center gap-2">
-                  <span className="rounded-md bg-linen px-3 py-1.5 text-[11.5px] font-semibold text-night">
+                  <span className="rounded-md bg-linen px-3 py-1.5 text-micro font-semibold text-night">
                     Approve and post
                   </span>
-                  <span className="rounded-md border border-line-strong px-3 py-1.5 text-[11.5px] text-linen">
+                  <span className="rounded-md border border-line-strong px-3 py-1.5 text-micro text-linen">
                     Edit
                   </span>
-                  <span className="hidden rounded-md border border-line px-2.5 py-1 text-[11px] text-smoke sm:inline">
+                  <span className="hidden rounded-md border border-line px-2.5 py-1 text-micro text-smoke sm:inline">
                     Shorter
                   </span>
-                  <span className="hidden rounded-md border border-line px-2.5 py-1 text-[11px] text-smoke sm:inline">
+                  <span className="hidden rounded-md border border-line px-2.5 py-1 text-micro text-smoke sm:inline">
                     In French
                   </span>
-                  <span className="ml-auto text-[11px] text-smoke-2">55 words</span>
+                  <span className="ml-auto text-micro text-smoke-2">55 words</span>
                 </div>
               </div>
-              <div className="border-t border-line px-4 py-2.5 text-[11.5px] text-smoke">
+              <div className="border-t border-line px-4 py-2.5 text-micro text-smoke">
                 <span className="font-medium text-linen">For Camille only:</span> pass the compliment on to Léa.
               </div>
             </div>

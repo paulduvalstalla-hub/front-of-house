@@ -21,7 +21,7 @@ function Features({ items, tone }: { items: string[]; tone?: "smoke" | "strong" 
   return (
     <ul className="mt-6 space-y-2.5">
       {items.map((f) => (
-        <li key={f} className="flex gap-2.5 text-[14.5px] leading-snug text-smoke">
+        <li key={f} className="flex gap-2.5 text-body leading-snug text-smoke">
           <Check tone={tone} />
           <span>{f}</span>
         </li>
@@ -40,10 +40,10 @@ export function Pricing() {
       <div className="mx-auto max-w-[1200px] px-5 py-24 sm:px-8">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 className="font-serif text-[40px] leading-[1.05] tracking-[-0.03em] sm:text-[52px]">
+            <h2 className="font-serif text-display-2 [text-wrap:balance]">
               Priced per restaurant, not per reply
             </h2>
-            <p className="mt-3 text-[15.5px] text-smoke">Every plan starts with a 14-day free trial. No card needed.</p>
+            <p className="mt-3 text-body text-smoke">Every plan starts with a 14-day free trial. No card needed.</p>
           </div>
           <div
             role="radiogroup"
@@ -57,7 +57,7 @@ export function Pricing() {
                 role="radio"
                 aria-checked={billing === b}
                 onClick={() => setBilling(b)}
-                className={`rounded-md px-4 py-1.5 text-[13.5px] transition ${
+                className={`rounded-md px-4 py-1.5 text-small transition ${
                   billing === b ? "bg-linen text-night" : "text-smoke hover:text-linen"
                 }`}
               >
@@ -70,13 +70,13 @@ export function Pricing() {
         <div className="mt-12 grid items-stretch gap-6 lg:grid-cols-[1fr_1.25fr_1fr] lg:gap-0">
           {/* Starter: quiet column */}
           <div className="flex flex-col border-t border-line px-1 py-8 lg:border-y lg:border-l lg:border-line lg:px-8 lg:py-10">
-            <h3 className="text-[17px] font-semibold">Starter</h3>
-            <p className="mt-1 text-[14px] text-smoke-2">For a single restaurant getting started</p>
+            <h3 className="text-title font-semibold">Starter</h3>
+            <p className="mt-1 text-small text-smoke-2">For a single restaurant getting started</p>
             <p className="mt-6 flex items-baseline gap-1.5">
-              <span className="font-serif text-[48px] leading-none tracking-[-0.03em]">${starter}</span>
-              <span className="text-[14px] text-smoke">a month</span>
+              <span className="font-serif text-display-2 leading-none">${starter}</span>
+              <span className="text-small text-smoke">a month</span>
             </p>
-            <p className="mt-1.5 h-5 text-[12.5px] text-smoke-2">
+            <p className="mt-1.5 h-5 text-micro text-smoke-2">
               {billing === "annual" ? `Billed $${starter * 12} a year` : "Billed monthly"}
             </p>
             <Features
@@ -85,7 +85,7 @@ export function Pricing() {
             <div className="mt-auto pt-8">
               <Link
                 href="/sign-in"
-                className="block rounded-lg border border-line-strong px-5 py-2.5 text-center text-[14.5px] font-medium transition hover:border-linen/40"
+                className="block rounded-lg border border-line-strong px-5 py-2.5 text-center text-body font-medium transition hover:border-linen/40"
               >
                 Start free trial
               </Link>
@@ -95,15 +95,15 @@ export function Pricing() {
           {/* Pro: the raised, lit panel */}
           <div className="relative flex flex-col rounded-[16px] border border-line-strong bg-night-2 px-6 py-8 sm:px-9 lg:-my-4 lg:py-12">
             <div className="relative flex items-center justify-between">
-              <h3 className="text-[17px] font-semibold">Pro</h3>
-              <span className="text-[12.5px] text-smoke">Most restaurants pick this</span>
+              <h3 className="text-title font-semibold">Pro</h3>
+              <span className="text-small text-smoke">Most restaurants pick this</span>
             </div>
-            <p className="relative mt-1 text-[14px] text-smoke">For busy rooms and small groups</p>
+            <p className="relative mt-1 text-small text-smoke">For busy rooms and small groups</p>
             <p className="relative mt-6 flex items-baseline gap-1.5">
-              <span className="font-serif text-[60px] leading-none tracking-[-0.03em] text-linen">${pro}</span>
-              <span className="text-[14px] text-smoke">a month</span>
+              <span className="font-serif text-display-2 leading-none text-linen">${pro}</span>
+              <span className="text-small text-smoke">a month</span>
             </p>
-            <p className="relative mt-1.5 h-5 text-[12.5px] text-smoke-2">
+            <p className="relative mt-1.5 h-5 text-micro text-smoke-2">
               {billing === "annual" ? `Billed $${pro * 12} a year` : "Billed monthly"}
             </p>
             <Features
@@ -119,7 +119,7 @@ export function Pricing() {
             <div className="relative mt-auto pt-8">
               <Link
                 href="/sign-in"
-                className="block rounded-lg bg-linen px-5 py-3 text-center text-[15px] font-semibold text-night transition hover:bg-white"
+                className="block rounded-lg bg-linen px-5 py-3 text-center text-body font-semibold text-night transition hover:bg-white"
               >
                 Start free trial
               </Link>
@@ -128,17 +128,17 @@ export function Pricing() {
 
           {/* Group: quiet column */}
           <div className="flex flex-col border-t border-line px-1 py-8 lg:border-y lg:border-r lg:border-line lg:px-8 lg:py-10">
-            <h3 className="text-[17px] font-semibold">Group</h3>
-            <p className="mt-1 text-[14px] text-smoke-2">For restaurant groups</p>
-            <p className="mt-6 font-serif text-[40px] leading-[1.2] tracking-[-0.03em]">Let&rsquo;s talk</p>
-            <p className="mt-1.5 h-5 text-[12.5px] text-smoke-2">Pricing by number of locations</p>
+            <h3 className="text-title font-semibold">Group</h3>
+            <p className="mt-1 text-small text-smoke-2">For restaurant groups</p>
+            <p className="mt-6 font-serif text-display-3">Let&rsquo;s talk</p>
+            <p className="mt-1.5 h-5 text-micro text-smoke-2">Pricing by number of locations</p>
             <Features
               items={["4 or more locations", "Roles and permissions per site", "Single sign-on (SSO)", "Priority support"]}
             />
             <div className="mt-auto pt-8">
               <Link
                 href="/sign-in"
-                className="block rounded-lg border border-line-strong px-5 py-2.5 text-center text-[14.5px] font-medium transition hover:border-linen/40"
+                className="block rounded-lg border border-line-strong px-5 py-2.5 text-center text-body font-medium transition hover:border-linen/40"
               >
                 Contact sales
               </Link>

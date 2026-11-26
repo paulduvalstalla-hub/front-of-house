@@ -25,13 +25,13 @@ export function Faq() {
   return (
     <section className="border-t border-line">
       <div className="mx-auto grid max-w-[1200px] gap-10 px-5 py-24 sm:px-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-16">
-        <h2 className="font-serif text-[36px] leading-[1.08] tracking-[-0.025em] sm:text-[44px]">
+        <h2 className="font-serif text-display-2 [text-wrap:balance]">
           Questions managers ask first
         </h2>
         <div className="divide-y divide-line border-y border-line">
           {QUESTIONS.map((item) => (
             <details key={item.q} className="group py-1">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 rounded-md py-4 text-[16.5px] font-medium text-linen [&::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 rounded-md py-4 text-title font-medium text-linen [&::-webkit-details-marker]:hidden">
                 {item.q}
                 <span
                   aria-hidden
@@ -40,7 +40,7 @@ export function Faq() {
                   +
                 </span>
               </summary>
-              <p className="max-w-[620px] pb-5 text-[15px] leading-relaxed text-smoke">{item.a}</p>
+              <p className="max-w-[620px] pb-5 text-body [text-wrap:pretty] text-smoke">{item.a}</p>
             </details>
           ))}
         </div>
