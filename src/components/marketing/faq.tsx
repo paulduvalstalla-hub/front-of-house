@@ -1,11 +1,11 @@
 const QUESTIONS = [
   {
-    q: "Does it post replies automatically?",
-    a: "Only the safe ones, and only with Autopilot on. It posts replies it marked Ready to 4- and 5-star reviews, after a few seconds in which you can stop it. Illness, allergies, discrimination, legal threats and suspected fakes are always held for the owner, and everything else waits for your approval.",
+    q: "Does it post replies on its own?",
+    a: "Only with Autopilot on, and only the safe ones: a reply marked Ready to a 4- or 5-star review posts after a 12-second countdown you can stop. Every other reply waits for your approval, and reviews about illness, allergies, discrimination, legal threats or a suspected fake are always held for the owner. Autopilot is included in every plan.",
   },
   {
     q: "Which platforms does it work with?",
-    a: "Google Business Profile, TripAdvisor, Yelp and OpenTable. In this prototype the connections are simulated with sample reviews; the reading, triage and drafting run live on every review.",
+    a: "Google Business Profile, Tripadvisor, Yelp and OpenTable. In this prototype the connections are simulated with sample reviews and nothing is actually posted; the reading, sorting and drafting run live on every review.",
   },
   {
     q: "What happens with risky reviews?",

@@ -26,7 +26,7 @@ export function Hero() {
         <p
           className={`foh-rise-late mx-auto mt-7 max-w-[600px] text-lead text-smoke [text-wrap:pretty]`}
         >
-          Front of House reads every review from Google, TripAdvisor, Yelp and OpenTable, drafts a reply in your
+          Front of House reads every review from Google, Tripadvisor, Yelp and OpenTable, drafts a reply in your
           restaurant&rsquo;s voice, and holds the risky ones until the owner has seen them.
         </p>
         <div className={`foh-rise-late mt-9 flex flex-wrap items-center justify-center gap-3`}>

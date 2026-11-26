@@ -5,7 +5,7 @@ export type Risk = "ready" | "tell" | "hold";
 const LABEL: Record<Risk, string> = {
   ready: "Ready to post",
   tell: "Tell the owner",
-  hold: "Hold for owner",
+  hold: "Hold for the owner",
 };
 
 /** Review status for the marketing mocks: icon plus plain text, same as the app. */

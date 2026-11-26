@@ -1,15 +1,15 @@
 const STEPS = [
   {
     title: "Connect your platforms",
-    body: "Link Google, TripAdvisor, Yelp and OpenTable. New reviews land in one inbox, newest first.",
+    body: "Link Google, Tripadvisor, Yelp and OpenTable. New reviews land in one inbox, newest first.",
   },
   {
-    title: "Front of House drafts and triages",
-    body: "Every new review is read the moment it lands. The agent drafts a reply in your voice and flags what the owner must see.",
+    title: "Front of House drafts and sorts",
+    body: "Each new review is read the moment it lands and gets a reply in your voice, marked Ready to post, Tell the owner, or Hold for the owner.",
   },
   {
-    title: "Safe replies post themselves",
-    body: "With Autopilot on, Ready replies to 4- and 5-star reviews go straight back to Google or TripAdvisor. Anything risky waits for a person.",
+    title: "Safe replies can post themselves",
+    body: "With Autopilot on, a Ready reply to a 4- or 5-star review posts after a 12-second countdown you can stop. Every other reply waits for your approval.",
   },
 ];
 

@@ -17,7 +17,7 @@ export const PLATFORMS: {
   },
   {
     id: "TripAdvisor",
-    name: "TripAdvisor",
+    name: "Tripadvisor",
     detail: "Reviews and ratings from travellers",
     initiallyConnected: true,
   },

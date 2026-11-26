@@ -80,7 +80,13 @@ export function Pricing() {
               {billing === "annual" ? `Billed $${starter * 12} a year` : "Billed monthly"}
             </p>
             <Features
-              items={["1 location", "Google, TripAdvisor, Yelp and OpenTable", "150 AI drafts a month", "Risk triage and owner alerts"]}
+              items={[
+                "1 location",
+                "Google, Tripadvisor, Yelp and OpenTable",
+                "150 reply drafts a month",
+                "Risky reviews held for the owner",
+                "Autopilot for safe 4- and 5-star replies",
+              ]}
             />
             <div className="mt-auto pt-8">
               <Link
@@ -109,9 +115,9 @@ export function Pricing() {
             <Features
               tone="strong"
               items={[
+                "Everything in Starter",
                 "Up to 3 locations",
-                "Unlimited AI drafts",
-                "Owner approval workflow",
+                "Unlimited reply drafts",
                 "Analytics on ratings, response time and themes",
                 "Replies in any language your guests write in",
               ]}
@@ -133,7 +139,7 @@ export function Pricing() {
             <p className="mt-6 font-serif text-display-3">Let&rsquo;s talk</p>
             <p className="mt-1.5 h-5 text-micro text-smoke-2">Pricing by number of locations</p>
             <Features
-              items={["4 or more locations", "Roles and permissions per site", "Single sign-on (SSO)", "Priority support"]}
+              items={["Everything in Pro", "4 or more locations", "Roles and permissions per site", "Single sign-on (SSO)", "Priority support"]}
             />
             <div className="mt-auto pt-8">
               <Link

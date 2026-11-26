@@ -38,6 +38,14 @@ const OPENTABLE = (
   </svg>
 );
 
+// Brand spellings for screen readers and tooltips; the Platform ids stay as the agent uses them.
+const LABEL: Record<Platform, string> = {
+  Google: "Google",
+  Yelp: "Yelp",
+  TripAdvisor: "Tripadvisor",
+  OpenTable: "OpenTable",
+};
+
 const MARKS: Record<Platform, ReactNode> = {
   Google: GOOGLE,
   Yelp: YELP,
@@ -62,8 +70,8 @@ export function PlatformLogo({
     return (
       <span
         role="img"
-        aria-label={platform}
-        title={platform}
+        aria-label={LABEL[platform]}
+        title={LABEL[platform]}
         className="inline-grid shrink-0 place-items-center rounded-[10px] border border-line bg-linen/[0.04]"
         style={{ width: size, height: size }}
       >
@@ -76,8 +84,8 @@ export function PlatformLogo({
   return (
     <span
       role="img"
-      aria-label={platform}
-      title={platform}
+      aria-label={LABEL[platform]}
+      title={LABEL[platform]}
       className="inline-block shrink-0"
       style={{ width: size, height: size }}
     >

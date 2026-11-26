@@ -42,8 +42,8 @@ function Row({
 /* (a) Triage board */
 const COLUMNS: { risk: Risk; ids: string[]; note: string }[] = [
   { risk: "ready", ids: ["g-sarah", "o-chen", "t-james"], note: "Safe to post now" },
-  { risk: "tell", ids: ["y-mark", "g-priya"], note: "Post, then a same-day note to the owner" },
-  { risk: "hold", ids: ["t-helene", "g-dana", "y-kevin"], note: "Neutral holding reply, owner decides" },
+  { risk: "tell", ids: ["y-mark", "g-priya"], note: "Post it, then tell the owner the same day" },
+  { risk: "hold", ids: ["t-helene", "g-dana", "y-kevin"], note: "A neutral holding reply; the owner decides" },
 ];
 
 function TriageVisual() {
@@ -158,7 +158,7 @@ export function Features() {
         </div>
         <Row
           title="Sorted before you open it"
-          body="Each review is read for rating, language and what went wrong, then filed as ready to post, post and tell the owner, or hold until the owner has seen it. Illness, allergies, discrimination and likely fakes never go out unchecked."
+          body="Each review is read for rating, language and what went wrong, then marked Ready to post, Tell the owner, or Hold for the owner. Illness, allergies, discrimination and likely fakes never go out unchecked."
           visual={<TriageVisual />}
         />
         <Row

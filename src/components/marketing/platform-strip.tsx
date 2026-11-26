@@ -7,7 +7,7 @@ export function PlatformStrip() {
       <div className="mx-auto flex max-w-[1200px] flex-col gap-8 px-5 py-14 sm:px-8 lg:flex-row lg:items-center lg:gap-16">
         <div className="max-w-[360px]">
           <h2 className="font-serif text-display-3 [text-wrap:balance]">
-            One inbox for Google, TripAdvisor, Yelp and OpenTable
+            One inbox for Google, Tripadvisor, Yelp and OpenTable
           </h2>
           <p className="mt-3 text-small leading-relaxed text-smoke-2">
             In this prototype the platform connections are simulated with sample reviews. The AI reading,
