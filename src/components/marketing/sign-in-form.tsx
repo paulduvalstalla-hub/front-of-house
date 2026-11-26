@@ -15,8 +15,8 @@ function SubmitButton({ children, variant }: { children: string; variant: "prima
       disabled={pending}
       className={
         variant === "primary"
-          ? "w-full rounded-lg bg-linen px-5 py-3 text-[15px] font-semibold text-night transition hover:bg-white disabled:opacity-60"
-          : "w-full rounded-lg border border-line-strong px-5 py-3 text-[15px] font-medium text-linen transition hover:border-linen/40 disabled:opacity-60"
+          ? "w-full rounded-lg bg-linen px-5 py-3 text-body font-semibold text-night transition hover:bg-white disabled:opacity-60"
+          : "w-full rounded-lg border border-line-strong px-5 py-3 text-body font-medium text-linen transition hover:border-linen/40 disabled:opacity-60"
       }
     >
       {pending ? "Opening the dashboard…" : children}
@@ -25,25 +25,25 @@ function SubmitButton({ children, variant }: { children: string; variant: "prima
 }
 
 const inputClass =
-  "mt-1.5 block w-full rounded-xl border border-line-strong bg-night px-3.5 py-2.5 text-[15px] text-linen outline-none transition placeholder:text-smoke-2 focus:border-lamp/70 focus:ring-4 focus:ring-lamp/15";
+  "mt-1.5 block w-full rounded-xl border border-line-strong bg-night px-3.5 py-2.5 text-body text-linen outline-none transition placeholder:text-smoke-2 focus:border-lamp/70 focus:ring-4 focus:ring-lamp/15";
 
 export function SignInForm() {
   const next = useSearchParams().get("next") ?? "";
 
   return (
     <div className="w-full max-w-[400px]">
-      <h1 className="font-serif text-[38px] leading-[1.05] tracking-[-0.03em]">Sign in to Front of House</h1>
-      <p className="mt-3 text-[15px] leading-relaxed text-smoke">
+      <h1 className="font-serif text-display-3">Sign in to Front of House</h1>
+      <p className="mt-3 text-body text-smoke">
         Pick up tonight&rsquo;s reviews for Petit Comptoir where you left them.
       </p>
 
       <form action={signInDemo} className="mt-8 space-y-4">
         <input type="hidden" name="next" value={next} />
-        <label className="block text-[13.5px] text-smoke">
+        <label className="block text-small text-smoke">
           Name
           <input name="name" defaultValue={DEFAULT_NAME} autoComplete="name" className={inputClass} />
         </label>
-        <label className="block text-[13.5px] text-smoke">
+        <label className="block text-small text-smoke">
           Work email
           <input
             name="email"
@@ -65,7 +65,7 @@ export function SignInForm() {
         <SubmitButton variant="secondary">Use the demo account</SubmitButton>
       </form>
 
-      <p className="mt-6 rounded-xl border border-line bg-night/60 px-4 py-3 text-[13px] leading-relaxed text-smoke">
+      <p className="mt-6 rounded-xl border border-line bg-night/60 px-4 py-3 text-small text-smoke">
         Demo mode: no account is created and no password is needed. Everything you do stays in this browser.
       </p>
     </div>

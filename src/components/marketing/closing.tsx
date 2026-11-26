@@ -5,8 +5,7 @@ import { HomeLink } from "./home-link";
 export function ClosingCta() {
   return (
     <section className="border-t border-line">
-      <div className="mx-auto max-w-[1200px] px-5 py-20 sm:px-8 sm:py-32">
-        <div className="text-center">
+      <div className="mx-auto max-w-[1200px] px-5 py-20 text-center sm:px-8 sm:py-32">
           <h2 className="mx-auto max-w-[760px] font-serif text-display-2 [text-wrap:balance]">
             Answer tonight&rsquo;s reviews before the chairs go up.
           </h2>
@@ -18,7 +17,6 @@ export function ClosingCta() {
               Try the live demo
             </Link>
           </div>
-        </div>
       </div>
     </section>
   );
@@ -31,17 +29,17 @@ export function SiteFooter() {
         <HomeLink className="self-start rounded-md">
           <Logo size={18} />
         </HomeLink>
-        <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2 text-small text-smoke">
-          <a href="#how-it-works" className="hover:text-linen">
+        <nav aria-label="Footer" className="-my-3 flex flex-wrap gap-x-6 text-small text-smoke">
+          <a href="#how-it-works" className="py-3 hover:text-linen">
             How it works
           </a>
-          <a href="#integrations" className="hover:text-linen">
+          <a href="#integrations" className="py-3 hover:text-linen">
             Integrations
           </a>
-          <a href="#pricing" className="hover:text-linen">
+          <a href="#pricing" className="py-3 hover:text-linen">
             Pricing
           </a>
-          <Link href="/sign-in" className="hover:text-linen">
+          <Link href="/sign-in" className="py-3 hover:text-linen">
             Sign in
           </Link>
         </nav>

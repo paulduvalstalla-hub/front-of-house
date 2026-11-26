@@ -44,7 +44,7 @@ export function Pricing() {
               Priced per restaurant, not per reply
             </h2>
             <p className="mt-3 max-w-[34rem] text-body text-smoke">
-              Planned pricing: every plan will start with a 14-day free trial. The live demo is open now, with no
+              Planned pricing: every plan will start with a 14‑day free trial. The live demo is open now, with no
               account or card.
             </p>
           </div>
@@ -59,7 +59,7 @@ export function Pricing() {
                 type="button"
                 aria-pressed={billing === b}
                 onClick={() => setBilling(b)}
-                className={`rounded-md px-4 py-1.5 text-small transition ${
+                className={`rounded-md px-4 py-2.5 text-small transition ${
                   billing === b ? "bg-linen text-night" : "text-smoke hover:text-linen"
                 }`}
               >

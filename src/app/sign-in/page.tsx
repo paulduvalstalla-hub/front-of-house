@@ -23,7 +23,7 @@ export default function SignInPage() {
             <SignInForm />
           </Suspense>
         </div>
-        <p className="text-[12.5px] text-smoke-2">
+        <p className="text-micro text-smoke-2">
           A prototype for a Hult assignment. Petit Comptoir is fictional.
         </p>
       </div>
@@ -34,18 +34,20 @@ export default function SignInPage() {
           <figure className="max-w-[500px] rounded-2xl border border-line-strong bg-night/85 shadow-[0_40px_100px_-30px_rgb(0_0_0/0.85)] backdrop-blur">
             <div className="flex items-center gap-2.5 border-b border-line px-5 py-3.5">
               <PlatformLogo platform="Google" size={18} />
-              <span className="text-[13.5px] font-medium">Sarah M.</span>
-              <Stars value={5} className="text-[12px]" />
+              <span className="text-small font-medium">Sarah M.</span>
+              <Stars value={5} className="text-micro" />
               <RiskBadge risk="ready" className="ml-auto" />
             </div>
-            <blockquote className="px-5 py-5 font-serif text-[18px] leading-[1.6] text-linen">
-              Hi Sarah, thank you for coming in to celebrate your mom&rsquo;s 60th. It made our evening to hear the
-              duck confit was perfect. I&rsquo;m glad Léa remembered the occasion and brought that candle to the
-              crème brûlée. We&rsquo;d love to welcome you both back.
-              <span className="mt-3 block">— Camille, General Manager</span>
+            {/* Word for word from the live agent: test-runs/v3-product-live.txt, "happy" scenario. */}
+            <blockquote className="px-5 py-5 font-serif text-lead text-linen">
+              Hi Sarah, thank you so much. Happy 60th to your mom! It means a lot that the duck confit was perfect
+              for the evening. Please tell Léa thank you from us. A candle in the crème brûlée is exactly the kind
+              of moment we love. We&rsquo;re glad the room felt cosy and the wine was a hit. We look forward to
+              welcoming you both back.
+              <span className="mt-3 block">&mdash; Camille, General Manager</span>
             </blockquote>
-            <figcaption className="border-t border-line px-5 py-3 text-[12.5px] text-smoke-2">
-              Drafted by Front of House in 3 seconds, approved by Camille.
+            <figcaption className="border-t border-line px-5 py-3 text-micro text-smoke-2">
+              Drafted by Front of House in 3 seconds, in a test run of the live agent.
             </figcaption>
           </figure>
         </div>

@@ -37,7 +37,9 @@ export function Faq() {
                   aria-hidden
                   className="grid size-7 shrink-0 place-items-center rounded-full border border-line-strong text-smoke transition group-open:rotate-45"
                 >
-                  +
+                  <svg viewBox="0 0 16 16" className="size-3.5" fill="none">
+                    <path d="M8 3.5v9M3.5 8h9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                  </svg>
                 </span>
               </summary>
               <p className="max-w-[620px] pb-5 text-body [text-wrap:pretty] text-smoke">{item.a}</p>
