@@ -129,13 +129,20 @@ export function ReviewDesk() {
             {messages.map((m, mi) => {
               if (m.role === "user") {
                 const text = textOf(m);
-                const isReview = text.length > 140;
+                const isLong = text.length > 140;
+                // Only call it a guest review once the agent has treated it as one.
+                const reply = messages[mi + 1];
+                const label = !reply
+                  ? " "
+                  : reply.parts.some((p) => p.type === "tool-fileReply")
+                    ? "Guest review"
+                    : "You";
                 return (
                   <li key={m.id} className="flex flex-col items-end">
-                    {isReview ? (
+                    {isLong ? (
                       <figure className="w-full max-w-[600px]">
                         <figcaption className="mb-1.5 text-right text-[12px] font-medium uppercase tracking-[0.12em] text-ink-faint">
-                          Guest review
+                          {label}
                         </figcaption>
                         <blockquote className="rounded-2xl border border-line bg-paper px-5 py-4 font-serif text-[16.5px] italic leading-relaxed text-ink-soft">
                           {text}
