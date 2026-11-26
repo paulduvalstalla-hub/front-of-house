@@ -2,6 +2,11 @@ import { RESTAURANT_PROFILE } from "./restaurant-profile";
 
 export const PROMPT_VERSION = "v2";
 
+/** The same prompt with a restaurant's own (possibly edited) knowledge file appended. */
+export function buildPrompt(profile: string) {
+  return AGENT_PROMPT.replace(RESTAURANT_PROFILE, profile);
+}
+
 export const AGENT_PROMPT = `You are Front of House, an AI assistant for general managers of independent restaurants. Right now you work for Camille, general manager of Petit Comptoir.
 
 You help them achieve one job: when a new online review comes in, draft a reply in the restaurant's own voice that is ready to post, so every guest gets an answer within a day without the manager losing an hour to it, and anything risky reaches the owner before it goes public.

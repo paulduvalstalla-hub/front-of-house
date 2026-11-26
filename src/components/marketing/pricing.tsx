@@ -1,0 +1,157 @@
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+
+type Billing = "monthly" | "annual";
+
+function price(monthly: number, billing: Billing) {
+  return billing === "monthly" ? monthly : Math.round(monthly * 0.8);
+}
+
+function Check({ tone = "smoke" }: { tone?: "smoke" | "lamp" }) {
+  return (
+    <svg viewBox="0 0 16 16" className={`mt-[3px] size-3.5 shrink-0 ${tone === "lamp" ? "text-lamp" : "text-smoke-2"}`} aria-hidden>
+      <path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function Features({ items, tone }: { items: string[]; tone?: "smoke" | "lamp" }) {
+  return (
+    <ul className="mt-6 space-y-2.5">
+      {items.map((f) => (
+        <li key={f} className="flex gap-2.5 text-[14.5px] leading-snug text-smoke">
+          <Check tone={tone} />
+          <span>{f}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+export function Pricing() {
+  const [billing, setBilling] = useState<Billing>("monthly");
+  const starter = price(29, billing);
+  const pro = price(79, billing);
+
+  return (
+    <section id="pricing" className="scroll-mt-20 border-t border-line">
+      <div className="mx-auto max-w-[1200px] px-5 py-24 sm:px-8">
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h2 className="font-serif text-[40px] leading-[1.05] tracking-[-0.03em] sm:text-[52px]">
+              Priced per restaurant, not per reply
+            </h2>
+            <p className="mt-3 text-[15.5px] text-smoke">Every plan starts with a 14-day free trial. No card needed.</p>
+          </div>
+          <div
+            role="radiogroup"
+            aria-label="Billing period"
+            className="inline-flex self-start rounded-full border border-line-strong bg-night-2 p-1 md:self-auto"
+          >
+            {(["monthly", "annual"] as const).map((b) => (
+              <button
+                key={b}
+                type="button"
+                role="radio"
+                aria-checked={billing === b}
+                onClick={() => setBilling(b)}
+                className={`rounded-full px-4 py-1.5 text-[13.5px] transition ${
+                  billing === b ? "bg-linen text-night" : "text-smoke hover:text-linen"
+                }`}
+              >
+                {b === "monthly" ? "Monthly" : "Annual, save 20%"}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-12 grid items-stretch gap-6 lg:grid-cols-[1fr_1.25fr_1fr] lg:gap-0">
+          {/* Starter: quiet column */}
+          <div className="flex flex-col border-t border-line px-1 py-8 lg:border-y lg:border-l lg:border-line lg:px-8 lg:py-10">
+            <h3 className="text-[17px] font-semibold">Starter</h3>
+            <p className="mt-1 text-[14px] text-smoke-2">For a single restaurant getting started</p>
+            <p className="mt-6 flex items-baseline gap-1.5">
+              <span className="font-serif text-[48px] leading-none tracking-[-0.03em]">${starter}</span>
+              <span className="text-[14px] text-smoke">a month</span>
+            </p>
+            <p className="mt-1.5 h-5 text-[12.5px] text-smoke-2">
+              {billing === "annual" ? `Billed $${starter * 12} a year` : "Billed monthly"}
+            </p>
+            <Features
+              items={["1 location", "Google, TripAdvisor, Yelp and OpenTable", "150 AI drafts a month", "Risk triage and owner alerts"]}
+            />
+            <div className="mt-auto pt-8">
+              <Link
+                href="/sign-in"
+                className="block rounded-full border border-line-strong px-5 py-2.5 text-center text-[14.5px] font-medium transition hover:border-linen/40"
+              >
+                Start free trial
+              </Link>
+            </div>
+          </div>
+
+          {/* Pro: the raised, lit panel */}
+          <div className="relative flex flex-col overflow-hidden rounded-[22px] border border-lamp/60 bg-[linear-gradient(170deg,#24253a_0%,#171a29_55%,#1a1822_100%)] px-6 py-8 shadow-[0_0_80px_-20px_rgb(242_182_109/0.45)] sm:px-9 lg:-my-4 lg:py-12">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -top-24 left-1/2 h-48 w-[80%] -translate-x-1/2 rounded-full bg-lamp/20 blur-3xl"
+            />
+            <div className="relative flex items-center justify-between">
+              <h3 className="text-[17px] font-semibold">Pro</h3>
+              <span className="rounded-full bg-lamp/15 px-2.5 py-0.5 text-[12px] font-medium text-lamp">
+                Best fit for most restaurants
+              </span>
+            </div>
+            <p className="relative mt-1 text-[14px] text-smoke">For busy rooms and small groups</p>
+            <p className="relative mt-6 flex items-baseline gap-1.5">
+              <span className="font-serif text-[60px] leading-none tracking-[-0.03em] text-linen">${pro}</span>
+              <span className="text-[14px] text-smoke">a month</span>
+            </p>
+            <p className="relative mt-1.5 h-5 text-[12.5px] text-smoke-2">
+              {billing === "annual" ? `Billed $${pro * 12} a year` : "Billed monthly"}
+            </p>
+            <Features
+              tone="lamp"
+              items={[
+                "Up to 3 locations",
+                "Unlimited AI drafts",
+                "Owner approval workflow",
+                "Analytics on ratings, response time and themes",
+                "Replies in any language your guests write in",
+              ]}
+            />
+            <div className="relative mt-auto pt-8">
+              <Link
+                href="/sign-in"
+                className="block rounded-full bg-lamp px-5 py-3 text-center text-[15px] font-semibold text-night shadow-[0_0_30px_-6px_rgb(242_182_109/0.7)] transition hover:bg-[#f6c584]"
+              >
+                Start free trial
+              </Link>
+            </div>
+          </div>
+
+          {/* Group: quiet column */}
+          <div className="flex flex-col border-t border-line px-1 py-8 lg:border-y lg:border-r lg:border-line lg:px-8 lg:py-10">
+            <h3 className="text-[17px] font-semibold">Group</h3>
+            <p className="mt-1 text-[14px] text-smoke-2">For restaurant groups</p>
+            <p className="mt-6 font-serif text-[40px] leading-[1.2] tracking-[-0.03em]">Let&rsquo;s talk</p>
+            <p className="mt-1.5 h-5 text-[12.5px] text-smoke-2">Pricing by number of locations</p>
+            <Features
+              items={["4 or more locations", "Roles and permissions per site", "Single sign-on (SSO)", "Priority support"]}
+            />
+            <div className="mt-auto pt-8">
+              <Link
+                href="/sign-in"
+                className="block rounded-full border border-line-strong px-5 py-2.5 text-center text-[14.5px] font-medium transition hover:border-linen/40"
+              >
+                Contact sales
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

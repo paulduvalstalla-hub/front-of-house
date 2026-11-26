@@ -15,15 +15,15 @@ const sans = Instrument_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Front of House — review replies for Petit Comptoir",
+  title: "Front of House — the review reply desk for restaurants",
   description:
-    "An AI assistant that drafts on-brand replies to guest reviews for independent restaurant managers, and flags the risky ones for the owner.",
+    "Front of House reads every guest review from Google, TripAdvisor, Yelp and OpenTable, drafts a reply in your restaurant's voice, and holds the risky ones for the owner.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${serif.variable} ${sans.variable} antialiased`}>
-      <body>{children}</body>
+    <html lang="en" className={`${serif.variable} ${sans.variable}`}>
+      <body className="min-h-dvh">{children}</body>
     </html>
   );
 }

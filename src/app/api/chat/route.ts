@@ -6,7 +6,7 @@ import {
   toUIMessageStream,
   type UIMessage,
 } from "ai";
-import { AGENT_PROMPT } from "@/lib/system-prompt";
+import { AGENT_PROMPT, buildPrompt } from "@/lib/system-prompt";
 import { fileReply } from "@/lib/reply-tool";
 
 export const maxDuration = 60;
@@ -19,6 +19,7 @@ const MODEL = process.env.ANTHROPIC_MODEL ?? "claude-haiku-5-5";
 
 const MAX_MESSAGES = 24;
 const MAX_CHARS = 6000;
+const MAX_PROFILE_CHARS = 9000;
 
 function textOf(message: UIMessage) {
   return message.parts.map((part) => (part.type === "text" ? part.text : "")).join("");
@@ -33,11 +34,17 @@ export async function POST(req: Request) {
   }
 
   let messages: UIMessage[];
+  let profile: unknown;
   try {
-    ({ messages } = (await req.json()) as { messages: UIMessage[] });
+    ({ messages, profile } = (await req.json()) as { messages: UIMessage[]; profile?: unknown });
   } catch {
     return Response.json({ error: "Invalid request body." }, { status: 400 });
   }
+  // A restaurant may send its own edited knowledge file from the Brand voice page.
+  const knowledge =
+    typeof profile === "string" && profile.trim().length > 200 && profile.length <= MAX_PROFILE_CHARS
+      ? profile
+      : null;
   if (!Array.isArray(messages) || messages.length === 0) {
     return Response.json({ error: "No messages to answer." }, { status: 400 });
   }
@@ -56,7 +63,7 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: anthropic(MODEL),
-    instructions: AGENT_PROMPT,
+    instructions: knowledge ? buildPrompt(knowledge) : AGENT_PROMPT,
     messages: await convertToModelMessages(recent),
     tools: { fileReply },
     maxOutputTokens: 2000,
