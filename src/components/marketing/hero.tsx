@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { DuskSky } from "./dusk-sky";
-import { ProductWindow } from "./product-window";
+import { HeldReview } from "./held-review";
 import "./marketing.css";
 
 export function Hero() {
@@ -48,7 +48,7 @@ export function Hero() {
         </p>
 
         <div className={`foh-window-rise relative mx-auto mt-16 max-w-[1120px] sm:mt-20`}>
-          <ProductWindow />
+          <HeldReview />
         </div>
       </div>
     </section>
