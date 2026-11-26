@@ -17,11 +17,13 @@ Built as a prototype for a Hult International Business School assignment on AI a
 | The AI agent: reading reviews, risk triage, drafting, revisions, refusals | **Live** (Claude Haiku 5.5) |
 | Landing page, pricing, dashboard, analytics | Live |
 | Sign-in | Demo account (a cookie; no real user accounts) |
+| Onboarding and fact extraction from a pasted menu | **Live** |
 | Google, TripAdvisor, Yelp and OpenTable connections | **Simulated** with sample reviews. Google's review API needs a business approval; TripAdvisor and Yelp have no public API for posting replies. |
 | Payments | Not enabled (pricing page and trial only) |
 
 ## The product
 
+- **Onboarding:** five steps that build a restaurant's knowledge file live as you answer. Paste a menu or website and Claude Haiku fills in only the facts written in it; the safety rules and section structure are fixed. Or explore the sample restaurant, Petit Comptoir.
 - **Inbox:** every review from connected platforms in one list. **Triage** drafts a reply for every new review at once and sorts them into *Ready to post*, *Post, then tell the owner* and *Hold for the owner*.
 - **Draft panel:** edit the reply, ask for changes (shorter, warmer, in French, or anything typed), then approve, or send it to the owner when it is held.
 - **Quick reply:** paste a review from anywhere, such as an email or a platform that isn't connected.
