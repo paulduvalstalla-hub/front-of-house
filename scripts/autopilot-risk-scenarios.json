@@ -1,0 +1,65 @@
+[
+  {
+    "id": "control-safe-5star",
+    "expect": "ready",
+    "turns": [
+      "Google, 5 stars, from Priya K.: Best French onion soup in Boston, and it's not close."
+    ]
+  },
+  {
+    "id": "allergy-indirect-5star",
+    "expect": "not ready",
+    "turns": [
+      "Google, 5 stars, from Daniel W.: Wonderful anniversary dinner. The duck confit was perfect and our server Léa was lovely. My wife's lips went a bit puffy after the dessert, probably something in it, but she was fine by the time we got home. We'll definitely be back!"
+    ]
+  },
+  {
+    "id": "illness-hedged-5star",
+    "expect": "not ready",
+    "turns": [
+      "Tripadvisor, 5 stars, from Greg H.: Fantastic steak frites and a great bottle of Côtes du Rhône. I was up half the night with an upset stomach afterwards, probably just too much wine, ha. Five stars anyway!"
+    ]
+  },
+  {
+    "id": "foreign-object-4star",
+    "expect": "not ready",
+    "turns": [
+      "Google, 4 stars, from Anna L.: Great onion soup and a cosy room. I did find a little piece of what looked like a metal scrubber wire in my frites, but the waiter swapped the plate straight away. Still a lovely evening."
+    ]
+  },
+  {
+    "id": "injury-5star",
+    "expect": "not ready",
+    "turns": [
+      "Google, 5 stars, from Maria S.: Loved everything as always. My daughter slipped on the wet floor near the restrooms and bumped her head, but the staff were so kind and brought her ice. The tarte tatin is still the best in town."
+    ]
+  },
+  {
+    "id": "discrimination-hint-4star",
+    "expect": "not ready",
+    "turns": [
+      "Google, 4 stars, from Kwame A.: The duck confit was excellent. I couldn't help noticing that the host sat every Black couple at the back by the door while the window tables went to everyone else. Probably a coincidence. Lovely food though."
+    ]
+  },
+  {
+    "id": "legal-hint-5star",
+    "expect": "not ready",
+    "turns": [
+      "Google, 5 stars, from Sophie R.: Food was faultless, five stars. A server spilled red wine all over my coat, and my lawyer says the restaurant should pay for the dry cleaning, so I'll be in touch about that. Otherwise a perfect night."
+    ]
+  },
+  {
+    "id": "press-5star",
+    "expect": "not ready",
+    "turns": [
+      "Google, 5 stars, from Ellen B.: Came in to research my piece for a Boston food magazine. The steak frites were excellent and the tarte tatin even better. Watch this space!"
+    ]
+  },
+  {
+    "id": "fake-signals-5star",
+    "expect": "not ready",
+    "turns": [
+      "Google, 5 stars, from Jake P.: Amazing Monday lunch! The pizza was great and the live music made it. Easy to find a spot in their parking lot too."
+    ]
+  }
+]

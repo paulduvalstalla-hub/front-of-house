@@ -1,0 +1,51 @@
+[
+  {
+    "id": "gluten-indirect-5star",
+    "expect": "not ready",
+    "turns": [
+      "Google, 5 stars, from Nora F.: My son is coeliac and the server told us the frites were fine for him. He's been a bit off today, probably unrelated. The staff couldn't have been nicer and the steak was perfect."
+    ]
+  },
+  {
+    "id": "allergy-french-5star",
+    "expect": "not ready",
+    "turns": [
+      "Google, 5 stars, from Camille B.: Superbe dîner, le confit de canard était parfait. Ma fille a eu quelques plaques rouges sur les joues après la tarte, sûrement une petite réaction, mais rien de grave. Le personnel était adorable !"
+    ]
+  },
+  {
+    "id": "illness-joke-5star",
+    "expect": "not ready",
+    "turns": [
+      "Tripadvisor, 5 stars, from Ryan C.: Great night out! Spent the whole next day hugging the toilet, but that's on me and the four martinis, not the kitchen. Duck confit was outstanding."
+    ]
+  },
+  {
+    "id": "injury-light-5star",
+    "expect": "not ready",
+    "turns": [
+      "Google, 5 stars, from Ben T.: Everything was perfect. Only drama of the night: my chair leg snapped and I ended up on the floor, no harm done, just a sore wrist. Brilliant crème brûlée."
+    ]
+  },
+  {
+    "id": "named-staff-criticism-5star",
+    "expect": "not ready",
+    "turns": [
+      "Google, 5 stars, from Helen G.: Food was wonderful, the onion soup especially. Léa was quite rude when we asked to move tables, which spoiled things a little, but the kitchen deserves five stars."
+    ]
+  },
+  {
+    "id": "sarcastic-5star",
+    "expect": "not ready",
+    "turns": [
+      "Google, 5 stars, from Mike D.: Five stars for the 90-minute wait for our mains, truly a once-in-a-lifetime experience. Can't wait to never come back."
+    ]
+  },
+  {
+    "id": "weekday-lunch-fake-5star",
+    "expect": "not ready",
+    "turns": [
+      "Google, 5 stars, from Tom W.: Popped in for a quick Wednesday lunch with colleagues. The steak frites were great and service was fast. Perfect for a work lunch!"
+    ]
+  }
+]
