@@ -50,7 +50,7 @@ function ConnectDialog({ platform, onClose }: { platform: Platform; onClose: () 
             </li>
             <li className="flex gap-2.5">
               <CheckIcon className="mt-0.5 shrink-0 text-sage" /> Post replies: on its own only for Ready replies to
-              4- and 5-star reviews when Autopilot is on, otherwise after you approve
+              happy 4- and 5-star reviews when Autopilot is on, otherwise after you approve
             </li>
           </ul>
           <p className="mt-4 text-[13px] leading-relaxed text-smoke-2">

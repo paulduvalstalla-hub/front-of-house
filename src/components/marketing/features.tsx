@@ -26,7 +26,7 @@ const COLUMNS: { risk: Risk; ids: string[]; note: string }[] = [
   {
     risk: "ready",
     ids: ["g-sarah", "g-priya", "o-chen"],
-    note: "Posts when you approve it. With Autopilot on, a Ready reply to a 4- or 5-star review posts on its own after a 12-second countdown you can stop.",
+    note: "Posts when you approve it. With Autopilot on, a Ready reply to a happy 4- or 5-star review posts on its own after a 12-second countdown you can stop.",
   },
   {
     risk: "tell",

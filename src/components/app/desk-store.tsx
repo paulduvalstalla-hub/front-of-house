@@ -77,6 +77,18 @@ const CONCURRENCY = 3;
 export const AUTO_POST_SECONDS = 12;
 /** Autopilot only posts on its own for reviews with at least this many stars. */
 export const AUTO_POST_MIN_STARS = 4;
+/**
+ * …and only when the agent itself read the guest's mood as positive. Added on 27 Nov 2026 after
+ * the hidden-risk test: a sarcastic "5-star" complaint was marked Ready 4 of 5 times, though the
+ * agent rated its sentiment negative every time (test-runs/v3-autopilot-risk-x5.txt). The system
+ * prompt is unchanged; this is a check in code on the agent's own answer.
+ */
+export const AUTO_POST_SENTIMENT = "positive";
+
+/** Whether a first draft is safe for Autopilot to post on its own (the person-in-charge checks come on top). */
+export function autopilotMayPost(draft: Pick<ReplyDraft, "risk" | "sentiment">, stars: number | undefined) {
+  return draft.risk === "ready" && draft.sentiment === AUTO_POST_SENTIMENT && (stars ?? 0) >= AUTO_POST_MIN_STARS;
+}
 const FIRST_ARRIVAL_MS = 8_000;
 const LIVE_BY_ID = new Map(LIVE_REVIEWS.map((r) => [r.id, r]));
 
@@ -314,12 +326,11 @@ export function DeskProvider({ children }: { children: ReactNode }) {
           // Looked up now, not when the chat was created: a review that just arrived may not have been known then.
           const reviewNow = findReview(id);
           const firstDraft = !!draft && !prev0?.draft;
-          // Autopilot posts only a first draft the agent marked Ready, for a 4- or 5-star review,
-          // and only while nobody has stepped in on this review.
+          // Autopilot posts only a first draft the agent marked Ready, for a 4- or 5-star review
+          // whose mood it read as positive, and only while nobody has stepped in on this review.
           const autoPost =
             firstDraft &&
-            draft.risk === "ready" &&
-            (reviewNow?.stars ?? 0) >= AUTO_POST_MIN_STARS &&
+            autopilotMayPost(draft, reviewNow?.stars) &&
             (s0.agentOn ?? true) &&
             (s0.autoPost ?? true) &&
             prev0?.status !== "replied" &&

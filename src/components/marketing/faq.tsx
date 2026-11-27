@@ -1,7 +1,7 @@
 const QUESTIONS = [
   {
     q: "Does it post replies on its own?",
-    a: "Only with Autopilot on, and only the safe ones: a reply marked Ready to a 4- or 5-star review posts after a 12-second countdown you can stop. Every other reply waits for your approval, and reviews about illness, allergies, discrimination, legal threats or a suspected fake are always held for the owner. Autopilot is included in every plan.",
+    a: "Only with Autopilot on, and only the safe ones: a reply marked Ready to a 4- or 5-star review that the agent reads as genuinely happy posts after a 12-second countdown you can stop. Every other reply waits for your approval, and reviews about illness, allergies, discrimination, legal threats or a suspected fake are always held for the owner. Autopilot is included in every plan.",
   },
   {
     q: "Which platforms does it work with?",

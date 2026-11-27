@@ -5,7 +5,7 @@ import { useState, type FormEvent } from "react";
 import { StatusIcon } from "@/components/status";
 import type { DemoReview } from "@/lib/demo-reviews";
 import type { ReplyDraft } from "@/lib/reply-tool";
-import { useDesk, type DeskMessage } from "./desk-store";
+import { AUTO_POST_MIN_STARS, AUTO_POST_SENTIMENT, useDesk, type DeskMessage } from "./desk-store";
 import { CheckIcon, HoldIcon } from "./icons";
 import { ListingPreview } from "./listing-preview";
 import { riskMeta } from "./risk";
@@ -180,6 +180,18 @@ export function DraftPanel({ review }: { review: DemoReview }) {
     record.autoPostAt && record.status === "drafted" && !busy && now
       ? Math.max(0, Math.ceil((record.autoPostAt - now) / 1000))
       : null;
+  // A safe-looking 4–5★ review Autopilot left alone because the agent read the guest's mood as not positive.
+  const moodHeld =
+    draft?.risk === "ready" &&
+    !!draft.sentiment &&
+    draft.sentiment !== AUTO_POST_SENTIMENT &&
+    review.stars >= AUTO_POST_MIN_STARS &&
+    record.status === "drafted" &&
+    !record.autoPostAt &&
+    !record.autoPostHeld &&
+    desk.autoPost &&
+    desk.agentOn &&
+    !busy;
 
   return (
     <section aria-label="Draft reply" className="overflow-hidden rounded-[var(--radius-window)] border border-line bg-night-2">
@@ -231,6 +243,13 @@ export function DraftPanel({ review }: { review: DemoReview }) {
             Stop, I&rsquo;ll check it
           </button>
         </div>
+      )}
+
+      {moodHeld && (
+        <p className="border-b border-line px-5 py-2.5 text-[13.5px] text-smoke">
+          Autopilot left this one for you: it has {review.stars} stars, but the agent reads the guest&rsquo;s mood as{" "}
+          {draft.sentiment}.
+        </p>
       )}
 
       <div className="space-y-5 px-5 py-4">
