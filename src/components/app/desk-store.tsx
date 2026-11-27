@@ -14,6 +14,7 @@ import {
 } from "react";
 import { DEMO_REVIEWS, PLATFORMS, reviewPrompt, type DemoReview, type Platform } from "@/lib/demo-reviews";
 import { LIVE_REVIEWS } from "@/lib/live-reviews";
+import type { Account } from "@/lib/session";
 import type { ReplyDraft } from "@/lib/reply-tool";
 import { RESTAURANT_PROFILE } from "@/lib/restaurant-profile";
 import { SAMPLE_WORKSPACE, type Answers, type Workspace } from "@/lib/workspace";
@@ -70,7 +71,10 @@ type Persisted = {
   arrivals?: { id: string; at: number }[];
 };
 
-const STORAGE_KEY = "foh-demo-v1";
+/** Each demo visit keeps its own copy of the sample restaurant in the browser under this prefix. */
+const DEMO_KEY_PREFIX = "foh-demo-";
+/** How long the desk waits after a change before saving it to the account. */
+const SAVE_DELAY_MS = 1_200;
 const TRIAL_DAYS = 14;
 const CONCURRENCY = 3;
 /** Seconds a Ready reply waits before Autopilot posts it, so a person can stop it. */
@@ -123,25 +127,33 @@ function initialState(now = 0): Persisted {
   };
 }
 
-function load(now: number): Persisted {
+/** A fresh copy of the sample restaurant, as the demo opens it. */
+function sampleState(now: number): Persisted {
+  return { ...initialState(now), workspace: SAMPLE_WORKSPACE };
+}
+
+/** Merges saved state over the defaults, so fields added later get a value. */
+function revive(parsed: (Omit<Partial<Persisted>, "v"> & { v: number }) | null, base: Persisted): Persisted {
+  if (!parsed || parsed.v !== 2) return base;
+  return {
+    ...base,
+    ...parsed,
+    records: { ...base.records, ...parsed.records },
+    connections: { ...base.connections, ...parsed.connections },
+  } as Persisted;
+}
+
+function loadDemo(key: string, now: number): Persisted {
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return initialState(now);
-    const parsed = JSON.parse(raw) as Omit<Partial<Persisted>, "v"> & { v: number };
-    const base = initialState(now);
-    if (parsed.v === 1) {
-      // Saved before onboarding existed: it was the sample restaurant.
-      return { ...base, ...parsed, v: 2, workspace: SAMPLE_WORKSPACE, customReviews: [] } as Persisted;
+    // Older demo visits (and the pre-accounts "foh-demo-v1") are left over: clear them.
+    for (let i = window.localStorage.length - 1; i >= 0; i--) {
+      const k = window.localStorage.key(i);
+      if (k?.startsWith(DEMO_KEY_PREFIX) && k !== key) window.localStorage.removeItem(k);
     }
-    if (parsed.v !== 2) return base;
-    return {
-      ...base,
-      ...parsed,
-      records: { ...base.records, ...parsed.records },
-      connections: { ...base.connections, ...parsed.connections },
-    } as Persisted;
+    const raw = window.localStorage.getItem(key);
+    return raw ? revive(JSON.parse(raw), sampleState(now)) : sampleState(now);
   } catch {
-    return initialState(now);
+    return sampleState(now);
   }
 }
 
@@ -167,6 +179,15 @@ export function readAssistant(message: DeskMessage): { draft?: ReplyDraft; text?
 
 type DeskContextValue = {
   ready: boolean;
+  /** Who is signed in: a real account, or a demo visit of the sample restaurant. */
+  account: Account;
+  /** Set when a real account's restaurant couldn't be loaded. */
+  loadError: string | null;
+  retryLoad: () => void;
+  /** Saving to the account: idle until something changes. Always "idle" in the demo. */
+  saveStatus: "idle" | "saving" | "saved" | "error";
+  /** Saves any change still waiting on the timer (before signing out). */
+  flushSave: () => Promise<void>;
   /** The restaurant being worked for (the sample until one is chosen). */
   workspace: Workspace;
   hasWorkspace: boolean;
@@ -203,7 +224,6 @@ type DeskContextValue = {
   disconnect: (p: Platform) => void;
   setProfile: (profile: string) => void;
   addReview: (r: Omit<DemoReview, "id" | "hoursAgo">) => string;
-  startSample: () => void;
   finishOnboarding: (ws: Workspace, answers: Answers, profile: string, autoTriage: boolean) => void;
   autoTriage: boolean;
   clearAutoTriage: () => void;
@@ -218,9 +238,14 @@ export function useDesk() {
   return ctx;
 }
 
-export function DeskProvider({ children }: { children: ReactNode }) {
+export function DeskProvider({ children, account }: { children: ReactNode; account: Account }) {
   const [state, setState] = useState<Persisted>(() => initialState(0));
   const [ready, setReady] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [loadAttempt, setLoadAttempt] = useState(0);
+  const [saveStatus, setSaveStatus] = useState<DeskContextValue["saveStatus"]>("idle");
+  const lastSaved = useRef<string | null>(null);
+  const demoKey = account.kind === "demo" ? `${DEMO_KEY_PREFIX}${account.id}` : null;
   const [triage, setTriage] = useState({ running: false, done: 0, total: 0 });
   const [drafting, setDrafting] = useState<Record<string, boolean>>({});
   const [now, setNow] = useState(0);
@@ -238,24 +263,95 @@ export function DeskProvider({ children }: { children: ReactNode }) {
     stateRef.current = state;
   }, [state]);
 
-  // Load the saved demo after mount, so server and client render the same first frame.
+  // Load after mount, so server and client render the same first frame. The demo reads this
+  // browser's copy of the sample restaurant; a real account fetches its restaurant from the server.
   useEffect(() => {
     const clock = Date.now();
-    const loaded = load(clock);
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration from localStorage
-    setState(loaded);
-    setNow(clock);
-    setReady(true);
+    if (demoKey) {
+      const loaded = loadDemo(demoKey, clock);
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration from localStorage
+      setState(loaded);
+      setNow(clock);
+      setReady(true);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/workspace", { cache: "no-store" });
+        if (res.status === 401) {
+          // The session ended or the account is gone: a full page load drops everything held in memory.
+          // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+          window.location.assign("/sign-in");
+          return;
+        }
+        if (!res.ok) throw new Error();
+        const data = (await res.json()) as { state: unknown; createdAt: number };
+        if (cancelled) return;
+        // A new account's trial starts the day it was created.
+        const base = { ...initialState(clock), trialStartedAt: data.createdAt || clock };
+        const loaded = revive(data.state as Parameters<typeof revive>[0], base);
+        lastSaved.current = JSON.stringify(loaded);
+        setState(loaded);
+        setNow(clock);
+        setLoadError(null);
+        setReady(true);
+      } catch {
+        if (!cancelled) setLoadError("Front of House couldn't load your restaurant. Check your connection and try again.");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [demoKey, loadAttempt]);
+
+  const pendingSave = useRef<string | null>(null);
+  const saveToAccount = useCallback(async (json: string) => {
+    if (json === lastSaved.current) return;
+    setSaveStatus("saving");
+    try {
+      const res = await fetch("/api/workspace", {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: json,
+        keepalive: json.length < 60_000,
+      });
+      if (!res.ok) throw new Error();
+      lastSaved.current = json;
+      setSaveStatus("saved");
+      window.setTimeout(() => setSaveStatus((st) => (st === "saved" ? "idle" : st)), 2_500);
+    } catch {
+      setSaveStatus("error");
+    }
   }, []);
 
+  // Save: the demo to this browser at once; a real account to the server, a moment after the last change.
   useEffect(() => {
     if (!ready) return;
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch {
-      /* private mode or storage full: the demo still works for this visit */
+    const json = JSON.stringify(state);
+    if (demoKey) {
+      try {
+        window.localStorage.setItem(demoKey, json);
+      } catch {
+        /* private mode or storage full: the demo still works for this visit */
+      }
+      return;
     }
-  }, [state, ready]);
+    if (json === lastSaved.current) return;
+    pendingSave.current = json;
+    // If the page is closed before the timer fires, send the change anyway.
+    const flush = () => {
+      if (json === lastSaved.current || json.length >= 60_000) return;
+      void fetch("/api/workspace", { method: "PUT", headers: { "content-type": "application/json" }, body: json, keepalive: true });
+      lastSaved.current = json;
+    };
+    window.addEventListener("pagehide", flush);
+    const timer = window.setTimeout(() => void saveToAccount(json), SAVE_DELAY_MS);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("pagehide", flush);
+    };
+  }, [state, ready, demoKey, saveToAccount]);
 
   const patchRecord = useCallback((id: string, patch: Partial<ReviewRecord>) => {
     setState((s) => ({ ...s, records: { ...s.records, [id]: { ...s.records[id], ...patch } } }));
@@ -509,6 +605,16 @@ export function DeskProvider({ children }: { children: ReactNode }) {
 
   const value: DeskContextValue = {
     ready,
+    account,
+    loadError,
+    retryLoad: () => {
+      setLoadError(null);
+      setLoadAttempt((n) => n + 1);
+    },
+    saveStatus,
+    flushSave: async () => {
+      if (!demoKey && pendingSave.current) await saveToAccount(pendingSave.current);
+    },
     workspace,
     hasWorkspace: state.workspace !== null,
     answers: state.answers,
@@ -565,16 +671,6 @@ export function DeskProvider({ children }: { children: ReactNode }) {
       }));
       return id;
     },
-    startSample: () => {
-      chats.current.clear();
-      startedAt.current.clear();
-      setEvents([]);
-      setState((s) => ({
-        ...initialState(Date.now()),
-        trialStartedAt: s.trialStartedAt,
-        workspace: SAMPLE_WORKSPACE,
-      }));
-    },
     finishOnboarding: (ws, answers, profile, autoTriage) => {
       chats.current.clear();
       startedAt.current.clear();
@@ -598,7 +694,12 @@ export function DeskProvider({ children }: { children: ReactNode }) {
       chats.current.clear();
       startedAt.current.clear();
       setEvents([]);
-      setState(initialState(Date.now()));
+      // The demo goes back to a fresh sample inbox; an account clears its restaurant and starts onboarding again.
+      setState((s) =>
+        demoKey
+          ? { ...sampleState(Date.now()), trialStartedAt: s.trialStartedAt }
+          : { ...initialState(Date.now()), trialStartedAt: s.trialStartedAt },
+      );
     },
   };
 

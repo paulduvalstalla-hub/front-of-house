@@ -35,7 +35,7 @@ export function SiteNav() {
             Sign in
           </Link>
           <Link
-            href="/sign-in"
+            href="/demo"
             className="hidden whitespace-nowrap rounded-lg bg-linen px-4 py-2 text-small font-semibold text-night transition hover:bg-white min-[400px]:inline-block"
           >
             Try the live demo
@@ -59,7 +59,7 @@ export function SiteNav() {
                 Sign in
               </Link>
               <Link
-                href="/sign-in"
+                href="/demo"
                 className="mt-1 rounded-lg bg-linen px-3 py-2.5 text-small font-semibold text-night min-[400px]:hidden"
               >
                 Try the live demo

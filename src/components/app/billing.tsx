@@ -25,6 +25,7 @@ const PLANS = [
 
 export function Billing() {
   const desk = useDesk();
+  const demo = desk.account.kind === "demo";
   return (
     <div className="mx-auto max-w-[960px] px-5 py-8 lg:px-10">
       <h1 className="font-serif text-[30px] leading-none tracking-[-0.025em]">Billing</h1>
@@ -91,45 +92,72 @@ export function Billing() {
         ))}
       </div>
 
-      <section className="mt-12 border-t border-line pt-6">
-        <h2 className="text-[15px] font-medium">Restaurant</h2>
-        <p className="mt-1 text-[13.5px] text-smoke">
-          You&rsquo;re working as {desk.workspace.restaurant}
-          {desk.workspace.mode === "sample" ? ", the sample restaurant." : "."}
-        </p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <Link
-            href="/onboarding"
-            className="rounded-lg border border-line px-4 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
-          >
-            Set up a restaurant
-          </Link>
-          {desk.workspace.mode !== "sample" && (
+      {demo ? (
+        <>
+          <section className="mt-12 border-t border-line pt-6">
+            <h2 className="text-[15px] font-medium">Restaurant</h2>
+            <p className="mt-1 text-[13.5px] text-smoke">
+              You&rsquo;re in the demo, working as {desk.workspace.restaurant}, the sample restaurant. To set up your own,
+              create an account: your profile and replies are saved to it.
+            </p>
+            <Link
+              href="/sign-up"
+              className="mt-3 inline-block rounded-lg bg-linen px-4 py-1.5 text-[13.5px] font-medium text-night hover:bg-white"
+            >
+              Create an account
+            </Link>
+          </section>
+
+          <section className="mt-10 border-t border-line pt-6">
+            <h2 className="text-[15px] font-medium">Restart the demo</h2>
+            <p className="mt-1 text-[13.5px] text-smoke">
+              Puts the sample inbox back the way it started: every draft, reply and connection change is cleared.
+            </p>
             <button
               type="button"
-              onClick={() => desk.startSample()}
-              className="rounded-lg border border-line px-4 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
+              onClick={() => desk.resetDemo()}
+              className="mt-3 rounded-lg border border-line px-4 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
             >
-              Switch to the sample restaurant
+              Restart the demo
             </button>
-          )}
-        </div>
-      </section>
+          </section>
+        </>
+      ) : (
+        <>
+          <section className="mt-12 border-t border-line pt-6">
+            <h2 className="text-[15px] font-medium">Restaurant</h2>
+            <p className="mt-1 text-[13.5px] text-smoke">
+              You&rsquo;re working as {desk.workspace.restaurant}. Change its facts, voice or rules by going through setup
+              again; your answers are filled in.
+            </p>
+            <Link
+              href="/onboarding"
+              className="mt-3 inline-block rounded-lg border border-line px-4 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
+            >
+              Edit your setup
+            </Link>
+          </section>
 
-      <section className="mt-10 border-t border-line pt-6">
-        <h2 className="text-[15px] font-medium">Reset the demo</h2>
-        <p className="mt-1 text-[13.5px] text-smoke">
-          Clears your restaurant, drafts, replies, connections and brand-voice edits saved in this browser, and starts
-          onboarding again.
-        </p>
-        <button
-          type="button"
-          onClick={() => desk.resetDemo()}
-          className="mt-3 rounded-lg border border-line px-4 py-1.5 text-[13.5px] text-smoke hover:border-line-strong hover:text-linen"
-        >
-          Reset demo data
-        </button>
-      </section>
+          <section className="mt-10 border-t border-line pt-6">
+            <h2 className="text-[15px] font-medium">Start over</h2>
+            <p className="mt-1 text-[13.5px] text-smoke">
+              Deletes your restaurant profile, reviews and replies from your account and starts setup again. Your account
+              stays.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                if (window.confirm(`Delete ${desk.workspace.restaurant}'s profile, reviews and replies? This can't be undone.`)) {
+                  desk.resetDemo();
+                }
+              }}
+              className="mt-3 rounded-lg border border-wine/40 px-4 py-1.5 text-[13.5px] text-wine hover:border-wine/70"
+            >
+              Start over
+            </button>
+          </section>
+        </>
+      )}
     </div>
   );
 }

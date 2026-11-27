@@ -2,10 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useMemo, useState, useSyncExternalStore } from "react";
+import { useState } from "react";
 import { signOut } from "@/app/actions";
 import { Logo } from "@/components/brand";
-import { readClientSession } from "@/lib/session";
 import { useDesk } from "./desk-store";
 import { CardIcon, ChartIcon, CloseIcon, ExitIcon, InboxIcon, MenuIcon, PlugIcon, QuillIcon, VoiceIcon } from "./icons";
 
@@ -18,16 +17,14 @@ const NAV = [
   { href: "/dashboard/billing", label: "Billing", icon: CardIcon },
 ];
 
-const subscribe = () => () => {};
-const cookieSnapshot = () => document.cookie;
+const SAVE_LABEL = { idle: "", saving: "Saving…", saved: "Saved to your account", error: "Not saved. Retrying on your next change." };
 
 function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
-  const { reviews, records, trialDaysLeft, workspace, agentOn, connections } = useDesk();
+  const { reviews, records, trialDaysLeft, workspace, agentOn, connections, account, saveStatus, flushSave } = useDesk();
   const watching = Object.values(connections).filter(Boolean).length;
-  // Subscribe to the raw cookie string (stable between renders), then decode it.
-  const rawCookie = useSyncExternalStore(subscribe, cookieSnapshot, () => "");
-  const session = useMemo(() => (rawCookie ? readClientSession() : null), [rawCookie]);
+  const demo = account.kind === "demo";
+  const name = account.kind === "user" ? account.name : workspace.manager;
   const open = reviews.filter((r) => {
     const s = records[r.id]?.status;
     return s === "new" || s === "drafted";
@@ -79,31 +76,54 @@ function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
       </nav>
 
       <div className="mt-auto flex flex-col gap-3">
-        <Link
-          href="/dashboard/billing"
-          onClick={onNavigate}
-          className="rounded-xl border border-line px-3 py-2.5 hover:border-line-strong"
-        >
-          <p className="text-[13px] text-linen">Pro trial</p>
-          <div className="mt-2 h-1 overflow-hidden rounded-full bg-night-4">
-            <div className="h-full rounded-full bg-linen/70" style={{ width: `${(trialDaysLeft / 14) * 100}%` }} />
+        {demo ? (
+          <div className="rounded-xl border border-lamp/30 bg-lamp/[0.05] px-3 py-3">
+            <p className="text-[13px] text-linen">You&rsquo;re in the demo</p>
+            <p className="mt-1 text-[12.5px] leading-snug text-smoke">
+              Create an account to set up your own restaurant. It&rsquo;s saved, so it&rsquo;s there next time.
+            </p>
+            <Link
+              href="/sign-up"
+              onClick={onNavigate}
+              className="mt-2.5 block rounded-lg bg-linen px-3 py-1.5 text-center text-[13px] font-medium text-night hover:bg-white"
+            >
+              Create an account
+            </Link>
           </div>
-          <p className="mt-1.5 text-[12px] text-smoke-2">{trialDaysLeft} days left</p>
-        </Link>
+        ) : (
+          <Link
+            href="/dashboard/billing"
+            onClick={onNavigate}
+            className="rounded-xl border border-line px-3 py-2.5 hover:border-line-strong"
+          >
+            <p className="text-[13px] text-linen">Pro trial</p>
+            <div className="mt-2 h-1 overflow-hidden rounded-full bg-night-4">
+              <div className="h-full rounded-full bg-linen/70" style={{ width: `${(trialDaysLeft / 14) * 100}%` }} />
+            </div>
+            <p className="mt-1.5 text-[12px] text-smoke-2">{trialDaysLeft} days left</p>
+          </Link>
+        )}
 
         <div className="flex items-center gap-2.5 px-1">
           <span className="grid size-8 shrink-0 place-items-center rounded-full bg-dusk text-[13px] font-medium">
-            {(session?.name ?? "C").slice(0, 1).toUpperCase()}
+            {(name || "?").slice(0, 1).toUpperCase()}
           </span>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-[13.5px]">{session?.name ?? workspace.manager}</p>
-            <p className="truncate text-[12px] text-smoke-2">{session?.email ?? "Demo account"}</p>
+            <p className="truncate text-[13.5px]">{name}</p>
+            <p className="truncate text-[12px] text-smoke-2" aria-live="polite">
+              {demo ? "Demo visit" : saveStatus === "idle" ? account.email : SAVE_LABEL[saveStatus]}
+            </p>
           </div>
-          <form action={signOut}>
+          <form
+            action={async () => {
+              await flushSave();
+              await signOut();
+            }}
+          >
             <button
               type="submit"
-              title="Sign out"
-              aria-label="Sign out"
+              title={demo ? "Leave the demo" : "Sign out"}
+              aria-label={demo ? "Leave the demo" : "Sign out"}
               className="grid size-8 place-items-center rounded-lg text-smoke hover:bg-night-2 hover:text-linen"
             >
               <ExitIcon />

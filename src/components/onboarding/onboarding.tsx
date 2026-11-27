@@ -57,12 +57,32 @@ function Check({ checked, onChange, children }: { checked: boolean; onChange: (v
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/** Waits for the account's saved restaurant, so editing starts from the answers already given. */
 export function Onboarding() {
+  const desk = useDesk();
+  if (desk.loadError) {
+    return (
+      <div className="grid min-h-dvh place-items-center px-5 text-center">
+        <div>
+          <p className="text-[15px]">{desk.loadError}</p>
+          <button type="button" onClick={desk.retryLoad} className="mt-5 rounded-lg bg-linen px-4 py-2 text-[14px] font-medium text-night">
+            Try again
+          </button>
+        </div>
+      </div>
+    );
+  }
+  if (!desk.ready) return <div className="min-h-dvh" aria-busy />;
+  const name = desk.account.kind === "user" ? desk.account.name : "";
+  return <OnboardingFlow initial={desk.answers ?? { ...EMPTY_ANSWERS, manager: name }} />;
+}
+
+function OnboardingFlow({ initial }: { initial: Answers }) {
   const desk = useDesk();
   const router = useRouter();
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
-  const [a, setA] = useState<Answers>(EMPTY_ANSWERS);
+  const [a, setA] = useState<Answers>(initial);
   const [paste, setPaste] = useState("");
   const [importing, setImporting] = useState(false);
   const [importMsg, setImportMsg] = useState<{ ok: boolean; text: string } | null>(null);
@@ -163,11 +183,6 @@ export function Onboarding() {
     router.push("/dashboard");
   }
 
-  function sample() {
-    desk.startSample();
-    router.push("/dashboard");
-  }
-
   // Intro: set up a restaurant, or explore the sample.
   if (!started) {
     return (
@@ -194,7 +209,8 @@ export function Onboarding() {
             </p>
             {desk.hasWorkspace && (
               <p className="mt-4 text-[13.5px] text-lamp">
-                You&rsquo;re set up as {desk.workspace.restaurant}. Starting again replaces that profile and its demo data.
+                You&rsquo;re set up as {desk.workspace.restaurant}. Your answers are filled in; saving again rebuilds the
+                profile and starts a fresh inbox.
               </p>
             )}
             <div className="mt-9 flex flex-wrap items-center gap-3">
@@ -203,19 +219,22 @@ export function Onboarding() {
                 onClick={() => setStarted(true)}
                 className="rounded-lg bg-linen px-5 py-3 text-[15px] font-medium text-night hover:bg-white"
               >
-                Set up my restaurant
+                {desk.hasWorkspace ? "Edit my restaurant" : "Set up my restaurant"}
               </button>
-              <button
-                type="button"
-                onClick={sample}
-                className="rounded-lg border border-line-strong px-5 py-3 text-[15px] text-linen hover:bg-night-2"
-              >
-                Explore the sample restaurant
-              </button>
+              {desk.hasWorkspace && (
+                <Link
+                  href="/dashboard"
+                  className="rounded-lg border border-line-strong px-5 py-3 text-[15px] text-linen hover:bg-night-2"
+                >
+                  Back to the inbox
+                </Link>
+              )}
             </div>
-            <p className="mt-4 text-[13px] text-smoke-2">
-              The sample is Petit Comptoir, a fictional Boston bistro with a full inbox of reviews.
-            </p>
+            {desk.account.kind === "user" && (
+              <p className="mt-4 text-[13px] text-smoke-2">
+                Signed in as {desk.account.email}. Everything you set up is saved to your account.
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -234,9 +253,11 @@ export function Onboarding() {
             <Link href="/">
               <Logo size={18} />
             </Link>
-            <button type="button" onClick={sample} className="text-[13px] text-smoke hover:text-linen">
-              Skip and use the sample
-            </button>
+            {desk.hasWorkspace && (
+              <Link href="/dashboard" className="text-[13px] text-smoke hover:text-linen">
+                Cancel
+              </Link>
+            )}
           </div>
 
           <ol aria-label="Progress" className="mt-8 grid grid-cols-5 gap-1.5">

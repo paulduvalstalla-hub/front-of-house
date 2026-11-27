@@ -31,7 +31,7 @@ export function Hero() {
         </p>
         <div className={`foh-rise-late mt-9 flex flex-wrap items-center justify-center gap-3`}>
           <Link
-            href="/sign-in"
+            href="/demo"
             className="rounded-lg bg-linen px-6 py-3 text-body font-semibold text-night transition hover:bg-white"
           >
             Try the live demo

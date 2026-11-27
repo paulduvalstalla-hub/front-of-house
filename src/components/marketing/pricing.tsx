@@ -92,7 +92,7 @@ export function Pricing() {
             />
             <div className="mt-auto pt-8">
               <Link
-                href="/sign-in"
+                href="/demo"
                 className="block rounded-lg border border-line-strong px-5 py-2.5 text-center text-body font-medium transition hover:border-linen/40"
               >
                 Try the live demo
@@ -123,7 +123,7 @@ export function Pricing() {
             />
             <div className="relative mt-auto pt-8">
               <Link
-                href="/sign-in"
+                href="/demo"
                 className="block rounded-lg bg-linen px-5 py-3 text-center text-body font-semibold text-night transition hover:bg-white"
               >
                 Try the live demo
@@ -142,7 +142,7 @@ export function Pricing() {
             />
             <div className="mt-auto pt-8">
               <Link
-                href="/sign-in"
+                href="/demo"
                 className="block rounded-lg border border-line-strong px-5 py-2.5 text-center text-body font-medium transition hover:border-linen/40"
               >
                 Try the live demo
